@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Mac自动SSH+MFA</title>
+    <url>/2022/12/08/Mac%E8%87%AA%E5%8A%A8SSH-MFA/</url>
+    <content><![CDATA[<p>因工作需要，使用Iterm2自动跳转远程终端，提高工作效率</p>
+<h1 id="一、自动获取MFA-Token"><a href="#一、自动获取MFA-Token" class="headerlink" title="一、自动获取MFA Token"></a>一、自动获取MFA Token</h1><p>安装oath-toolkit</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew search oath-toolkit</span><br><span class="line">brew install oath-toolkit</span><br></pre></td></tr></table></figure>
+
+<p>使用下面命令获取token， 注：${SECKEY} 是一个变量，按照自己的填写</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">alias</span> smCode=<span class="string">&quot;echo `oathtool --totp -b <span class="variable">$&#123;SECKEY&#125;</span> `| pbcopy&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="二、自定义SHELL-MFA-TOKEN脚本"><a href="#二、自定义SHELL-MFA-TOKEN脚本" class="headerlink" title="二、自定义SHELL+MFA TOKEN脚本"></a>二、自定义SHELL+MFA TOKEN脚本</h1><p>将脚本保存juneyao_auto_ssh_prd.sh</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">opts=$@</span><br><span class="line">getParam()&#123;</span><br><span class="line">  arg=$1</span><br><span class="line">  echo $opts | xargs -n1 | cut -b 2- | awk -F&#x27;=&#x27; &#x27;&#123;if($1==&quot;&#x27;&quot;$arg&quot;&#x27;&quot;) print $2&#125;&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">USER=zhaoyihao</span><br><span class="line">echo &quot;[INFO] USER: &quot;$&#123;USER&#125;</span><br><span class="line"></span><br><span class="line">HOST=`getParam HOST`</span><br><span class="line">echo &quot;[INFO] HOST: &quot;$&#123;HOST&#125;</span><br><span class="line"></span><br><span class="line">PASSWORD=`getParam PASSWORD`</span><br><span class="line">echo &quot;[INFO] PASSWORD: *****&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">stg:20 prd:2222</span></span><br><span class="line">PORT=`getParam PORT`</span><br><span class="line">echo &quot;[INFO] PORT: &quot;$&#123;PORT&#125;</span><br><span class="line"></span><br><span class="line">PRD_TOKEN=&quot;`oathtool --totp -b 4YIKKGPXJD3G32YP`&quot;</span><br><span class="line"></span><br><span class="line">sw_login()&#123;</span><br><span class="line">        expect -c &quot;</span><br><span class="line">        # 每个判断等待1秒</span><br><span class="line">        set timeout 1</span><br><span class="line">        spawn ssh $USER@$HOST -p $PORT</span><br><span class="line">        # 判断是否需要保存秘钥</span><br><span class="line">        expect &#123;</span><br><span class="line">                \&quot;yes/no\&quot;   &#123; send yes\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送密码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*assword\&quot; &#123; send $PASSWORD\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送验证码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*OTP Code*\&quot; &#123; send $PRD_TOKEN\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 停留在当前登录界面</span><br><span class="line">        interact</span><br><span class="line">        &quot;</span><br><span class="line">&#125;</span><br><span class="line">sw_login</span><br></pre></td></tr></table></figure>
+
+
+
+<p>脚本的使用命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sh juneyao_auto_ssh_prd.sh -HOST=jmp.juneyaoair.com -PORT=2222 -PASSWORD=123123</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="三、与ITerm2集成"><a href="#三、与ITerm2集成" class="headerlink" title="三、与ITerm2集成"></a>三、与ITerm2集成</h1><p>在ITerm2终端中进行配置</p>
+<p>Preference… -&gt; Profiles -&gt; +</p>
+<p>将脚本运行命令填入到Send text at start:文本框中保存即可。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>hexo换主题乱码问题的解决</title>
+    <url>/2022/12/08/hexo%E6%8D%A2%E4%B8%BB%E9%A2%98%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3/</url>
+    <content><![CDATA[<h1 id="hexo换主题乱码问题的解决"><a href="#hexo换主题乱码问题的解决" class="headerlink" title="hexo换主题乱码问题的解决"></a>hexo换主题乱码问题的解决</h1><p>使用next主题</p>
+<h2 id="问题的表现"><a href="#问题的表现" class="headerlink" title="问题的表现"></a>问题的表现</h2><p><code>&#123;% extends '_layout.swig' %&#125; &#123;% import '_macro/post.swig' as post_template %&#125;....................</code></p>
+<h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>原因是hexo在5.0之后把swig给删除了需要自己手动安装</p>
+<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line">npm <span class="selector-tag">i</span> hexo-renderer-swig</span><br></pre></td></tr></table></figure>
+
+<p>之后重新</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">hexo clean          </span><br><span class="line">hexo <span class="keyword">generate</span>      </span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
     <title>github配置多用户</title>
     <url>/2022/12/08/github%E9%85%8D%E7%BD%AE%E5%A4%9A%E7%94%A8%E6%88%B7/</url>
     <content><![CDATA[<p>因为需要使用多个github账号，但只有一台电脑，想要动态切换不同用户，并且做到免密提交。</p>
@@ -17,11 +57,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#x63;&#110;&#110;&#x71;&#106;&#x62;&#97;&#110;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#109;">&#x63;&#110;&#110;&#x71;&#106;&#x62;&#97;&#110;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#109;</a></td>
+<td><a href="mailto:&#99;&#x6e;&#x6e;&#x71;&#x6a;&#98;&#97;&#110;&#x35;&#x32;&#x31;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#99;&#x6e;&#x6e;&#x71;&#x6a;&#98;&#97;&#110;&#x35;&#x32;&#x31;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a></td>
 <td>hoey94</td>
 </tr>
 <tr>
-<td><a href="mailto:&#51;&#53;&#x31;&#56;&#x36;&#x35;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#99;&#111;&#x6d;">&#51;&#53;&#x31;&#56;&#x36;&#x35;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#51;&#x35;&#x31;&#56;&#54;&#53;&#x35;&#x37;&#54;&#x40;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;">&#51;&#x35;&#x31;&#56;&#54;&#53;&#x35;&#x37;&#54;&#x40;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;</a></td>
 <td>hoey1994</td>
 </tr>
 </tbody></table>
@@ -36,11 +76,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#x63;&#x6e;&#110;&#x71;&#x6a;&#x62;&#x61;&#x6e;&#x35;&#x32;&#x31;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;">&#x63;&#x6e;&#110;&#x71;&#x6a;&#x62;&#x61;&#x6e;&#x35;&#x32;&#x31;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#x61;&#x6e;&#53;&#x32;&#49;&#x40;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#x61;&#x6e;&#53;&#x32;&#49;&#x40;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;</a></td>
 <td>Test</td>
 </tr>
 <tr>
-<td><a href="mailto:&#51;&#53;&#x31;&#56;&#54;&#53;&#53;&#x37;&#54;&#64;&#x71;&#113;&#46;&#99;&#x6f;&#109;">&#51;&#53;&#x31;&#56;&#54;&#53;&#53;&#x37;&#54;&#64;&#x71;&#113;&#46;&#99;&#x6f;&#109;</a></td>
+<td><a href="mailto:&#51;&#53;&#x31;&#56;&#54;&#53;&#53;&#x37;&#54;&#64;&#x71;&#113;&#46;&#99;&#111;&#x6d;">&#51;&#53;&#x31;&#56;&#54;&#53;&#53;&#x37;&#54;&#64;&#x71;&#113;&#46;&#99;&#111;&#x6d;</a></td>
 <td>test</td>
 </tr>
 </tbody></table>
@@ -89,45 +129,14 @@
 
 
 
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#99;&#110;&#x6e;&#x71;&#106;&#98;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#99;&#110;&#x6e;&#x71;&#106;&#98;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#51;&#x35;&#49;&#x38;&#x36;&#53;&#53;&#x37;&#54;&#x40;&#x71;&#113;&#46;&#99;&#111;&#109;">&#51;&#x35;&#49;&#x38;&#x36;&#53;&#53;&#x37;&#54;&#x40;&#x71;&#113;&#46;&#99;&#111;&#109;</a>(hoey1994)下创建test项目</p>
+<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#110;&#x6e;&#x71;&#106;&#x62;&#97;&#x6e;&#53;&#50;&#49;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#x63;&#110;&#x6e;&#x71;&#106;&#x62;&#97;&#x6e;&#53;&#50;&#49;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a>(hoey94)下创建Test项目</p>
+<p>在账号<a href="mailto:&#x33;&#53;&#x31;&#56;&#54;&#53;&#x35;&#x37;&#x36;&#64;&#113;&#113;&#46;&#99;&#x6f;&#109;">&#x33;&#53;&#x31;&#56;&#54;&#53;&#x35;&#x37;&#x36;&#64;&#113;&#113;&#46;&#99;&#x6f;&#109;</a>(hoey1994)下创建test项目</p>
 <p>使用下面命令分别克隆到本地</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
 
 
 
 <p>改动一下里面的内容并提交完成测试。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/12/06/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>hexo换主题乱码问题的解决</title>
-    <url>/2022/12/08/hexo%E6%8D%A2%E4%B8%BB%E9%A2%98%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3/</url>
-    <content><![CDATA[<h1 id="hexo换主题乱码问题的解决"><a href="#hexo换主题乱码问题的解决" class="headerlink" title="hexo换主题乱码问题的解决"></a>hexo换主题乱码问题的解决</h1><p>使用next主题</p>
-<h2 id="问题的表现"><a href="#问题的表现" class="headerlink" title="问题的表现"></a>问题的表现</h2><p><code>&#123;% extends '_layout.swig' %&#125; &#123;% import '_macro/post.swig' as post_template %&#125;....................</code></p>
-<h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>原因是hexo在5.0之后把swig给删除了需要自己手动安装</p>
-<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line">npm <span class="selector-tag">i</span> hexo-renderer-swig</span><br></pre></td></tr></table></figure>
-
-<p>之后重新</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">hexo clean          </span><br><span class="line">hexo <span class="keyword">generate</span>      </span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
 ]]></content>
   </entry>
 </search>
