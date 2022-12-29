@@ -77,19 +77,17 @@
 
 
 
-<meta name="description" content="因工作需要，使用Iterm2自动跳转远程终端，提高工作效率 自动获取MFA Token安装oath-toolkit 12brew search oath-toolkitbrew install oath-toolkit  使用下面命令获取token， 注：${SECKEY} 是一个变量，按照自己的填写 1alias smCode&#x3D;&quot;echo &#96;oathtool --totp -b $&amp;#">
+<meta name="description" content="一天下来是否有负能量的言行，有没有让人感到不愉快？待人是否亲切？是否傲慢？有没有卑怯的举止？有没有自私的言行？等等 事件一： 在会议上，要人事件搞得大家都很不愉快，回忆： “别呀，这块不就是在会上定的嘛。是这样的，我们这边现在还有40来张表没有测，剩下23张要等待上游数据就位，这样就需要60多张表要搞，如果按照每天3张表的进度，这样也得要至少20天。2个人的话就差不多10～15天左右了。” 待人亲">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac自动SSH+MFA">
-<meta property="og:url" content="http://example.com/2022/12/08/Mac%E8%87%AA%E5%8A%A8SSH-MFA/index.html">
+<meta property="og:title" content="自省20221214">
+<meta property="og:url" content="http://example.com/posts/20221214180601-736a536c.html">
 <meta property="og:site_name" content="Hoey笔记">
-<meta property="og:description" content="因工作需要，使用Iterm2自动跳转远程终端，提高工作效率 自动获取MFA Token安装oath-toolkit 12brew search oath-toolkitbrew install oath-toolkit  使用下面命令获取token， 注：${SECKEY} 是一个变量，按照自己的填写 1alias smCode&#x3D;&quot;echo &#96;oathtool --totp -b $&amp;#">
+<meta property="og:description" content="一天下来是否有负能量的言行，有没有让人感到不愉快？待人是否亲切？是否傲慢？有没有卑怯的举止？有没有自私的言行？等等 事件一： 在会议上，要人事件搞得大家都很不愉快，回忆： “别呀，这块不就是在会上定的嘛。是这样的，我们这边现在还有40来张表没有测，剩下23张要等待上游数据就位，这样就需要60多张表要搞，如果按照每天3张表的进度，这样也得要至少20天。2个人的话就差不多10～15天左右了。” 待人亲">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tva1.sinaimg.cn/large/0066vfZIgy1h8woxb34vqj31y01dwe81.jpg">
-<meta property="article:published_time" content="2022-12-08T11:39:34.000Z">
-<meta property="article:modified_time" content="2022-12-08T12:57:13.462Z">
+<meta property="article:published_time" content="2022-12-14T10:06:01.000Z">
+<meta property="article:modified_time" content="2022-12-29T05:53:52.999Z">
 <meta property="article:author" content="Hoey">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://tva1.sinaimg.cn/large/0066vfZIgy1h8woxb34vqj31y01dwe81.jpg">
 
 
 
@@ -119,13 +117,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2022/12/08/Mac自动SSH-MFA/"/>
+  <link rel="canonical" href="http://example.com/posts/20221214180601-736a536c.html"/>
 
 
 
 
 
-  <title>Mac自动SSH+MFA | Hoey笔记</title>
+  <title>自省20221214 | Hoey笔记</title><meta name="robots" content="noindex">
   
 
 
@@ -266,7 +264,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/08/Mac%E8%87%AA%E5%8A%A8SSH-MFA/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221214180601-736a536c.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -283,7 +281,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Mac自动SSH+MFA</h1>
+          <h1 class="post-title" itemprop="name headline">自省20221214</h1>
         
 
         <div class="post-meta">
@@ -295,8 +293,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-08T19:39:34+08:00">
-                2022-12-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-14T18:06:01+08:00">
+                2022-12-14
               </time>
             
 
@@ -333,29 +331,42 @@
       
 
       
-        <p>因工作需要，使用Iterm2自动跳转远程终端，提高工作效率</p>
-<h1 id="自动获取MFA-Token"><a href="#自动获取MFA-Token" class="headerlink" title="自动获取MFA Token"></a>自动获取MFA Token</h1><p>安装oath-toolkit</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew search oath-toolkit</span><br><span class="line">brew install oath-toolkit</span><br></pre></td></tr></table></figure>
-
-<p>使用下面命令获取token， 注：${SECKEY} 是一个变量，按照自己的填写</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> smCode=<span class="string">&quot;echo `oathtool --totp -b <span class="variable">$&#123;SECKEY&#125;</span> `| pbcopy&quot;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="自定义SHELL-MFA-TOKEN脚本"><a href="#自定义SHELL-MFA-TOKEN脚本" class="headerlink" title="自定义SHELL+MFA TOKEN脚本"></a>自定义SHELL+MFA TOKEN脚本</h1><p>将脚本保存juneyao_auto_ssh_prd.sh</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">opts=$@</span><br><span class="line">getParam()&#123;</span><br><span class="line">  arg=$1</span><br><span class="line">  echo $opts | xargs -n1 | cut -b 2- | awk -F&#x27;=&#x27; &#x27;&#123;if($1==&quot;&#x27;&quot;$arg&quot;&#x27;&quot;) print $2&#125;&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">USER=zhaoyihao</span><br><span class="line">echo &quot;[INFO] USER: &quot;$&#123;USER&#125;</span><br><span class="line"></span><br><span class="line">HOST=`getParam HOST`</span><br><span class="line">echo &quot;[INFO] HOST: &quot;$&#123;HOST&#125;</span><br><span class="line"></span><br><span class="line">PASSWORD=`getParam PASSWORD`</span><br><span class="line">echo &quot;[INFO] PASSWORD: *****&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">stg:20 prd:2222</span></span><br><span class="line">PORT=`getParam PORT`</span><br><span class="line">echo &quot;[INFO] PORT: &quot;$&#123;PORT&#125;</span><br><span class="line"></span><br><span class="line">PRD_TOKEN=&quot;`oathtool --totp -b 4YIKKGPXJD3G32YP`&quot;</span><br><span class="line"></span><br><span class="line">sw_login()&#123;</span><br><span class="line">        expect -c &quot;</span><br><span class="line">        # 每个判断等待1秒</span><br><span class="line">        set timeout 1</span><br><span class="line">        spawn ssh $USER@$HOST -p $PORT</span><br><span class="line">        # 判断是否需要保存秘钥</span><br><span class="line">        expect &#123;</span><br><span class="line">                \&quot;yes/no\&quot;   &#123; send yes\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送密码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*assword\&quot; &#123; send $PASSWORD\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送验证码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*OTP Code*\&quot; &#123; send $PRD_TOKEN\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 停留在当前登录界面</span><br><span class="line">        interact</span><br><span class="line">        &quot;</span><br><span class="line">&#125;</span><br><span class="line">sw_login</span><br></pre></td></tr></table></figure>
-
-
-
-<p>脚本的使用命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh juneyao_auto_ssh_prd.sh -HOST=jmp.juneyaoair.com -PORT=2222 -PASSWORD=123123</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="与ITerm2集成"><a href="#与ITerm2集成" class="headerlink" title="与ITerm2集成"></a>与ITerm2集成</h1><p>在ITerm2终端中进行配置</p>
-<p>Preference… -&gt; Profiles -&gt; +<img src="http://tva1.sinaimg.cn/large/0066vfZIgy1h8woxb34vqj31y01dwe81.jpg" alt="image.png"></p>
-<p>将脚本运行命令填入到Send text at start:文本框中保存即可。</p>
-
+        <p>一天下来是否有负能量的言行，有没有让人感到不愉快？待人是否亲切？是否傲慢？有没有卑怯的举止？有没有自私的言行？等等</p>
+<p>事件一：</p>
+<p>在会议上，要人事件搞得大家都很不愉快，回忆：</p>
+<p>“别呀，这块不就是在会上定的嘛。是这样的，我们这边现在还有40来张表没有测，剩下23张要等待上游数据就位，这样就需要60多张表要搞，如果按照每天3张表的进度，这样也得要至少20天。2个人的话就差不多10～15天左右了。”</p>
+<p>待人亲切不亲切？ 不亲切，老是感觉怨念很重，你把你怨念收一收。</p>
+<p>有没有卑怯的举止？怂，胆识不行，遇到别人压你，你就怕了，属于吃硬不吃软。</p>
+<p>有没有让人感到不愉快， 有，不听别人的建议，<font color="red">不愿意有人说不，别人一反对自己就炸毛。</font></p>
+<p>有没有自私的言行，  没有</p>
+<p>心得1：</p>
+<p>工作拆的不够细， 自认为很好，但是一点都不细，导致老板信心不足，不敢给你人呀，下面的人也慢慢远离，因为是在是太累了，就算脾气再好，也扛不住这么连续加班。 是你自己没做好呀！</p>
+<p>心得2：</p>
+<p>要人就要人，别人反驳就反驳，要听取别人的反驳，接受别人的反驳，接受别人给自己提意见，而不是人家一提你就爆炸。</p>
+<p>心得3:</p>
+<p>适当的开开玩笑化解一下：</p>
+<p>“为啥又变成60张表了？态度平和一些，是这样的我们这边23张表等着上游来数只能等下周测了呗”</p>
+<p>“12月30号之前必须完成，哈哈哈这没办法呀，你可以看一下 工作分解清单，这块我们把工作细分了一下，按照每个工作项评估了合理的工期，这个工期实际上已经压缩了，不妨你先看一看这个清单再下结论，或者我们可以先在12月30号前先交付一波，后续在交付一波，您看怎么样？”</p>
+<p>心得4:</p>
+<p>如果事情不够清晰，请不要过分的承诺，今天会议上我有没有承诺，没有承诺对吧，我提出要人了， 这就是进步</p>
+<p>今天给谁造成了不舒服？</p>
+<ol>
+<li>姜智赢</li>
+<li>黄韶山</li>
+<li>柳鹏</li>
+</ol>
+<p>明天整点好吃的给大家分一下，早点来！</p>
+<p>当有人当中挑战你的底线时？你会怎么做？</p>
+<p>今天我的表现非常的差，因为我表现的很激动，尽管说的话不是很伤人，但是给大家的印象也不好。</p>
+<ol>
+<li><p>永远请控制好你的情绪</p>
+</li>
+<li><p>如果对方挑战你的底线，你就选择不吭声、不理睬</p>
+</li>
+<li><p>以后开会一定要带着录音。</p>
+</li>
+</ol>
+<!-- flag of hidden posts -->
       
     </div>
     
@@ -375,26 +386,6 @@
       
       
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2022/12/08/github%E9%85%8D%E7%BD%AE%E5%A4%9A%E7%94%A8%E6%88%B7/" rel="next" title="github配置多用户">
-                <i class="fa fa-chevron-left"></i> github配置多用户
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2022/12/08/Mac%E4%B8%8BVIM%E9%85%8D%E7%BD%AE/" rel="prev" title="Mac下VIM配置">
-                Mac下VIM配置 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
 
       
@@ -443,17 +434,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -495,22 +477,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%8E%B7%E5%8F%96MFA-Token"><span class="nav-number">1.</span> <span class="nav-text">自动获取MFA Token</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89SHELL-MFA-TOKEN%E8%84%9A%E6%9C%AC"><span class="nav-number">2.</span> <span class="nav-text">自定义SHELL+MFA TOKEN脚本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8EITerm2%E9%9B%86%E6%88%90"><span class="nav-number">3.</span> <span class="nav-text">与ITerm2集成</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
