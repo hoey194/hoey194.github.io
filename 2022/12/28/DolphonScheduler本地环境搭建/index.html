@@ -85,7 +85,7 @@
 <meta property="og:description" content="环境准备  MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports) Git JDK: v1.8.x (Currently does not support jdk 11) Maven: v3.5+ Node: v16.13+ (dolphinScheduler version is lower than 3.0, please install n">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-12-28T14:29:17.000Z">
-<meta property="article:modified_time" content="2022-12-29T02:04:29.380Z">
+<meta property="article:modified_time" content="2022-12-29T03:57:19.459Z">
 <meta property="article:author" content="Hoey">
 <meta name="twitter:card" content="summary">
 
@@ -347,7 +347,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout 3.1.0-release</span><br></pre></td></tr></table></figure>
 
 <p>3.编译项目</p>
-<p>spotless是一种代码格式化工具，使用 spotless:apply 表示开启module代码格式校验</p>
+<p>spotless是一种代码格式化工具，使用 spotless:apply 表示格式化module代码</p>
 <p>mvnw同mvn的功能是一样的，mvnw做了项目适配</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./mvnw spotless:apply </span><br><span class="line">./mvnw clean install -Prelease -Dmaven.test.skip=true -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true</span><br></pre></td></tr></table></figure>
 
