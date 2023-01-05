@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/posts/20221208193934-30d40687.html</loc>
+    
+    <lastmod>2023-01-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/sage/index.html</loc>
     
     <lastmod>2022-12-29</lastmod>
@@ -30,15 +39,6 @@
   
   <url>
     <loc>http://example.com/sage/%E8%87%AA%E7%9C%8120221216.html</loc>
-    
-    <lastmod>2022-12-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/posts/20221208193934-30d40687.html</loc>
     
     <lastmod>2022-12-29</lastmod>
     
@@ -137,7 +137,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/posts/20221213192040-1d80bfd.html</loc>
+    <loc>http://example.com/sage/V2ray%E6%90%AD%E5%BB%BA.html</loc>
     
     <lastmod>2022-12-29</lastmod>
     
@@ -157,7 +157,7 @@
 
   <url>
     <loc>http://example.com/</loc>
-    <lastmod>2022-12-29</lastmod>
+    <lastmod>2023-01-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
