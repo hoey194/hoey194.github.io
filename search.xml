@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>DolphinScheduler 3.1.0 本地环境搭建</title>
+    <url>/posts/20221228222917-aa59cf36.html</url>
+    <content><![CDATA[<p>环境准备</p>
+<ul>
+<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
+<li><a href="https://git-scm.com/downloads">Git</a></li>
+<li><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>: v1.8.x (Currently does not support jdk 11)</li>
+<li><a href="http://maven.apache.org/download.cgi">Maven</a>: v3.5+</li>
+<li><a href="https://nodejs.org/en/download">Node</a>: v16.13+ (dolphinScheduler version is lower than 3.0, please install node v12.20+)</li>
+<li><a href="https://pnpm.io/installation">Pnpm</a>: v6.x</li>
+<li>Zookeeper: 3.8</li>
+</ul>
+<p>1.克隆项目到本地</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/apache/dolphinscheduler.git</span><br></pre></td></tr></table></figure>
+
+<p>2.导入项目到IDEA，并切换分支到<code>3.1.0</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout 3.1.0-release</span><br></pre></td></tr></table></figure>
+
+<p>3.编译项目</p>
+<p>spotless是一种代码格式化工具，使用 spotless:apply 表示格式化module代码</p>
+<p>mvnw同mvn的功能是一样的，mvnw做了项目适配</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./mvnw spotless:apply </span><br><span class="line">./mvnw clean install -Prelease -Dmaven.test.skip=true -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true</span><br></pre></td></tr></table></figure>
+
+<p>4.在mysql创建database数据库</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> SCHEMA dolphinschedulertest;</span><br></pre></td></tr></table></figure>
+
+<p>找到脚本dolphinscheduler-dao/src/main/resources/sql/dolphinscheduler_mysql.sql并运行</p>
+<p>5.修改项目配置文件</p>
+<p>全局搜索<code>application.yaml</code>，将文件中涉及postgresql的替换为mysql</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   driver-class-name: org.postgresql.Driver</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   url: jdbc:postgresql://127.0.0.1:5432/dolphinscheduler</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   username: root</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   password: root</span></span><br><span class="line">driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">url: jdbc:mysql://127.0.0.1:3306/dolphinschedulertest</span><br><span class="line">username: root</span><br><span class="line">password: 123456</span><br><span class="line"></span><br><span class="line">org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate</span><br></pre></td></tr></table></figure>
+
+<p>6.修改dolphinscheduler-bom下pom.xml</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;mysql-connector.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>7.修改logback-spring.xml</p>
+<p>全局搜索logback-spring.xml，将下面内容添加到其中</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">&quot;INFO&quot;</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--将这句话加入到root节点下--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">&quot;STDOUT&quot;</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>8.配置启动项</p>
+<p>分别配置MasterServer, WorkerServer, ApiApplicationServer</p>
+<ul>
+<li>MasterServer：Execute function <code>main</code> in the class <code>org.apache.dolphinscheduler.server.master.MasterServer</code> by Intellij IDEA, with the configuration <em>VM Options</em> <code>-Dlogging.config=classpath:logback-spring.xml -Ddruid.mysql.usePingMethod=false -Dspring.profiles.active=mysql</code></li>
+<li>WorkerServer：Execute function <code>main</code> in the class <code>org.apache.dolphinscheduler.server.worker.WorkerServer</code> by Intellij IDEA, with the configuration <em>VM Options</em> <code>-Dlogging.config=classpath:logback-spring.xml -Ddruid.mysql.usePingMethod=false -Dspring.profiles.active=mysql</code></li>
+<li>ApiApplicationServer：Execute function <code>main</code> in the class <code>org.apache.dolphinscheduler.api.ApiApplicationServer</code> by Intellij IDEA, with the configuration <em>VM Options</em> <code>-Dlogging.config=classpath:logback-spring.xml -Dspring.profiles.active=api,mysql</code>. After it started, you could find Open API documentation in <a href="http://localhost:12345/dolphinscheduler/swagger-ui/index.html">http://localhost:12345/dolphinscheduler/swagger-ui/index.html</a></li>
+</ul>
+<p>9.配置zookeeper</p>
+<p>参考以前的博客<a href="https://blog.hoey.tk/2018/04/15/2018-04-15-hadoop-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8/">zookeeper部署</a></p>
+<p>10.启动前端</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pnpm install</span><br><span class="line">pnpm run dev</span><br></pre></td></tr></table></figure>
+
+<p>11.启动后端</p>
+<p>分别在IDEA中运行MasterServer, WorkerServer, ApiApplicationServer</p>
+<p>登陆账号密码 <font color="red">admin/dolphinscheduler123</font></p>
+<p>参考文档：<a href="https://www.bookstack.cn/read/dolphinscheduler-3.1.0-en/af18cd17a04eb31f.md">https://www.bookstack.cn/read/dolphinscheduler-3.1.0-en/af18cd17a04eb31f.md</a></p>
+<p>编译错误1：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:1.12.1:pnpm (pnpm install) on project dolphinscheduler-ui: Failed to run task: &#x27;pnpm install&#x27; failed. org.apache.commons.exec.ExecuteException: Process exited with an error: 9 (Exit value: 9) -&gt; [Help 1]</span><br></pre></td></tr></table></figure>
+
+<p>解决办法：</p>
+<p>修改dolphinscheduler-ui模块下的pom.xml，修改后记得重新执行<code>./mvnw spotless:apply</code>格式化代码</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--                &lt;plugins&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                    &lt;plugin&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;groupId&gt;com.github.eirslett&lt;/groupId&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;artifactId&gt;frontend-maven-plugin&lt;/artifactId&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;version&gt;$&#123;frontend-maven-plugin.version&#125;&lt;/version&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;pnpmInheritsProxyConfigFromMaven&gt;false&lt;/pnpmInheritsProxyConfigFromMaven&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;executions&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;install node and pnpm&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;install-node-and-pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;nodeVersion&gt;$&#123;node.version&#125;&lt;/nodeVersion&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;pnpmVersion&gt;$&#123;pnpm.version&#125;&lt;/pnpmVersion&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;pnpm install&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;phase&gt;generate-resources&lt;/phase&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;arguments&gt;install&lt;/arguments&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;pnpm run build:prod&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;arguments&gt;run build:prod&lt;/arguments&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;/executions&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                    &lt;/plugin&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                &lt;/plugins&gt;--&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
     <title>Hexo隐藏文章</title>
     <url>/posts/20221212095216-1c5dc392.html</url>
     <content><![CDATA[<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>在站点根目录下执行</p>
@@ -72,11 +136,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#110;&#110;&#113;&#x6a;&#98;&#x61;&#x6e;&#x35;&#x32;&#x31;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#99;&#110;&#110;&#113;&#x6a;&#98;&#x61;&#x6e;&#x35;&#x32;&#x31;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;</a></td>
+<td><a href="mailto:&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#97;&#x6e;&#x35;&#50;&#49;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#97;&#x6e;&#x35;&#50;&#49;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a></td>
 <td>hoey94</td>
 </tr>
 <tr>
-<td><a href="mailto:&#x33;&#53;&#49;&#x38;&#x36;&#53;&#53;&#55;&#54;&#x40;&#x71;&#113;&#46;&#x63;&#x6f;&#109;">&#x33;&#53;&#49;&#x38;&#x36;&#53;&#53;&#55;&#54;&#x40;&#x71;&#113;&#46;&#x63;&#x6f;&#109;</a></td>
+<td><a href="mailto:&#x33;&#53;&#49;&#56;&#54;&#x35;&#53;&#55;&#54;&#x40;&#113;&#113;&#46;&#99;&#111;&#x6d;">&#x33;&#53;&#49;&#56;&#54;&#x35;&#53;&#55;&#54;&#x40;&#113;&#113;&#46;&#99;&#111;&#x6d;</a></td>
 <td>hoey1994</td>
 </tr>
 </tbody></table>
@@ -91,11 +155,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#x63;&#110;&#110;&#113;&#106;&#98;&#97;&#x6e;&#53;&#50;&#49;&#x40;&#103;&#109;&#x61;&#105;&#108;&#46;&#x63;&#111;&#x6d;">&#x63;&#110;&#110;&#113;&#106;&#98;&#97;&#x6e;&#53;&#50;&#49;&#x40;&#103;&#109;&#x61;&#105;&#108;&#46;&#x63;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#99;&#110;&#x6e;&#x71;&#x6a;&#98;&#x61;&#x6e;&#x35;&#50;&#x31;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#99;&#110;&#x6e;&#x71;&#x6a;&#98;&#x61;&#x6e;&#x35;&#50;&#x31;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a></td>
 <td>Test</td>
 </tr>
 <tr>
-<td><a href="mailto:&#51;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#55;&#x36;&#64;&#113;&#113;&#46;&#99;&#x6f;&#x6d;">&#51;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#55;&#x36;&#64;&#113;&#113;&#46;&#99;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#x33;&#53;&#x31;&#56;&#x36;&#53;&#x35;&#x37;&#x36;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#109;">&#x33;&#53;&#x31;&#56;&#x36;&#53;&#x35;&#x37;&#x36;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#109;</a></td>
 <td>test</td>
 </tr>
 </tbody></table>
@@ -144,8 +208,8 @@
 
 
 
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#110;&#x6e;&#x71;&#106;&#x62;&#97;&#x6e;&#53;&#x32;&#49;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;">&#x63;&#110;&#x6e;&#x71;&#106;&#x62;&#97;&#x6e;&#53;&#x32;&#49;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#x33;&#53;&#49;&#x38;&#x36;&#x35;&#x35;&#55;&#x36;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;">&#x33;&#53;&#49;&#x38;&#x36;&#x35;&#x35;&#55;&#x36;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;</a>(hoey1994)下创建test项目</p>
+<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#110;&#x6e;&#x71;&#106;&#x62;&#x61;&#110;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#x63;&#110;&#x6e;&#x71;&#106;&#x62;&#x61;&#110;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>(hoey94)下创建Test项目</p>
+<p>在账号<a href="mailto:&#x33;&#x35;&#x31;&#56;&#54;&#53;&#x35;&#55;&#x36;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;">&#x33;&#x35;&#x31;&#56;&#54;&#53;&#x35;&#55;&#x36;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;</a>(hoey1994)下创建test项目</p>
 <p>使用下面命令分别克隆到本地</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
 
@@ -168,15 +232,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>拉链表</title>
-    <url>/posts/20230221094327-2e5ad32b.html</url>
-    <content><![CDATA[<p>拉链表思路图：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094438645.png" alt="image-20230221094438645"></p>
-<p>使用HiveSQL增量完成拉链表加工思路：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094348740.png" alt="image-20230221094348740"></p>
-]]></content>
-  </entry>
-  <entry>
     <title>基于Python的简易FS服务</title>
     <url>/posts/20221212164304-b422eee5.html</url>
     <content><![CDATA[<p>创建start.py，代码如下：</p>
@@ -188,67 +243,12 @@
 ]]></content>
   </entry>
   <entry>
-    <title>DolphinScheduler 3.1.0 本地环境搭建</title>
-    <url>/posts/20221228222917-aa59cf36.html</url>
-    <content><![CDATA[<p>环境准备</p>
-<ul>
-<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
-<li><a href="https://git-scm.com/downloads">Git</a></li>
-<li><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>: v1.8.x (Currently does not support jdk 11)</li>
-<li><a href="http://maven.apache.org/download.cgi">Maven</a>: v3.5+</li>
-<li><a href="https://nodejs.org/en/download">Node</a>: v16.13+ (dolphinScheduler version is lower than 3.0, please install node v12.20+)</li>
-<li><a href="https://pnpm.io/installation">Pnpm</a>: v6.x</li>
-<li>Zookeeper: 3.8</li>
-</ul>
-<p>1.克隆项目到本地</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/apache/dolphinscheduler.git</span><br></pre></td></tr></table></figure>
-
-<p>2.导入项目到IDEA，并切换分支到<code>3.1.0</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout 3.1.0-release</span><br></pre></td></tr></table></figure>
-
-<p>3.编译项目</p>
-<p>spotless是一种代码格式化工具，使用 spotless:apply 表示格式化module代码</p>
-<p>mvnw同mvn的功能是一样的，mvnw做了项目适配</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./mvnw spotless:apply </span><br><span class="line">./mvnw clean install -Prelease -Dmaven.test.skip=true -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true</span><br></pre></td></tr></table></figure>
-
-<p>4.在mysql创建database数据库</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> SCHEMA dolphinschedulertest;</span><br></pre></td></tr></table></figure>
-
-<p>找到脚本dolphinscheduler-dao/src/main/resources/sql/dolphinscheduler_mysql.sql并运行</p>
-<p>5.修改项目配置文件</p>
-<p>全局搜索<code>application.yaml</code>，将文件中涉及postgresql的替换为mysql</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   driver-class-name: org.postgresql.Driver</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   url: jdbc:postgresql://127.0.0.1:5432/dolphinscheduler</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   username: root</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   password: root</span></span><br><span class="line">driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">url: jdbc:mysql://127.0.0.1:3306/dolphinschedulertest</span><br><span class="line">username: root</span><br><span class="line">password: 123456</span><br><span class="line"></span><br><span class="line">org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate</span><br></pre></td></tr></table></figure>
-
-<p>6.修改dolphinscheduler-bom下pom.xml</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;mysql-connector.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>7.修改logback-spring.xml</p>
-<p>全局搜索logback-spring.xml，将下面内容添加到其中</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">&quot;INFO&quot;</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--将这句话加入到root节点下--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">&quot;STDOUT&quot;</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>8.配置启动项</p>
-<p>分别配置MasterServer, WorkerServer, ApiApplicationServer</p>
-<ul>
-<li>MasterServer：Execute function <code>main</code> in the class <code>org.apache.dolphinscheduler.server.master.MasterServer</code> by Intellij IDEA, with the configuration <em>VM Options</em> <code>-Dlogging.config=classpath:logback-spring.xml -Ddruid.mysql.usePingMethod=false -Dspring.profiles.active=mysql</code></li>
-<li>WorkerServer：Execute function <code>main</code> in the class <code>org.apache.dolphinscheduler.server.worker.WorkerServer</code> by Intellij IDEA, with the configuration <em>VM Options</em> <code>-Dlogging.config=classpath:logback-spring.xml -Ddruid.mysql.usePingMethod=false -Dspring.profiles.active=mysql</code></li>
-<li>ApiApplicationServer：Execute function <code>main</code> in the class <code>org.apache.dolphinscheduler.api.ApiApplicationServer</code> by Intellij IDEA, with the configuration <em>VM Options</em> <code>-Dlogging.config=classpath:logback-spring.xml -Dspring.profiles.active=api,mysql</code>. After it started, you could find Open API documentation in <a href="http://localhost:12345/dolphinscheduler/swagger-ui/index.html">http://localhost:12345/dolphinscheduler/swagger-ui/index.html</a></li>
-</ul>
-<p>9.配置zookeeper</p>
-<p>参考以前的博客<a href="https://blog.hoey.tk/2018/04/15/2018-04-15-hadoop-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8/">zookeeper部署</a></p>
-<p>10.启动前端</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pnpm install</span><br><span class="line">pnpm run dev</span><br></pre></td></tr></table></figure>
-
-<p>11.启动后端</p>
-<p>分别在IDEA中运行MasterServer, WorkerServer, ApiApplicationServer</p>
-<p>登陆账号密码 <font color="red">admin/dolphinscheduler123</font></p>
-<p>参考文档：<a href="https://www.bookstack.cn/read/dolphinscheduler-3.1.0-en/af18cd17a04eb31f.md">https://www.bookstack.cn/read/dolphinscheduler-3.1.0-en/af18cd17a04eb31f.md</a></p>
-<p>编译错误1：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[ERROR] Failed to execute goal com.github.eirslett:frontend-maven-plugin:1.12.1:pnpm (pnpm install) on project dolphinscheduler-ui: Failed to run task: &#x27;pnpm install&#x27; failed. org.apache.commons.exec.ExecuteException: Process exited with an error: 9 (Exit value: 9) -&gt; [Help 1]</span><br></pre></td></tr></table></figure>
-
-<p>解决办法：</p>
-<p>修改dolphinscheduler-ui模块下的pom.xml，修改后记得重新执行<code>./mvnw spotless:apply</code>格式化代码</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--                &lt;plugins&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                    &lt;plugin&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;groupId&gt;com.github.eirslett&lt;/groupId&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;artifactId&gt;frontend-maven-plugin&lt;/artifactId&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;version&gt;$&#123;frontend-maven-plugin.version&#125;&lt;/version&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;pnpmInheritsProxyConfigFromMaven&gt;false&lt;/pnpmInheritsProxyConfigFromMaven&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;executions&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;install node and pnpm&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;install-node-and-pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;nodeVersion&gt;$&#123;node.version&#125;&lt;/nodeVersion&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;pnpmVersion&gt;$&#123;pnpm.version&#125;&lt;/pnpmVersion&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;pnpm install&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;phase&gt;generate-resources&lt;/phase&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;arguments&gt;install&lt;/arguments&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;pnpm run build:prod&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;arguments&gt;run build:prod&lt;/arguments&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;/executions&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                    &lt;/plugin&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                &lt;/plugins&gt;--&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
+    <title>拉链表</title>
+    <url>/posts/20230221094327-2e5ad32b.html</url>
+    <content><![CDATA[<p>拉链表思路图：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094438645.png" alt="image-20230221094438645"></p>
+<p>使用HiveSQL增量完成拉链表加工思路：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094348740.png" alt="image-20230221094348740"></p>
 ]]></content>
   </entry>
 </search>
