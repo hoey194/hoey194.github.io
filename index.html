@@ -283,6 +283,591 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230430133503-ff462b52.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230430133503-ff462b52.html" itemprop="url">jellyfin 添加字体库解决中文乱码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-04-30T13:35:03+08:00">
+                2023-04-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近使用Jellyfin搭建家庭影音出现中文乱码问题，下面是我搜到的一些方案，我用的是扩展中文字体库</p>
+<ul>
+<li>使用nyanmisaka/jellyfin 套件</li>
+<li>使用actime转字幕</li>
+<li>扩展中文字体库</li>
+</ul>
+<p>下面是一些指令，针对小白用的，大佬无视</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">远程登录到NAS并切换最高权限</span></span><br><span class="line">ssh admin@192.168.30.5 -p 22</span><br><span class="line">sudo -i</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入到NAS自己创建的目录，这个目录自己改</span></span><br><span class="line">cd /volume1/media/fonts</span><br><span class="line">pwd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用docker命令查看jellyfin 的<span class="built_in">id</span></span></span><br><span class="line">docker ps</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入到容器内部查看目录文件结构1538f09eaa85要替换成自己的<span class="built_in">id</span></span></span><br><span class="line">docker exec -it 1538f09eaa85 /bin/bash</span><br><span class="line">cd /usr/share/fonts/</span><br><span class="line">exit</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制宿主机的文件到容器内</span></span><br><span class="line">docker cp fz.tar.gz 1538f09eaa85:/usr/share/fonts/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">到容器目录中解压</span></span><br><span class="line">docker exec -it 1538f09eaa85 /bin/bash</span><br><span class="line">cd /usr/share/fonts/</span><br><span class="line">tar -zxvf fz.tar.gz</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>链接：<a target="_blank" rel="noopener" href="https://share.weiyun.com/5Wg55FF5">https://share.weiyun.com/5Wg55FF5</a> 密码：nhqe76</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230331142046-129de9c2.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230331142046-129de9c2.html" itemprop="url">panda chapter 1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-03-31T14:20:46+08:00">
+                2023-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>RedBull诞生于2021牛年，红色代表的是喜庆，因此项目命名为RedBull。该项目专注于Flink DataStream 研发，帮助企业快速构建企业级的Flink实时计算数仓。</p>
+<p>RedBull目前有三大模块，分别是</p>
+<ul>
+<li>dependency：主要封装Flink的核心依赖包</li>
+<li>shade：主要整合</li>
+<li>core：做适当的封装，降本增效</li>
+<li>common：复用代码</li>
+<li>runtime：按照业务场景完成代码编写</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230328125112-f144fb4b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230328125112-f144fb4b.html" itemprop="url">Doris使用踩坑总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-03-28T12:51:12+08:00">
+                2023-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>环境</p>
+<ul>
+<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
+<li>[Doris](<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">部署 Docker 集群 - Apache Doris</a>):v1.12.1</li>
+<li><a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>: v1.8.x</li>
+<li>IDEA开发环境</li>
+</ul>
+<h3 id="一、-Docker部署"><a href="#一、-Docker部署" class="headerlink" title="一、 Docker部署"></a>一、 Docker部署</h3><p>官方提供文档<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">Deploy Docker cluster</a></p>
+<p><font color="red">但部署完以后发现集群无法识别BE节点，查看日志发现是因为没有设置<code>vm.max_map_count</code>参数</font></p>
+<blockquote>
+<p>避坑1: 需要设置sysctl -w vm.max_map_count=2000000</p>
+<p>避坑2: 在启动容器时需要添加privileged: true</p>
+</blockquote>
+<h3 id="二、Flink-写入Doris"><a href="#二、Flink-写入Doris" class="headerlink" title="二、Flink 写入Doris"></a>二、Flink 写入Doris</h3><p>官方提供了文档<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/ecosystem/flink-doris-connector?_highlight=flink">Flink Doris Connector</a></p>
+<p>这里选用的是RowData的方式写入到Doris，提前到Doris中创建表代码如下:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE dwd;</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> dwd.TICKET;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> dwd.TICKET (</span><br><span class="line">        event <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        newval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        oldval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        stamp <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        subevent <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptm <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptmms <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        ver <span class="type">VARCHAR</span>(<span class="number">256</span>)</span><br><span class="line">)DISTRIBUTED <span class="keyword">BY</span> HASH(stamp) BUCKETS <span class="number">1</span></span><br><span class="line">PROPERTIES (</span><br><span class="line">&quot;replication_allocation&quot; <span class="operator">=</span> &quot;tag.location.default: 1&quot;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>然后是使用Java代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">StreamExecutionEnvironment</span> <span class="variable">env</span> <span class="operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(<span class="number">1</span>);</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">prop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        prop.setProperty(<span class="string">&quot;format&quot;</span>, <span class="string">&quot;json&quot;</span>);</span><br><span class="line">        prop.setProperty(<span class="string">&quot;strip_outer_array&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">        env.fromElements(<span class="string">&quot;&#123;\&quot;event\&quot;:\&quot;CheckIn\&quot;,\&quot;newval\&quot;:\&quot;90\&quot;,\&quot;oldval\&quot;:\&quot;0\&quot;,\&quot;stamp\&quot;:\&quot;67100c4f-0355-4dba-8a76-2a94202132d1\&quot;,\&quot;subevent\&quot;:\&quot;\&quot;,\&quot;uptm\&quot;:\&quot;20230319094822\&quot;,\&quot;uptmms\&quot;:\&quot;20230319094822031\&quot;,\&quot;ver\&quot;:\&quot;v1.0\&quot;&#125;&quot;</span>)</span><br><span class="line">                .addSink(DorisSink.sink(</span><br><span class="line">                        DorisReadOptions.builder().build(),</span><br><span class="line">                        DorisExecutionOptions.builder().setBatchSize(<span class="number">3</span>)</span><br><span class="line">                                .setBatchIntervalMs(<span class="number">0L</span>)</span><br><span class="line">                                .setMaxRetries(<span class="number">3</span>)</span><br><span class="line">                                .setStreamLoadProp(prop)</span><br><span class="line">                                .build(),</span><br><span class="line">                        DorisOptions.builder().setFenodes(<span class="string">&quot;localhost:8030&quot;</span>)</span><br><span class="line">                                .setTableIdentifier(<span class="string">&quot;dwd.TICKET&quot;</span>)</span><br><span class="line">                                .setUsername(<span class="string">&quot;admin&quot;</span>)</span><br><span class="line">                                .setPassword(<span class="string">&quot;&quot;</span>).build())</span><br><span class="line">                );</span><br><span class="line">        env.execute(<span class="string">&quot;pss-format-job&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font color="red">运行时发现网络不通问题，无法成功写入Dois</font>，具体错误如图下图所示：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131103501.png" alt="image-20230328131103501"></p>
+<p>分析宿主节点和docker集群的关系</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131607049.png" alt="image-20230328131607049"></p>
+<p>由架构图得知，是因为sink写入的时候通过外网地址的fe取到be地址是内网地址。</p>
+<p>解决思路：</p>
+<ol>
+<li><p>程序上传到FE运行，但是我属于本地开发环境，这种方式不适合</p>
+</li>
+<li><p>配置Docker network，使得在宿主节点能够访问容器 BE的IP。这块我也尝试搜索了很多资料，最终以失败告终。</p>
+<ul>
+<li>尝试一： 在宿主节点修改路由表 sudo route add -net 172.20.80.0/24 172.20.80.1</li>
+<li>尝试二： 以Host方式运行FE和BE</li>
+</ul>
+</li>
+<li><p>修改源代码： 找到涉及到“第二步：将BE内网IP返回给主程序”代码，并修改</p>
+</li>
+</ol>
+<p>其中我是用第三种方法，成功在本地开发环境摄入数据到Doris，在这里简单介绍一下快速修改源码的方法。</p>
+<p>第一步： 先找到涉及到代码的相关方法，在该场景中对应的是<code>org.apache.doris.flink.rest.RestService</code>类的<code>randomBackend()</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@VisibleForTesting</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">randomBackend</span><span class="params">(DorisOptions options, DorisReadOptions readOptions, Logger logger)</span> <span class="keyword">throws</span> DorisException, IOException &#123;</span><br><span class="line">        List&lt;BackendRowV2&gt; backends = getBackendsV2(options, readOptions, logger);</span><br><span class="line">        logger.trace(<span class="string">&quot;Parse beNodes &#x27;&#123;&#125;&#x27;.&quot;</span>, backends);</span><br><span class="line">        <span class="keyword">if</span> (backends != <span class="literal">null</span> &amp;&amp; !backends.isEmpty()) &#123;</span><br><span class="line">            Collections.shuffle(backends);</span><br><span class="line">            <span class="type">BackendRowV2</span> <span class="variable">backend</span> <span class="operator">=</span> (BackendRowV2)backends.get(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> backend.getIp() + <span class="string">&quot;:&quot;</span> + backend.getHttpPort();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            logger.error(<span class="string">&quot;argument &#x27;&#123;&#125;&#x27; is illegal, value is &#x27;&#123;&#125;&#x27;.&quot;</span>, <span class="string">&quot;beNodes&quot;</span>, backends);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;beNodes&quot;</span>, String.valueOf(backends));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二步：现在希望返回值并非BE的内网IP，因此我们需要将<code>return</code>的内容写死<code>return &quot;localhost:8040&quot;;</code></p>
+<p>第三步：在代码中我们创建与类相同的包，并将源码原封不动粘贴进去，如果报错，可以修改。紧接着修改<code>return &quot;localhost:8040&quot;;</code>即可</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328133408579.png" alt="image-20230328133408579"></p>
+<p>总结：</p>
+<p>我这里是本地开发环境遇到的问题，并非生产环境；如果生产环境部署基于Doris的应用程序，则需要注意下下面几点：</p>
+<ol>
+<li>运行的代码所在的机器，必须与Doris所在的网络保持通常。</li>
+<li>基于RowData的摄入方式不太友好，现在仍要寻找一种更好的编码方式。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230314161612-f30a9b25.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230314161612-f30a9b25.html" itemprop="url">ksqlDB</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-03-14T16:16:12+08:00">
+                2023-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>目前需要对Kafka Topic中的数据进行分析，查询了一下KSQLDB挺不错，它是一个流处理引擎，主要用于处理实时数据流，并支持 SQL 查询和流处理操作。KSQLDB 可以运行在 Apache Kafka 平台之上，它不需要额外的基础设施，因此可以方便地与 Kafka 进行集成。KSQLDB 可以实现流数据的可视化、数据的清洗和去重、流式计算等。KSQLDB 的主要特点包括易于使用、接近实时的处理速度、强大的 SQL 查询功能以及灵活的流处理操作。</p>
+<p>环境准备</p>
+<ul>
+<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
+<li>Docker &amp; Docker compose</li>
+</ul>
+<p>下面代码用于部署Standalone</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">version: <span class="string">&#x27;2&#x27;</span></span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  zookeeper:</span><br><span class="line">    image: confluentinc/cp-zookeeper:<span class="number">7.3</span>.<span class="number">0</span></span><br><span class="line">    hostname: zookeeper</span><br><span class="line">    container_name: zookeeper</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;2181:2181&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      ZOOKEEPER_CLIENT_PORT: <span class="number">2181</span></span><br><span class="line">      ZOOKEEPER_TICK_TIME: <span class="number">2000</span></span><br><span class="line"></span><br><span class="line">  broker:</span><br><span class="line">    image: confluentinc/cp-kafka:<span class="number">7.3</span>.<span class="number">0</span></span><br><span class="line">    hostname: broker</span><br><span class="line">    container_name: broker</span><br><span class="line">    depends_on:</span><br><span class="line">      - zookeeper</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;29092:29092&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KAFKA_BROKER_ID: <span class="number">1</span></span><br><span class="line">      KAFKA_ZOOKEEPER_CONNECT: <span class="string">&#x27;zookeeper:2181&#x27;</span></span><br><span class="line">      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT</span><br><span class="line">      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:<span class="number">9092</span>,PLAINTEXT_HOST://localhost:<span class="number">29092</span></span><br><span class="line">      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: <span class="number">1</span></span><br><span class="line">      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: <span class="number">0</span></span><br><span class="line">      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: <span class="number">1</span></span><br><span class="line">      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">  ksqldb-server:</span><br><span class="line">    image: confluentinc/ksqldb-server:<span class="number">0.28</span>.<span class="number">3</span></span><br><span class="line">    hostname: ksqldb-server</span><br><span class="line">    container_name: ksqldb-server</span><br><span class="line">    depends_on:</span><br><span class="line">      - broker</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;8088:8088&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KSQL_LISTENERS: http://<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8088</span></span><br><span class="line">      KSQL_BOOTSTRAP_SERVERS: broker:<span class="number">9092</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line"></span><br><span class="line">  ksqldb-cli:</span><br><span class="line">    image: confluentinc/ksqldb-cli:<span class="number">0.28</span>.<span class="number">3</span></span><br><span class="line">    container_name: ksqldb-cli</span><br><span class="line">    depends_on:</span><br><span class="line">      - broker</span><br><span class="line">      - ksqldb-server</span><br><span class="line">    <span class="keyword">entrypoint</span><span class="language-bash">: /bin/sh</span></span><br><span class="line">    tty: true</span><br></pre></td></tr></table></figure>
+
+<p>启动KsqlDB服务:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up</span><br></pre></td></tr></table></figure>
+
+<p>使用Docker链接到Cli中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it ksqldb-cli</span><br></pre></td></tr></table></figure>
+
+<p>链接到cli中后，在终端运行命令链接：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ksqldb-cli] docker exec -it ksqldb-cli ksql http://ksqldb-server:8088</span><br></pre></td></tr></table></figure>
+
+<p>可以运行命令查看topic</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show topics;</span><br></pre></td></tr></table></figure>
+
+<p>如果你想链接远端Kafka集群，将<KSQL_BOOTSTRAP_SERVERS> 替换成自己的远程Kafka集群，像下面这个dockerfile一样：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">version: <span class="string">&#x27;2&#x27;</span></span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  ksqldb-server-juneyao:</span><br><span class="line">    image: confluentinc/ksqldb-server</span><br><span class="line">    hostname: ksqldb-server-juneyao</span><br><span class="line">    container_name: ksqldb-server-juneyao</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;8088:8088&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KSQL_LISTENERS: http://<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8088</span></span><br><span class="line">      KSQL_BOOTSTRAP_SERVERS: <span class="number">172.22</span>.<span class="number">17.28</span>:<span class="number">9092</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line"></span><br><span class="line">  ksqldb-cli-juneyao:</span><br><span class="line">    image: confluentinc/ksqldb-cli</span><br><span class="line">    container_name: ksqldb-cli-juneyao</span><br><span class="line">    depends_on:</span><br><span class="line">      - ksqldb-server-juneyao</span><br><span class="line">    <span class="keyword">entrypoint</span><span class="language-bash">: /bin/sh</span></span><br><span class="line">    tty: true</span><br></pre></td></tr></table></figure>
+
+<p> 后面的操作和上面都一样了，启动的时候注意修改名称</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230314162231259.png" alt="image-20230314162231259"></p>
+<h3 id="Example-1：-创建流表并查询"><a href="#Example-1：-创建流表并查询" class="headerlink" title="Example 1： 创建流表并查询"></a>Example 1： 创建流表并查询</h3><p>展示有多少Topic:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> topics;</span><br><span class="line"><span class="keyword">show</span> streams;</span><br></pre></td></tr></table></figure>
+
+<p>在cli链接后，我们创建一个riderLocations流，如果locations这个topic在kafka中不存在，则会对应创建。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> STREAM riderLocations (</span><br><span class="line">    profileId <span class="type">VARCHAR</span>,</span><br><span class="line">    latitude  <span class="keyword">DOUBLE</span>,</span><br><span class="line">    longitude <span class="keyword">DOUBLE</span></span><br><span class="line">) <span class="keyword">WITH</span> ( kafka_topic<span class="operator">=</span><span class="string">&#x27;locations&#x27;</span>, value_format<span class="operator">=</span><span class="string">&#x27;json&#x27;</span>, PARTITIONS <span class="operator">=</span><span class="number">1</span> );</span><br></pre></td></tr></table></figure>
+
+<p>然后往topic中插入一批数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kafka-console-producer --broker-list localhost:9092 --topic locations </span><br><span class="line">&#123;&quot;profileId&quot;:&quot;1&quot;,&quot;latitude&quot;:2.0,&quot;longitude&quot;:1.0&#125;</span><br><span class="line">&#123;&quot;profileId&quot;:&quot;2&quot;,&quot;latitude&quot;:3.0,&quot;longitude&quot;:3.0&#125;</span><br><span class="line">&#123;&quot;profileId&quot;:&quot;3&quot;,&quot;latitude&quot;:1.0,&quot;longitude&quot;:1.0&#125;</span><br></pre></td></tr></table></figure>
+
+<p>就可以愉快的查询它了</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="string">&#x27;auto.offset.reset&#x27;</span><span class="operator">=</span><span class="string">&#x27;earliest&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> riderLocations;</span><br></pre></td></tr></table></figure>
+
+<p>更多的详细用法可以参考网站<a target="_blank" rel="noopener" href="https://ksqldb.io/quickstart.html#quickstart-content">ksqldb</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230221094327-2e5ad32b.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1093,349 +1678,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221208121846-ef5df40e.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20221208121846-ef5df40e.html" itemprop="url">github配置多用户</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-08T12:18:46+08:00">
-                2022-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>因为需要使用多个github账号，但只有一台电脑，想要动态切换不同用户，并且做到免密提交。</p>
-<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><ul>
-<li>Mac book Pro 2020</li>
-<li>git version 2.24.3 (Apple Git-128)</li>
-<li>github账号</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>github登录账号</th>
-<th>github用户名</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="mailto:&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#97;&#x6e;&#x35;&#50;&#49;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#97;&#x6e;&#x35;&#50;&#49;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a></td>
-<td>hoey94</td>
-</tr>
-<tr>
-<td><a href="mailto:&#x33;&#53;&#49;&#56;&#54;&#x35;&#53;&#55;&#54;&#x40;&#113;&#113;&#46;&#99;&#111;&#x6d;">&#x33;&#53;&#49;&#56;&#54;&#x35;&#53;&#55;&#54;&#x40;&#113;&#113;&#46;&#99;&#111;&#x6d;</a></td>
-<td>hoey1994</td>
-</tr>
-</tbody></table>
-<ul>
-<li>测试用的项目(大小写区分)</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Github账号</th>
-<th>项目</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="mailto:&#99;&#110;&#x6e;&#x71;&#x6a;&#98;&#x61;&#x6e;&#x35;&#50;&#x31;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#99;&#110;&#x6e;&#x71;&#x6a;&#98;&#x61;&#x6e;&#x35;&#50;&#x31;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a></td>
-<td>Test</td>
-</tr>
-<tr>
-<td><a href="mailto:&#x33;&#53;&#x31;&#56;&#x36;&#53;&#x35;&#x37;&#x36;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#109;">&#x33;&#53;&#x31;&#56;&#x36;&#53;&#x35;&#x37;&#x36;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#109;</a></td>
-<td>test</td>
-</tr>
-</tbody></table>
-<h1 id="免密登录"><a href="#免密登录" class="headerlink" title="免密登录"></a>免密登录</h1><p>为两个账号生成不同的公钥(*.pub)和密钥</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;cnnqjban521@gmail.com&quot; -f ~/.ssh/id_rsa_hoey94</span><br><span class="line">ssh-keygen -t rsa -C &quot;351865576@qq.com&quot; -f ~/.ssh/id_rsa_hoey1994</span><br></pre></td></tr></table></figure>
-
-<p>生成的两组，公钥和密钥，分别到github官网上配置免密登录 Settings-&gt;SSH and GPG Keys-&gt;New SSH Key，填写的内容可以是用下面命令查看</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat ~/.ssh/id_rsa_hoey94.pub</span><br><span class="line">cat ~/.ssh/id_rsa_hoey1994.pub</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="配置映射"><a href="#配置映射" class="headerlink" title="配置映射"></a>配置映射</h1><p>创建~/.ssh/config，将内容填入进去</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.ssh/config</span><br><span class="line"></span><br><span class="line">Host github-hoey1994</span><br><span class="line">HostName github.com</span><br><span class="line">IdentityFile ~/.ssh/id_rsa_hoey1994</span><br></pre></td></tr></table></figure>
-
-
-
-<p>这里解释一下这一组内容的含义，平常克隆的时候我们会这么写:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:hoey1994/test.git</span><br></pre></td></tr></table></figure>
-
-<p>但如果如果按照上面内容进行配置以后，在克隆的时候要改成这样：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br></pre></td></tr></table></figure>
-
-<p>请仔细对比一下上面两个克隆命令之间的差异</p>
-<p>按照同样原理，将另一个账号也配置一下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Host github-hoey94</span><br><span class="line">HostName github.com</span><br><span class="line">IdentityFile ~/.ssh/id_rsa_hoey94</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>如果端口有修改，可以按照下面的方式进行填写</p>
-<p>Host gitlib-juneyao<br>HostName gitlab.juneyaoair.com<br>Port 10022<br>IdentityFile /Users/hoey/.ssh/id_rsa_juneyao</p>
-</blockquote>
-<h1 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h1><p>推荐不要跳过这一步，gacm是管理git用户很不错的一个工具，可以稍微熟悉一下命令。对于commit 的author的信息，可以快速的进行切换，因为本地有多个用户，使用它可以大大提高效率。</p>
-<ol>
-<li>取消全局的用户配置</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset user.email</span><br><span class="line">git config --global --unset user.mail</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">可以查看内容是否已经取消</span></span><br><span class="line">git config --global -e</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><p>安装多用户管理工具<a target="_blank" rel="noopener" href="https://github.com/hoey94/gacm">gacm</a>，具体安装步骤见github</p>
-</li>
-<li><p>使用gacm命令添加两个账户</p>
-</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gacm add --name hoey94 --email cnnqjban521@gmail.com</span><br><span class="line">gacm add --name hoey1994 --email 351865576@qq.com</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#110;&#x6e;&#x71;&#106;&#x62;&#x61;&#110;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#x63;&#110;&#x6e;&#x71;&#106;&#x62;&#x61;&#110;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#x33;&#x35;&#x31;&#56;&#54;&#53;&#x35;&#55;&#x36;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;">&#x33;&#x35;&#x31;&#56;&#54;&#53;&#x35;&#55;&#x36;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;</a>(hoey1994)下创建test项目</p>
-<p>使用下面命令分别克隆到本地</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
-
-
-
-<p>改动一下里面的内容并提交完成测试。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221208120419-a0fbf222.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20221208120419-a0fbf222.html" itemprop="url">hexo换主题乱码问题的解决</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-08T12:04:19+08:00">
-                2022-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>使用next主题时运行报错</p>
-<h2 id="问题的表现"><a href="#问题的表现" class="headerlink" title="问题的表现"></a>问题的表现</h2><p><code>&#123;% extends '_layout.swig' %&#125; &#123;% import '_macro/post.swig' as post_template %&#125;....................</code></p>
-<h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>原因是hexo在5.0之后把swig给删除了需要自己手动安装</p>
-<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="selector-tag">i</span> hexo-renderer-swig</span><br></pre></td></tr></table></figure>
-
-<p>之后重新</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean          </span><br><span class="line">hexo <span class="keyword">generate</span>      </span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+  </nav>
+
 
 
           </div>
@@ -1479,7 +1728,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

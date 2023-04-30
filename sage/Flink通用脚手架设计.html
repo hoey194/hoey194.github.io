@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="读《曾国藩传》和《六项精进》给我带来了很大的启发，两书作者稻盛和夫和曾国藩都在强调自省、反思和总结的重要性，日防夜防，为心中贼难防，出入社会的我在这块仍需要下苦功夫，强化自我管理意识，即日起开始写自省日记《吉事语》，无时无刻都要铭记洞察本心，切记切记。 不喜欢主动联系别人，不管是亲人还是朋友 事迹1：对象表示要多给父母通话。 事迹2：今日回看22年聊天记录，22年6月自己被提拔升职，自己曾反复告诫">
+<meta name="description" content="在公司写的 Flink 任务，过程中碰到的问题，在这里写下来，作为回顾总结。">
 <meta property="og:type" content="website">
-<meta property="og:title" content="吉事语230201">
-<meta property="og:url" content="http://example.com/sage/%E5%90%89%E4%BA%8B%E8%AF%AD230201.html">
+<meta property="og:title" content="Flink通用脚手架设计">
+<meta property="og:url" content="http://example.com/sage/Flink%E9%80%9A%E7%94%A8%E8%84%9A%E6%89%8B%E6%9E%B6%E8%AE%BE%E8%AE%A1.html">
 <meta property="og:site_name" content="Hoey笔记">
-<meta property="og:description" content="读《曾国藩传》和《六项精进》给我带来了很大的启发，两书作者稻盛和夫和曾国藩都在强调自省、反思和总结的重要性，日防夜防，为心中贼难防，出入社会的我在这块仍需要下苦功夫，强化自我管理意识，即日起开始写自省日记《吉事语》，无时无刻都要铭记洞察本心，切记切记。 不喜欢主动联系别人，不管是亲人还是朋友 事迹1：对象表示要多给父母通话。 事迹2：今日回看22年聊天记录，22年6月自己被提拔升职，自己曾反复告诫">
+<meta property="og:description" content="在公司写的 Flink 任务，过程中碰到的问题，在这里写下来，作为回顾总结。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-02-01T02:44:42.000Z">
-<meta property="article:modified_time" content="2023-02-26T08:57:39.001Z">
+<meta property="article:published_time" content="2023-03-30T07:47:57.000Z">
+<meta property="article:modified_time" content="2023-03-30T07:50:15.570Z">
 <meta property="article:author" content="Hoey">
 <meta name="twitter:card" content="summary">
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/sage/吉事语230201.html"/>
+  <link rel="canonical" href="http://example.com/sage/Flink通用脚手架设计.html"/>
 
 
 
 
 
-  <title>吉事语230201 | Hoey笔记</title>
+  <title>Flink通用脚手架设计 | Hoey笔记</title>
   
 
 
@@ -279,7 +279,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">吉事语230201</h1>
+	<h1 class="post-title" itemprop="name headline">Flink通用脚手架设计</h1>
 
 
 
@@ -291,13 +291,46 @@
       <div class="post-body">
         
         
-          <p>读《曾国藩传》和《六项精进》给我带来了很大的启发，两书作者稻盛和夫和曾国藩都在强调自省、反思和总结的重要性，日防夜防，为心中贼难防，出入社会的我在这块仍需要下苦功夫，强化自我管理意识，即日起开始写自省日记《吉事语》，无时无刻都要铭记洞察本心，切记切记。</p>
-<p>不喜欢主动联系别人，不管是亲人还是朋友</p>
-<p>事迹1：对象表示要多给父母通话。</p>
-<p>事迹2：今日回看22年聊天记录，22年6月自己被提拔升职，自己曾反复告诫与自己上司和下属联系，但做的并不好。</p>
-<p>存攀附心理</p>
-<p>事迹1：过完年后，想送礼给上司。</p>
-<p>攀附在某时是可以加速升职，或是在某些事上能又一些小恩小惠，但此为小人。打铁还需自身硬，父母都是踏实本分之人，勤勤恳恳，该是自己的要通过自己的努力获取，而不是歪门邪道。</p>
+          <hr>
+<hr>
+<p>在公司写的 Flink 任务，过程中碰到的问题，在这里写下来，作为回顾总结。</p>
+<span id="more"></span>
+
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>营销系统设计了几百个用户标签，经过讨论删选需要实现其中的五十几个用户标签。</p>
+<h2 id="设计图"><a href="#设计图" class="headerlink" title="设计图"></a>设计图</h2><h3 id="程序架构设计"><a href="#程序架构设计" class="headerlink" title="程序架构设计"></a>程序架构设计</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">class IExecutionContext &#123;</span><br><span class="line">  &lt;&lt;interface&gt;&gt;</span><br><span class="line"></span><br><span class="line">  + StreamExecutionEnvironment getExecutionEnvironment()</span><br><span class="line"></span><br><span class="line">  + ConfigHolder getConfigHolder()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class BaseExecutionContext &#123;</span><br><span class="line">  - ConfigHolder configHolder</span><br><span class="line">  - StreamExecutionEnvironment env</span><br><span class="line"></span><br><span class="line">  + BaseExecutionContext(String[] args)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ConfigHolder &#123;</span><br><span class="line">  - Properties properties</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class IFlinkTask &#123;</span><br><span class="line">  &lt;&lt;interface&gt;&gt;</span><br><span class="line">  + String taskName()</span><br><span class="line">  + void exec()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class FlinkTaskExecutor &#123;</span><br><span class="line">  - BaseExecutionContext ctx</span><br><span class="line">  + JobExecutionResult run(Class&lt;T&gt; clazz, String jobFolder)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class AbstractFlinkTask &#123;</span><br><span class="line">  &lt;&lt;abstract&gt;&gt;</span><br><span class="line">  - BaseExecutionContext ctx</span><br><span class="line">  + void exec()</span><br><span class="line">  + void source()</span><br><span class="line">  + void transform()</span><br><span class="line">  + void sink()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">IExecutionContext &lt;|-- BaseExecutionContext</span><br><span class="line">ConfigHolder &lt;.. BaseExecutionContext</span><br><span class="line">IFlinkTask &lt;|-- AbstractFlinkTask</span><br><span class="line">BaseExecutionContext &lt;.. AbstractFlinkTask</span><br><span class="line">BaseExecutionContext &lt;.. FlinkTaskExecutor</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>IExecutionContext 提供 Flink 执行环境对象和环境配置，决定执行默认配置还是自定义配置</li>
+<li>IFlinkTask 抽象 Flink 任务的业务逻辑</li>
+<li>AbstractFlinkTask 进一步抽象了 source/transform/sink 方法，并使用 exec 方法依次执行</li>
+<li>FlinkTaskExecutor<ol>
+<li>通过 ClassLoader 加载所有实现 IFlinkTask 的类</li>
+<li>通过 Reflect 为 Task 注入 Context</li>
+</ol>
+</li>
+</ul>
+<h3 id="程序流程设计"><a href="#程序流程设计" class="headerlink" title="程序流程设计"></a>程序流程设计</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">autonumber</span><br><span class="line">participant m as main</span><br><span class="line">participant exe as FlinkTaskExecutor</span><br><span class="line">participant ctx as BaseExecutionContext</span><br><span class="line">participant holder as ConfigHolder</span><br><span class="line">m -)+ exe : &lt;&lt;create&gt;&gt;</span><br><span class="line">exe -)+ ctx : &lt;&lt;create&gt;&gt;</span><br><span class="line">ctx -)+ holder : &lt;&lt;create&gt;&gt;</span><br><span class="line">holder -) holder : parseConfigFile</span><br><span class="line">holder --)- ctx : instance</span><br><span class="line">ctx -) ctx : setStreamExecutionEnvironment</span><br><span class="line">ctx --)- exe : instance</span><br><span class="line"></span><br><span class="line">m -) exe : run</span><br><span class="line">exe -) exe : getTaskClasses</span><br><span class="line">loop Instantiation</span><br><span class="line">  exe -)+ ReflectUtil : getInstance</span><br><span class="line">  ReflectUtil --)- exe: extends IFlinkTask</span><br><span class="line">  exe -) exe : injectContext</span><br><span class="line">  exe -) exe : injectFieldByEnvironment</span><br><span class="line">  exe -) ReflectUtil : invokeMethod</span><br><span class="line">end</span><br><span class="line">exe -) exe : execute</span><br></pre></td></tr></table></figure>
+
+<p>开发步骤</p>
+<ol>
+<li>新建任务类继承 AbstractFlinkTask 抽象类，实现 source/transform/sink 业务逻辑</li>
+<li>新建入口类在 main 方法中实例化 FlinkTaskExecutor，并执行 run 方法</li>
+</ol>
+<h2 id="设计思考"><a href="#设计思考" class="headerlink" title="设计思考"></a>设计思考</h2><p>::: info 为什么拆分成 source、transform、sink</p>
+<ol>
+<li><p>这样代码在分布上更加清晰</p>
+</li>
+<li><p>这样设计在开发的时候，开发者就必须将数据流拆分成不同的部分，并提起出每一个阶段的数据流为字段在方法间传递。</p>
+<p>在进行单元测试的时候就可以较为方便的拿到不同阶段的数据流。</p>
+</li>
+</ol>
+<p>:::</p>
+<h2 id="开发中遇到的问题"><a href="#开发中遇到的问题" class="headerlink" title="开发中遇到的问题"></a>开发中遇到的问题</h2><p>::: info 公司存在两个不同版本的 ElasticSearch 环境，怎么让任务既可以写 ElasticSearch6 又可以写 ElasticSearch7 ？</p>
+<p>这个问题最初有两个方向，一个是同事目前在用的，新建一个 git 分支，在新的分支下使用不同版本的 ES 依赖。另一个是从开源项目中借鉴的，使用 maven-shade-plugin 的 relocation 功能改变原依赖的包路径。目前使用第二种方案，将 ES6 和 ES7 分别打包成 shaded-es6 和 shaded-es7 两个依赖包。</p>
+<p>:::</p>
+<p>::: info 依赖版本问题</p>
+<p>通过父项目的 DependencyManager 约定依赖版本</p>
+<p>:::</p>
 
         
       </div>
@@ -340,8 +373,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -383,6 +425,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text">设计图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.1.</span> <span class="nav-text">程序架构设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.</span> <span class="nav-text">程序流程设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">设计思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">开发中遇到的问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
