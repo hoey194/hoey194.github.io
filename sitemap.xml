@@ -155,15 +155,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/sage/abbrlink.html</loc>
-    
-    <lastmod>2023-02-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/sage/%E5%90%89%E4%BA%8B%E8%AF%AD230220.html</loc>
     
     <lastmod>2023-02-26</lastmod>
@@ -300,6 +291,15 @@
   
   <url>
     <loc>http://example.com/sage/index.html</loc>
+    
+    <lastmod>2022-12-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/sage/%E4%B8%8D%E4%BB%85%E8%A6%81%E4%BC%9A%E4%B8%8B%E8%9B%8B%E4%B9%9F%E8%A6%81%E4%BC%9A%E5%8F%AB.html</loc>
     
     <lastmod>2022-12-29</lastmod>
     
