@@ -283,6 +283,171 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230504205542-a6b71998.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230504205542-a6b71998.html" itemprop="url">使用反向代理解决SSL认证</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-05-04T20:55:42+08:00">
+                2023-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>​        </p>
+<p>​        自己手里有很多私有服务，并且域名还都不一样，管理起来十分不方便，于是就想将这些网站整合在一起，并且对外提供统一域名访问方式。最近找到了一款挺不错的软件，并且还能提供免费的SSL，虽然3个月到期以后还要续期，不过白嫖的东西还要什么自行车。建好以后就想像下面这样。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504205632731.png" alt="image-20230504205632731"></p>
+<p>那配置完以后，访问的时候只需要在顶级域名前面加上二级域名就可以了，而且维护起来也十分傻瓜，搞完以后非常爽。</p>
+<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><ul>
+<li>VPS任意，我的是在国外自购的一台服务器，为什么自购国外的想必大家懂得都懂，现在是科学时代。</li>
+<li>自建家用机服务器，我的服务器主要插上8T*2机械硬盘组磁盘阵列，搞成NAS存储服务器，另外还在上面跑了很多服务这里就不一一列举了。</li>
+</ul>
+<h2 id="一、-网络拓扑图"><a href="#一、-网络拓扑图" class="headerlink" title="一、 网络拓扑图"></a>一、 网络拓扑图</h2><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504212114306.png" alt="image-20230504212114306"></p>
+<p>下面从最右边开始一层一层解释所做的事情：</p>
+<p>1.首先联系联通宽带，给到公网IP，将自己内网服务，通过端口映射的方式开放到外网，如果没有公网IP，也可以用frp等工具实现内网穿透。</p>
+<p>2.接下来要解决决公网IP变动的问题（为什么要解决是因为联通给的公网IP是动态的，每隔一段时间就会变）。我的DNS服务商选择的是Cloudflare，自己写了一个脚本动态监测到ip变更后，将A记录通过API的方式更新到Cloudflare那里，具体脚本参考<a target="_blank" rel="noopener" href="https://github.com/hoey94/cloudflare-api-ddns">cloudflare-api-dns</a>，当然也可以用参考现有的解决方案<a target="_blank" rel="noopener" href="https://github.com/jeessy2/ddns-go">ddns-go</a>解决，不过我喜欢自己coding。</p>
+<p>3.在自己的VPS上搭建好<a target="_blank" rel="noopener" href="https://github.com/NginxProxyManager/nginx-proxy-manager">Nginx Project Manager</a>（后面我们简称NPM）反向代理工具，管理自己所有的服务，并添加SSL认证。</p>
+<p>4.在Cloudflare创建好自己的记录。</p>
+<h2 id="二、-在centos7上-安装-NPM"><a href="#二、-在centos7上-安装-NPM" class="headerlink" title="二、 在centos7上 安装 NPM"></a>二、 在centos7上 安装 NPM</h2><ol>
+<li>确保安装了docker 和docker-compose</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker</span></span><br><span class="line">yum remove -y docker   docker-client   docker-client-latest   docker-common   docker-latest   docker-latest-logrotate   docker-logrotate   docker-selinux   docker-engine-selinux   docker-engine</span><br><span class="line">yum install -y yum-utils   device-mapper-persistent-data   lvm2</span><br><span class="line">sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">sudo yum makecache fast</span><br><span class="line">yum install -y docker-ce</span><br><span class="line">systemctl start docker.service</span><br><span class="line">systemctl enable docker.service</span><br><span class="line">docker -v</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker-compose</span></span><br><span class="line">curl -L https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose</span><br><span class="line">chmod +x /usr/local/bin/docker-compose</span><br><span class="line">docker-compose --version</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启ipv6防止日志文件过大 (可选)</span></span><br><span class="line">cat &gt; /etc/docker/daemon.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">    &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">    &quot;log-opts&quot;: &#123;</span><br><span class="line">        &quot;max-size&quot;: &quot;20m&quot;,</span><br><span class="line">        &quot;max-file&quot;: &quot;3&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;ipv6&quot;: true,</span><br><span class="line">    &quot;fixed-cidr-v6&quot;: &quot;fd00:dead:beef:c0::/80&quot;,</span><br><span class="line">    &quot;experimental&quot;:true,</span><br><span class="line">    &quot;ip6tables&quot;:true</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用docker-compose 安装npm</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/docker_data/npm</span><br><span class="line">cd /data/docker_data/npm</span><br><span class="line">vim docker-compose.yml</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将下面内容粘贴进去 start</span></span><br><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  app:</span><br><span class="line">    image: &#x27;jc21/nginx-proxy-manager:latest&#x27;</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &#x27;80:80&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;81:81&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;443:443&#x27; # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data:/data # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 data 文件夹中</span><br><span class="line">      - ./letsencrypt:/etc/letsencrypt  # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 letsencrypt 文件夹中</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将下面内容粘贴进去 end</span> </span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>更新NPM</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cd /root/data/docker_data/npm</span><br><span class="line"></span><br><span class="line">docker-compose down </span><br><span class="line"></span><br><span class="line">cp -r /data/docker_data/npm /data/docker_data/npm.archive  # 万事先备份，以防万一</span><br><span class="line"></span><br><span class="line">docker-compose pull</span><br><span class="line"></span><br><span class="line">docker-compose up -d    # 请不要使用 docker-compose stop 来停止容器，因为这么做需要额外的时间等待容器停止；docker-compose up -d 直接升级容器时会自动停止并立刻重建新的容器，完全没有必要浪费那些时间。</span><br><span class="line"></span><br><span class="line">docker image prune  # prune 命令用来删除不再使用的 docker 对象。删除所有未被 tag 标记和未被容器使用的镜像</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>卸载NPM</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /root/data/docker_data/npm</span><br><span class="line"></span><br><span class="line">docker-compose down </span><br><span class="line"></span><br><span class="line">rm -rf /root/data/docker_data/npm  # 完全删除映射到本地的数据</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、-结合Cloudflare-配置NPM"><a href="#三、-结合Cloudflare-配置NPM" class="headerlink" title="三、 结合Cloudflare 配置NPM"></a>三、 结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#x6d;&#x69;&#110;&#64;&#x65;&#x78;&#97;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#111;&#x6d;">&#x61;&#100;&#x6d;&#x69;&#110;&#64;&#x65;&#x78;&#97;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#111;&#x6d;</a>/changeme，登录后修改</p>
+<p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是108.61.22.116，域名是hoey.tk）</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504213806484.png" alt="image-20230504213806484"></p>
+<p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214014283.png" alt="image-20230504214014283"></p>
+<p>之后开启SSL认证</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214052552.png" alt="image-20230504214052552"></p>
+<p>点击保存即可。</p>
+<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p>配置完成以后，就可以使用nas.hoey.tk访问nas服务了，当用户访问nas.hoey.tk时，在网络中它的链路应该如下图所示：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214734565.png" alt="image-20230504214734565"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230430133503-ff462b52.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1537,148 +1702,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221208193934-30d40687.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20221208193934-30d40687.html" itemprop="url">Mac自动SSH+MFA</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-08T19:39:34+08:00">
-                2022-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>因工作需要，使用Iterm2自动跳转远程终端，提高工作效率</p>
-<h1 id="自动获取MFA-Token"><a href="#自动获取MFA-Token" class="headerlink" title="自动获取MFA Token"></a>自动获取MFA Token</h1><p>安装oath-toolkit</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew search oath-toolkit</span><br><span class="line">brew install oath-toolkit</span><br></pre></td></tr></table></figure>
-
-<p>使用下面命令获取token， 注：${SECKEY} 是一个变量，按照自己的填写</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> smCode=<span class="string">&quot;echo `oathtool --totp -b <span class="variable">$&#123;SECKEY&#125;</span> `| pbcopy&quot;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="自定义SHELL-MFA-TOKEN脚本"><a href="#自定义SHELL-MFA-TOKEN脚本" class="headerlink" title="自定义SHELL+MFA TOKEN脚本"></a>自定义SHELL+MFA TOKEN脚本</h1><p>将脚本保存juneyao_auto_ssh_prd.sh</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">opts=$@</span><br><span class="line">getParam()&#123;</span><br><span class="line">  arg=$1</span><br><span class="line">  echo $opts | xargs -n1 | cut -b 2- | awk -F&#x27;=&#x27; &#x27;&#123;if($1==&quot;&#x27;&quot;$arg&quot;&#x27;&quot;) print $2&#125;&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">USER=zhaoyihao</span><br><span class="line">echo &quot;[INFO] USER: &quot;$&#123;USER&#125;</span><br><span class="line"></span><br><span class="line">HOST=`getParam HOST`</span><br><span class="line">echo &quot;[INFO] HOST: &quot;$&#123;HOST&#125;</span><br><span class="line"></span><br><span class="line">PASSWORD=`getParam PASSWORD`</span><br><span class="line">echo &quot;[INFO] PASSWORD: *****&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">stg:20 prd:2222</span></span><br><span class="line">PORT=`getParam PORT`</span><br><span class="line">echo &quot;[INFO] PORT: &quot;$&#123;PORT&#125;</span><br><span class="line"></span><br><span class="line">PRD_TOKEN=&quot;`oathtool --totp -b 4YIKKGPXJD3G32YP`&quot;</span><br><span class="line"></span><br><span class="line">sw_login()&#123;</span><br><span class="line">        expect -c &quot;</span><br><span class="line">        # 每个判断等待1秒</span><br><span class="line">        set timeout 1</span><br><span class="line">        spawn ssh $USER@$HOST -p $PORT</span><br><span class="line">        # 判断是否需要保存秘钥</span><br><span class="line">        expect &#123;</span><br><span class="line">                \&quot;yes/no\&quot;   &#123; send yes\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送密码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*assword\&quot; &#123; send $PASSWORD\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送验证码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*OTP Code*\&quot; &#123; send $PRD_TOKEN\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 停留在当前登录界面</span><br><span class="line">        interact</span><br><span class="line">        &quot;</span><br><span class="line">&#125;</span><br><span class="line">sw_login</span><br></pre></td></tr></table></figure>
-
-
-
-<p>脚本的使用命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh juneyao_auto_ssh_prd.sh -HOST=jmp.juneyaoair.com -PORT=2222 -PASSWORD=123123</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="与ITerm2集成"><a href="#与ITerm2集成" class="headerlink" title="与ITerm2集成"></a>与ITerm2集成</h1><p>在ITerm2终端中进行配置</p>
-<p>Preference… -&gt; Profiles -&gt; +</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230105095419303.png" alt="image-20230105095419303"></p>
-<p>将脚本运行命令填入到Send text at start:文本框中保存即可。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1729,7 +1752,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

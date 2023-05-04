@@ -79,13 +79,24 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hoey笔记">
-<meta property="og:url" content="http://example.com/archives/index.html">
+<meta name="description" content="​         ​        自己手里有很多私有服务，并且域名还都不一样，管理起来十分不方便，于是就想将这些网站整合在一起，并且对外提供统一域名访问方式。最近找到了一款挺不错的软件，并且还能提供免费的SSL，虽然3个月到期以后还要续期，不过白嫖的东西还要什么自行车。建好以后就想像下面这样。  那配置完以后，访问的时候只需要在顶级域名前面加上二级域名就可以了，而且维护起来也十分傻瓜，搞完以后">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用反向代理解决SSL认证">
+<meta property="og:url" content="http://example.com/posts/20230504205542-a6b71998.html">
 <meta property="og:site_name" content="Hoey笔记">
+<meta property="og:description" content="​         ​        自己手里有很多私有服务，并且域名还都不一样，管理起来十分不方便，于是就想将这些网站整合在一起，并且对外提供统一域名访问方式。最近找到了一款挺不错的软件，并且还能提供免费的SSL，虽然3个月到期以后还要续期，不过白嫖的东西还要什么自行车。建好以后就想像下面这样。  那配置完以后，访问的时候只需要在顶级域名前面加上二级域名就可以了，而且维护起来也十分傻瓜，搞完以后">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504205632731.png">
+<meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504212114306.png">
+<meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504213806484.png">
+<meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214014283.png">
+<meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214052552.png">
+<meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214734565.png">
+<meta property="article:published_time" content="2023-05-04T12:55:42.000Z">
+<meta property="article:modified_time" content="2023-05-04T13:47:48.060Z">
 <meta property="article:author" content="Hoey">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504205632731.png">
 
 
 
@@ -115,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/archives/"/>
+  <link rel="canonical" href="http://example.com/posts/20230504205542-a6b71998.html"/>
 
 
 
 
 
-  <title>Archive | Hoey笔记</title>
+  <title>使用反向代理解决SSL认证 | Hoey笔记</title>
   
 
 
@@ -150,7 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -268,416 +279,186 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230504205542-a6b71998.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">使用反向代理解决SSL认证</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-05-04T20:55:42+08:00">
+                2023-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Um..! 13 posts in total. Keep on posting.
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2023">2023</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20230504205542-a6b71998.html" itemprop="url">
-              
-                <span itemprop="name">使用反向代理解决SSL认证</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-05-04T20:55:42+08:00"
-              content="2023-05-04" >
-          05-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20230430133503-ff462b52.html" itemprop="url">
-              
-                <span itemprop="name">Jellyfin 添加字体库解决中文乱码</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-04-30T13:35:03+08:00"
-              content="2023-04-30" >
-          04-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20230331142046-129de9c2.html" itemprop="url">
-              
-                <span itemprop="name">panda chapter 1</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-03-31T14:20:46+08:00"
-              content="2023-03-31" >
-          03-31
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20230328125112-f144fb4b.html" itemprop="url">
-              
-                <span itemprop="name">Doris使用踩坑总结</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-03-28T12:51:12+08:00"
-              content="2023-03-28" >
-          03-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20230314161612-f30a9b25.html" itemprop="url">
-              
-                <span itemprop="name">ksqlDB</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-03-14T16:16:12+08:00"
-              content="2023-03-14" >
-          03-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20230221094327-2e5ad32b.html" itemprop="url">
-              
-                <span itemprop="name">拉链表</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-02-21T09:43:27+08:00"
-              content="2023-02-21" >
-          02-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
+            
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2022">2022</h1>
-          </div>
-        
-        
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20221228222917-aa59cf36.html" itemprop="url">
-              
-                <span itemprop="name">DolphinScheduler 3.1.0 本地环境搭建</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2022-12-28T22:29:17+08:00"
-              content="2022-12-28" >
-          12-28
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20221212164304-b422eee5.html" itemprop="url">
-              
-                <span itemprop="name">基于Python的简易FS服务</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2022-12-12T16:43:04+08:00"
-              content="2022-12-12" >
-          12-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
+      
+        <p>​        </p>
+<p>​        自己手里有很多私有服务，并且域名还都不一样，管理起来十分不方便，于是就想将这些网站整合在一起，并且对外提供统一域名访问方式。最近找到了一款挺不错的软件，并且还能提供免费的SSL，虽然3个月到期以后还要续期，不过白嫖的东西还要什么自行车。建好以后就想像下面这样。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504205632731.png" alt="image-20230504205632731"></p>
+<p>那配置完以后，访问的时候只需要在顶级域名前面加上二级域名就可以了，而且维护起来也十分傻瓜，搞完以后非常爽。</p>
+<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><ul>
+<li>VPS任意，我的是在国外自购的一台服务器，为什么自购国外的想必大家懂得都懂，现在是科学时代。</li>
+<li>自建家用机服务器，我的服务器主要插上8T*2机械硬盘组磁盘阵列，搞成NAS存储服务器，另外还在上面跑了很多服务这里就不一一列举了。</li>
+</ul>
+<h2 id="一、-网络拓扑图"><a href="#一、-网络拓扑图" class="headerlink" title="一、 网络拓扑图"></a>一、 网络拓扑图</h2><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504212114306.png" alt="image-20230504212114306"></p>
+<p>下面从最右边开始一层一层解释所做的事情：</p>
+<p>1.首先联系联通宽带，给到公网IP，将自己内网服务，通过端口映射的方式开放到外网，如果没有公网IP，也可以用frp等工具实现内网穿透。</p>
+<p>2.接下来要解决决公网IP变动的问题（为什么要解决是因为联通给的公网IP是动态的，每隔一段时间就会变）。我的DNS服务商选择的是Cloudflare，自己写了一个脚本动态监测到ip变更后，将A记录通过API的方式更新到Cloudflare那里，具体脚本参考<a target="_blank" rel="noopener" href="https://github.com/hoey94/cloudflare-api-ddns">cloudflare-api-dns</a>，当然也可以用参考现有的解决方案<a target="_blank" rel="noopener" href="https://github.com/jeessy2/ddns-go">ddns-go</a>解决，不过我喜欢自己coding。</p>
+<p>3.在自己的VPS上搭建好<a target="_blank" rel="noopener" href="https://github.com/NginxProxyManager/nginx-proxy-manager">Nginx Project Manager</a>（后面我们简称NPM）反向代理工具，管理自己所有的服务，并添加SSL认证。</p>
+<p>4.在Cloudflare创建好自己的记录。</p>
+<h2 id="二、-在centos7上-安装-NPM"><a href="#二、-在centos7上-安装-NPM" class="headerlink" title="二、 在centos7上 安装 NPM"></a>二、 在centos7上 安装 NPM</h2><ol>
+<li>确保安装了docker 和docker-compose</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker</span></span><br><span class="line">yum remove -y docker   docker-client   docker-client-latest   docker-common   docker-latest   docker-latest-logrotate   docker-logrotate   docker-selinux   docker-engine-selinux   docker-engine</span><br><span class="line">yum install -y yum-utils   device-mapper-persistent-data   lvm2</span><br><span class="line">sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">sudo yum makecache fast</span><br><span class="line">yum install -y docker-ce</span><br><span class="line">systemctl start docker.service</span><br><span class="line">systemctl enable docker.service</span><br><span class="line">docker -v</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker-compose</span></span><br><span class="line">curl -L https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose</span><br><span class="line">chmod +x /usr/local/bin/docker-compose</span><br><span class="line">docker-compose --version</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启ipv6防止日志文件过大 (可选)</span></span><br><span class="line">cat &gt; /etc/docker/daemon.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">    &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">    &quot;log-opts&quot;: &#123;</span><br><span class="line">        &quot;max-size&quot;: &quot;20m&quot;,</span><br><span class="line">        &quot;max-file&quot;: &quot;3&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;ipv6&quot;: true,</span><br><span class="line">    &quot;fixed-cidr-v6&quot;: &quot;fd00:dead:beef:c0::/80&quot;,</span><br><span class="line">    &quot;experimental&quot;:true,</span><br><span class="line">    &quot;ip6tables&quot;:true</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
 
-        
-        
+<ol start="2">
+<li>使用docker-compose 安装npm</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/docker_data/npm</span><br><span class="line">cd /data/docker_data/npm</span><br><span class="line">vim docker-compose.yml</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将下面内容粘贴进去 start</span></span><br><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  app:</span><br><span class="line">    image: &#x27;jc21/nginx-proxy-manager:latest&#x27;</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &#x27;80:80&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;81:81&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;443:443&#x27; # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data:/data # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 data 文件夹中</span><br><span class="line">      - ./letsencrypt:/etc/letsencrypt  # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 letsencrypt 文件夹中</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将下面内容粘贴进去 end</span> </span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
 
-        
+<ol start="3">
+<li>更新NPM</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cd /root/data/docker_data/npm</span><br><span class="line"></span><br><span class="line">docker-compose down </span><br><span class="line"></span><br><span class="line">cp -r /data/docker_data/npm /data/docker_data/npm.archive  # 万事先备份，以防万一</span><br><span class="line"></span><br><span class="line">docker-compose pull</span><br><span class="line"></span><br><span class="line">docker-compose up -d    # 请不要使用 docker-compose stop 来停止容器，因为这么做需要额外的时间等待容器停止；docker-compose up -d 直接升级容器时会自动停止并立刻重建新的容器，完全没有必要浪费那些时间。</span><br><span class="line"></span><br><span class="line">docker image prune  # prune 命令用来删除不再使用的 docker 对象。删除所有未被 tag 标记和未被容器使用的镜像</span><br></pre></td></tr></table></figure>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20221212095216-1c5dc392.html" itemprop="url">
-              
-                <span itemprop="name">Hexo隐藏文章</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2022-12-12T09:52:16+08:00"
-              content="2022-12-12" >
-          12-12
-        </time>
-      </div>
-
-    </header>
-  </article>
+<ol start="4">
+<li>卸载NPM</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /root/data/docker_data/npm</span><br><span class="line"></span><br><span class="line">docker-compose down </span><br><span class="line"></span><br><span class="line">rm -rf /root/data/docker_data/npm  # 完全删除映射到本地的数据</span><br></pre></td></tr></table></figure>
 
 
+
+<h2 id="三、-结合Cloudflare-配置NPM"><a href="#三、-结合Cloudflare-配置NPM" class="headerlink" title="三、 结合Cloudflare 配置NPM"></a>三、 结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#x6d;&#x69;&#110;&#64;&#x65;&#x78;&#97;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#111;&#x6d;">&#x61;&#100;&#x6d;&#x69;&#110;&#64;&#x65;&#x78;&#97;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#111;&#x6d;</a>/changeme，登录后修改</p>
+<p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是108.61.22.116，域名是hoey.tk）</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504213806484.png" alt="image-20230504213806484"></p>
+<p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214014283.png" alt="image-20230504214014283"></p>
+<p>之后开启SSL认证</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214052552.png" alt="image-20230504214052552"></p>
+<p>点击保存即可。</p>
+<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p>配置完成以后，就可以使用nas.hoey.tk访问nas服务了，当用户访问nas.hoey.tk时，在网络中它的链路应该如下图所示：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214734565.png" alt="image-20230504214734565"></p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/20221208222030-7a63f10c.html" itemprop="url">
-              
-                <span itemprop="name">Mac下VIM配置</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2022-12-08T22:20:30+08:00"
-              content="2022-12-08" >
-          12-08
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/20230430133503-ff462b52.html" rel="next" title="Jellyfin 添加字体库解决中文乱码">
+                <i class="fa fa-chevron-left"></i> Jellyfin 添加字体库解决中文乱码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -685,6 +466,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -705,8 +490,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -748,6 +542,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">前置准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text">一、 网络拓扑图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E5%9C%A8centos7%E4%B8%8A-%E5%AE%89%E8%A3%85-NPM"><span class="nav-number">3.</span> <span class="nav-text">二、 在centos7上 安装 NPM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E7%BB%93%E5%90%88Cloudflare-%E9%85%8D%E7%BD%AENPM"><span class="nav-number">4.</span> <span class="nav-text">三、 结合Cloudflare 配置NPM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">四、总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -903,6 +713,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
