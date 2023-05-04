@@ -354,20 +354,95 @@
       
         
           
-            <p>​        </p>
-<p>​        自己手里有很多私有服务，并且域名还都不一样，管理起来十分不方便，于是就想将这些网站整合在一起，并且对外提供统一域名访问方式。最近找到了一款挺不错的软件，并且还能提供免费的SSL，虽然3个月到期以后还要续期，不过白嫖的东西还要什么自行车。建好以后就想像下面这样。</p>
+            <p>自己手里有很多私有服务，并且域名还都不一样，例如下面这些：</p>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>ip</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NAS</td>
+<td>192.168.30.5:5000</td>
+</tr>
+<tr>
+<td>Jellyfin</td>
+<td>192.168.30.5:8096</td>
+</tr>
+<tr>
+<td>私人笔记</td>
+<td>hoey94.github.io</td>
+</tr>
+<tr>
+<td>私人网盘</td>
+<td>192.168.30.5:9000</td>
+</tr>
+<tr>
+<td>chatgpt</td>
+<td>chat.github.io</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>这些应用管理起来十分不方便，于是就想将这些网站整合在一起，并且对外提供统一域名访问方式。</p>
+<p>我自身是有一个免费的顶级域名的hoey.tk，但是因为是白嫖的域名，在DNS服务商那里却不被支持（这就是白嫖的代价吧）。</p>
+<p>自己有很穷买不起域名，于是在网上4块钱买入了 hoey.asia一年。</p>
+<p>那我的需求就很明确了，其实我想得到的效果应该是这样:</p>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>ip</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NAS</td>
+<td>nas.hoey.tk</td>
+</tr>
+<tr>
+<td>Jellyfin</td>
+<td>jellyfin.hoey.tk</td>
+</tr>
+<tr>
+<td>私人笔记</td>
+<td>notes.hoey.tk</td>
+</tr>
+<tr>
+<td>私人网盘</td>
+<td>pan.hoey.tk</td>
+</tr>
+<tr>
+<td>chatgpt</td>
+<td>chat.hoey.tk</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>最近找到了一款挺不错的软件，并且还能提供免费的SSL，虽然3个月到期以后还要手动续期，不过白嫖的东西还要什么自行车。它的页面像这样：</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504205632731.png" alt="image-20230504205632731"></p>
-<p>那配置完以后，访问的时候只需要在顶级域名前面加上二级域名就可以了，而且维护起来也十分傻瓜，搞完以后非常爽。</p>
+<p>配置完以后，访问的时候只需要使用二级域名访问即可，十分方便，维护起来也十分傻瓜。</p>
 <h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><ul>
-<li>VPS任意，我的是在国外自购的一台服务器，为什么自购国外的想必大家懂得都懂，现在是科学时代。</li>
-<li>自建家用机服务器，我的服务器主要插上8T*2机械硬盘组磁盘阵列，搞成NAS存储服务器，另外还在上面跑了很多服务这里就不一一列举了。</li>
+<li>VPS任意，我的是在国外自购的一台服务器，为什么自购国外，大家懂得都懂，现在是科学时代。</li>
+<li>自建家用机服务器，我的服务器主要插上8T*2机械硬盘组磁盘阵列，搞成NAS存储服务器做个私有云。另外结合esxi或者是docker能跑很多好玩的东西，这里就不一一列举了，感兴趣的小伙伴可以搜索一下自建NAS服务器 ALL IN ONE。</li>
 </ul>
-<h2 id="一、-网络拓扑图"><a href="#一、-网络拓扑图" class="headerlink" title="一、 网络拓扑图"></a>一、 网络拓扑图</h2><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504212114306.png" alt="image-20230504212114306"></p>
-<p>下面从最右边开始一层一层解释所做的事情：</p>
-<p>1.首先联系联通宽带，给到公网IP，将自己内网服务，通过端口映射的方式开放到外网，如果没有公网IP，也可以用frp等工具实现内网穿透。</p>
-<p>2.接下来要解决决公网IP变动的问题（为什么要解决是因为联通给的公网IP是动态的，每隔一段时间就会变）。我的DNS服务商选择的是Cloudflare，自己写了一个脚本动态监测到ip变更后，将A记录通过API的方式更新到Cloudflare那里，具体脚本参考<a target="_blank" rel="noopener" href="https://github.com/hoey94/cloudflare-api-ddns">cloudflare-api-dns</a>，当然也可以用参考现有的解决方案<a target="_blank" rel="noopener" href="https://github.com/jeessy2/ddns-go">ddns-go</a>解决，不过我喜欢自己coding。</p>
-<p>3.在自己的VPS上搭建好<a target="_blank" rel="noopener" href="https://github.com/NginxProxyManager/nginx-proxy-manager">Nginx Project Manager</a>（后面我们简称NPM）反向代理工具，管理自己所有的服务，并添加SSL认证。</p>
-<p>4.在Cloudflare创建好自己的记录。</p>
+<h2 id="一、-网络拓扑图"><a href="#一、-网络拓扑图" class="headerlink" title="一、 网络拓扑图"></a>一、 网络拓扑图</h2><p>下面这个是结合自己家庭网络拓扑图和已有的一些服务的网络拓扑图，用这个实现二级域名访问+SSL。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504212114306.png" alt="image-20230504212114306"></p>
+<p>从最右边开始一层一层解释所做的事情：</p>
+<ol>
+<li><p>首先联系联通宽带，给到公网IP，将自己内网服务，在软路由内部通过端口映射的方式开放到外网。如果没有公网IP，也可以用frp等工具实现内网穿透。</p>
+</li>
+<li><p>接下来要解决公网IP变动的问题（为什么要解决是因为联通给的公网IP是动态的，每隔一段时间就会变）。我的DNS服务商选择的是Cloudflare。关于实现DDNS这块自己参考开源项目，改写了一个脚本，其重要功能是：动态监测公网IP变更，将A记录通过API的方式更新到Cloudflare以实现DNS解析，具体脚本参考<a target="_blank" rel="noopener" href="https://github.com/hoey94/cloudflare-api-ddns">cloudflare-api-dns</a>，当然也可以不自己写代码，网上有很多现有的解决方案，比如<a target="_blank" rel="noopener" href="https://github.com/jeessy2/ddns-go">ddns-go</a></p>
+</li>
+<li><p>在自己的VPS上搭建好<a target="_blank" rel="noopener" href="https://github.com/NginxProxyManager/nginx-proxy-manager">Nginx Project Manager</a>（后面我们简称NPM），用来整合自己所有的服务，并添加SSL认证。</p>
+</li>
+<li><p>在Cloudflare创建记录将新的域名映射到VPS上。</p>
+</li>
+</ol>
 <h2 id="二、-在centos7上-安装-NPM"><a href="#二、-在centos7上-安装-NPM" class="headerlink" title="二、 在centos7上 安装 NPM"></a>二、 在centos7上 安装 NPM</h2><ol>
 <li>确保安装了docker 和docker-compose</li>
 </ol>
@@ -390,7 +465,7 @@
 
 
 
-<h2 id="三、-结合Cloudflare-配置NPM"><a href="#三、-结合Cloudflare-配置NPM" class="headerlink" title="三、 结合Cloudflare 配置NPM"></a>三、 结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#x6d;&#105;&#110;&#x40;&#101;&#x78;&#97;&#109;&#112;&#x6c;&#x65;&#46;&#x63;&#111;&#x6d;">&#x61;&#100;&#x6d;&#105;&#110;&#x40;&#101;&#x78;&#97;&#109;&#112;&#x6c;&#x65;&#46;&#x63;&#111;&#x6d;</a>/changeme，登录后修改</p>
+<h2 id="三、-结合Cloudflare-配置NPM"><a href="#三、-结合Cloudflare-配置NPM" class="headerlink" title="三、 结合Cloudflare 配置NPM"></a>三、 结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#x64;&#109;&#x69;&#x6e;&#x40;&#x65;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#46;&#x63;&#x6f;&#109;">&#97;&#x64;&#109;&#x69;&#x6e;&#x40;&#x65;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#46;&#x63;&#x6f;&#109;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是108.61.22.116，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504213806484.png" alt="image-20230504213806484"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
