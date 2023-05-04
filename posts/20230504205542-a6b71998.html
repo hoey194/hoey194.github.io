@@ -88,12 +88,12 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504205632731.png">
 <meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504212114306.png">
-<meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504213806484.png">
+<meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png">
 <meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214014283.png">
 <meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214052552.png">
 <meta property="og:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214857962.png">
 <meta property="article:published_time" content="2023-05-04T12:55:42.000Z">
-<meta property="article:modified_time" content="2023-05-04T14:18:15.528Z">
+<meta property="article:modified_time" content="2023-05-04T14:30:42.953Z">
 <meta property="article:author" content="Hoey">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504205632731.png">
@@ -440,11 +440,11 @@
 <ol>
 <li><p>首先联系联通宽带，给到公网IP，将自己内网服务，在软路由内部通过端口映射的方式开放到外网。如果没有公网IP，也可以用frp等工具实现内网穿透。</p>
 </li>
-<li><p>接下来要解决公网IP变动的问题（为什么要解决是因为联通给的公网IP是动态的，每隔一段时间就会变）。我的DNS服务商选择的是Cloudflare。关于实现DDNS这块自己参考开源项目，改写了一个脚本，其重要功能是：动态监测公网IP变更，将A记录通过API的方式更新到Cloudflare以实现DNS解析，具体脚本参考<a target="_blank" rel="noopener" href="https://github.com/hoey94/cloudflare-api-ddns">cloudflare-api-dns</a>，当然也可以不自己写代码，网上有很多现有的解决方案，比如<a target="_blank" rel="noopener" href="https://github.com/jeessy2/ddns-go">ddns-go</a></p>
+<li><p>接下来要解决公网IP变动的问题（联通给的公网IP是动态的，每隔一段时间就会变）。DNS服务商我选择的是Cloudflare，实现DDNS这块是参考开源项目，改写了一个脚本，其主要功能是：以轮训的方式，动态监测公网IP变更，将A记录通过API的方式更新到Cloudflare以实现DNS解析，具体脚本参考<a target="_blank" rel="noopener" href="https://github.com/hoey94/cloudflare-api-ddns">cloudflare-api-dns</a>，当然网上也有很多类似以封装好的工具实现DDNS，比如<a target="_blank" rel="noopener" href="https://github.com/jeessy2/ddns-go">ddns-go</a></p>
 </li>
 <li><p>在自己的VPS上搭建好<a target="_blank" rel="noopener" href="https://github.com/NginxProxyManager/nginx-proxy-manager">Nginx Project Manager</a>（后面我们简称NPM），用来整合自己所有的服务，并添加SSL认证。</p>
 </li>
-<li><p>在Cloudflare创建记录将新的域名映射到VPS上。</p>
+<li><p>在Cloudflare创建记录将tk域名映射到VPS上，反向代理接受到请求，转发到4块钱买的域名(hoey.asia)上，哈哈哈。</p>
 </li>
 </ol>
 <h2 id="在CentOS-7上-安装-NPM"><a href="#在CentOS-7上-安装-NPM" class="headerlink" title="在CentOS 7上 安装 NPM"></a>在CentOS 7上 安装 NPM</h2><ol>
@@ -455,7 +455,7 @@
 <ol start="2">
 <li>使用docker-compose 安装npm</li>
 </ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/docker_data/npm</span><br><span class="line">cd /data/docker_data/npm</span><br><span class="line">vim docker-compose.yml</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将下面内容粘贴进去 start</span></span><br><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  app:</span><br><span class="line">    image: &#x27;jc21/nginx-proxy-manager:latest&#x27;</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &#x27;80:80&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;81:81&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;443:443&#x27; # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data:/data # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 data 文件夹中</span><br><span class="line">      - ./letsencrypt:/etc/letsencrypt  # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 letsencrypt 文件夹中</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将下面内容粘贴进去 end</span> </span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/docker_data/npm</span><br><span class="line">cd /data/docker_data/npm</span><br><span class="line">vim docker-compose.yml</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将内容粘贴进去 start</span></span><br><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  app:</span><br><span class="line">    image: &#x27;jc21/nginx-proxy-manager:latest&#x27;</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &#x27;80:80&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;81:81&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;443:443&#x27; # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data:/data # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 data 文件夹中</span><br><span class="line">      - ./letsencrypt:/etc/letsencrypt  # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 letsencrypt 文件夹中</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将内容粘贴进去 end</span> </span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
 
 <ol start="3">
 <li>更新NPM</li>
@@ -469,9 +469,9 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#100;&#109;&#105;&#110;&#64;&#x65;&#x78;&#x61;&#x6d;&#112;&#x6c;&#101;&#46;&#99;&#111;&#109;">&#97;&#100;&#109;&#105;&#110;&#64;&#x65;&#x78;&#x61;&#x6d;&#112;&#x6c;&#101;&#46;&#99;&#111;&#109;</a>/changeme，登录后修改</p>
-<p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是108.61.22.116，域名是hoey.tk）</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504213806484.png" alt="image-20230504213806484"></p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#x64;&#109;&#x69;&#x6e;&#x40;&#x65;&#120;&#97;&#109;&#112;&#x6c;&#101;&#x2e;&#x63;&#111;&#x6d;">&#x61;&#x64;&#109;&#x69;&#x6e;&#x40;&#x65;&#120;&#97;&#109;&#112;&#x6c;&#101;&#x2e;&#x63;&#111;&#x6d;</a>/changeme，登录后修改</p>
+<p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214014283.png" alt="image-20230504214014283"></p>
 <p>之后开启SSL认证</p>
