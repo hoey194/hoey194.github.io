@@ -4,7 +4,7 @@
   <url>
     <loc>http://example.com/posts/20230504205542-a6b71998.html</loc>
     
-    <lastmod>2023-05-04</lastmod>
+    <lastmod>2023-05-27</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -418,7 +418,7 @@
 
   <url>
     <loc>http://example.com/</loc>
-    <lastmod>2023-05-06</lastmod>
+    <lastmod>2023-05-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
