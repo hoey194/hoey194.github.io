@@ -283,6 +283,148 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221208193934-30d40687.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20221208193934-30d40687.html" itemprop="url">Mac自动SSH+MFA</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-08T19:39:34+08:00">
+                2022-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>因工作需要，使用Iterm2自动跳转远程终端，提高工作效率</p>
+<h1 id="自动获取MFA-Token"><a href="#自动获取MFA-Token" class="headerlink" title="自动获取MFA Token"></a>自动获取MFA Token</h1><p>安装oath-toolkit</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew search oath-toolkit</span><br><span class="line">brew install oath-toolkit</span><br></pre></td></tr></table></figure>
+
+<p>使用下面命令获取token， 注：${SECKEY} 是一个变量，按照自己的填写</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> smCode=<span class="string">&quot;echo `oathtool --totp -b <span class="variable">$&#123;SECKEY&#125;</span> `| pbcopy&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="自定义SHELL-MFA-TOKEN脚本"><a href="#自定义SHELL-MFA-TOKEN脚本" class="headerlink" title="自定义SHELL+MFA TOKEN脚本"></a>自定义SHELL+MFA TOKEN脚本</h1><p>将脚本保存juneyao_auto_ssh_prd.sh</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">opts=$@</span><br><span class="line">getParam()&#123;</span><br><span class="line">  arg=$1</span><br><span class="line">  echo $opts | xargs -n1 | cut -b 2- | awk -F&#x27;=&#x27; &#x27;&#123;if($1==&quot;&#x27;&quot;$arg&quot;&#x27;&quot;) print $2&#125;&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">USER=zhaoyihao</span><br><span class="line">echo &quot;[INFO] USER: &quot;$&#123;USER&#125;</span><br><span class="line"></span><br><span class="line">HOST=`getParam HOST`</span><br><span class="line">echo &quot;[INFO] HOST: &quot;$&#123;HOST&#125;</span><br><span class="line"></span><br><span class="line">PASSWORD=`getParam PASSWORD`</span><br><span class="line">echo &quot;[INFO] PASSWORD: *****&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">stg:20 prd:2222</span></span><br><span class="line">PORT=`getParam PORT`</span><br><span class="line">echo &quot;[INFO] PORT: &quot;$&#123;PORT&#125;</span><br><span class="line"></span><br><span class="line">PRD_TOKEN=&quot;`oathtool --totp -b 4YIKKGPXJD3G32YP`&quot;</span><br><span class="line"></span><br><span class="line">sw_login()&#123;</span><br><span class="line">        expect -c &quot;</span><br><span class="line">        # 每个判断等待1秒</span><br><span class="line">        set timeout 1</span><br><span class="line">        spawn ssh $USER@$HOST -p $PORT</span><br><span class="line">        # 判断是否需要保存秘钥</span><br><span class="line">        expect &#123;</span><br><span class="line">                \&quot;yes/no\&quot;   &#123; send yes\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送密码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*assword\&quot; &#123; send $PASSWORD\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送验证码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*OTP Code*\&quot; &#123; send $PRD_TOKEN\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 停留在当前登录界面</span><br><span class="line">        interact</span><br><span class="line">        &quot;</span><br><span class="line">&#125;</span><br><span class="line">sw_login</span><br></pre></td></tr></table></figure>
+
+
+
+<p>脚本的使用命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh juneyao_auto_ssh_prd.sh -HOST=jmp.juneyaoair.com -PORT=2222 -PASSWORD=123123</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="与ITerm2集成"><a href="#与ITerm2集成" class="headerlink" title="与ITerm2集成"></a>与ITerm2集成</h1><p>在ITerm2终端中进行配置</p>
+<p>Preference… -&gt; Profiles -&gt; +</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230105095419303.png" alt="image-20230105095419303"></p>
+<p>将脚本运行命令填入到Send text at start:文本框中保存即可。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221208121846-ef5df40e.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -368,11 +510,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#x6e;&#110;&#113;&#106;&#x62;&#97;&#110;&#x35;&#x32;&#49;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#99;&#x6e;&#110;&#113;&#106;&#x62;&#97;&#110;&#x35;&#x32;&#49;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
 <td>hoey94</td>
 </tr>
 <tr>
-<td><a href="mailto:&#51;&#53;&#x31;&#56;&#x36;&#x35;&#x35;&#x37;&#x36;&#64;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;">&#51;&#53;&#x31;&#56;&#x36;&#x35;&#x35;&#x37;&#x36;&#64;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;</a></td>
+<td><a href="mailto:&#x33;&#x35;&#49;&#56;&#54;&#53;&#53;&#x37;&#x36;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;">&#x33;&#x35;&#49;&#56;&#54;&#53;&#53;&#x37;&#x36;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>hoey1994</td>
 </tr>
 </tbody></table>
@@ -387,11 +529,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#97;&#x6e;&#x35;&#50;&#x31;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#97;&#x6e;&#x35;&#50;&#x31;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a></td>
+<td><a href="mailto:&#x63;&#x6e;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#53;&#x32;&#x31;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x63;&#x6e;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#53;&#x32;&#x31;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></td>
 <td>Test</td>
 </tr>
 <tr>
-<td><a href="mailto:&#51;&#x35;&#49;&#x38;&#54;&#53;&#53;&#x37;&#54;&#x40;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;">&#51;&#x35;&#49;&#x38;&#54;&#53;&#53;&#x37;&#54;&#x40;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#x33;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#55;&#x36;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#x6d;">&#x33;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#55;&#x36;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#x6d;</a></td>
 <td>test</td>
 </tr>
 </tbody></table>
@@ -440,8 +582,8 @@
 
 
 
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#110;&#x6e;&#x71;&#x6a;&#x62;&#x61;&#110;&#53;&#50;&#49;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;">&#x63;&#110;&#x6e;&#x71;&#x6a;&#x62;&#x61;&#110;&#53;&#50;&#49;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#x33;&#x35;&#49;&#56;&#54;&#x35;&#53;&#55;&#54;&#x40;&#x71;&#x71;&#x2e;&#99;&#111;&#109;">&#x33;&#x35;&#49;&#56;&#54;&#x35;&#53;&#55;&#54;&#x40;&#x71;&#x71;&#x2e;&#99;&#111;&#109;</a>(hoey1994)下创建test项目</p>
+<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a>(hoey94)下创建Test项目</p>
+<p>在账号<a href="mailto:&#51;&#53;&#x31;&#x38;&#x36;&#53;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;">&#51;&#53;&#x31;&#x38;&#x36;&#53;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;</a>(hoey1994)下创建test项目</p>
 <p>使用下面命令分别克隆到本地</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
 
@@ -660,7 +802,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

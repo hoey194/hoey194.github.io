@@ -1,6 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Docker中部署单节点Hadoop</title>
+    <url>/posts/20230705150512-edf97c6c.html</url>
+    <content><![CDATA[<p>之前介绍了Docker中部署多节点集群见链接<a href="https://blog.hoey.tk/2020/11/15/2020%E5%B9%B411%E6%9C%8815%E6%97%A514:11:53_%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2hadoop/">Docker部署多节点Hadoop</a></p>
+<p>在开发环境中，但节点的集群用来做验证还是十分方便的，下面介绍一下部署单节点的Hadoop集群。</p>
+<h3 id="创建自定义网络"><a href="#创建自定义网络" class="headerlink" title="创建自定义网络"></a>创建自定义网络</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建自定义网络</span> </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip段为：192.168.10.1/24，名字为：hadoop</span></span><br><span class="line">docker network create --subnet=192.168.10.1/24 hadoop</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">显示自定义网络列表</span></span><br><span class="line">docker network ls</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h3><p>创建容器时，开放端口8088（Yarn）、9000（HDFS通信端口，新版本时8020）、50010（数据传输端口）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name hadoop-standalone \</span><br><span class="line">--hostname hadoop-standalone \</span><br><span class="line">--net hadoop --ip 192.168.10.9 \</span><br><span class="line">-p 50070:50070 \</span><br><span class="line">-p 8088:8088 \</span><br><span class="line">-p 9000:9000 \</span><br><span class="line">-p 8020:8020 \</span><br><span class="line">-p 50010:50010 \</span><br><span class="line">-d -P ryaning/hadoop</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果你想将上文中创建的hadoop0、hadoop1、hadoop2节点也加入到网络组，可一用下面命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name hadoop-standalone \</span><br><span class="line">--hostname hadoop-standalone \</span><br><span class="line">--net hadoop --ip 192.168.10.9 \</span><br><span class="line">--add-host hadoop0:192.168.10.10 \</span><br><span class="line">--add-host hadoop1:192.168.10.11 \</span><br><span class="line">--add-host hadoop2:192.168.10.12 \</span><br><span class="line">-p 50070:50070 \</span><br><span class="line">-p 8088:8088 \</span><br><span class="line">-p 9000:9000 \</span><br><span class="line">-p 8020:8020 \</span><br><span class="line">-p 50010:50010 \</span><br><span class="line">-d -P ryaning/hadoop</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="设置-SSH-免密码登录"><a href="#设置-SSH-免密码登录" class="headerlink" title="设置 SSH 免密码登录"></a>设置 SSH 免密码登录</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入容器内</span></span><br><span class="line">docker exec -it hadoop-standalone bash</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行后会有多个输入提示，不用输入任何内容，全部直接回车即可</span></span><br><span class="line">ssh-keygen</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行命令后需要输入登录密码，**默认为 123456**</span></span><br><span class="line">ssh-copy-id -i /root/.ssh/id_rsa -p 22 root@hadoop-standalone</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="修改-Hadoop-配置文件"><a href="#修改-Hadoop-配置文件" class="headerlink" title="修改 Hadoop 配置文件"></a>修改 Hadoop 配置文件</h3><ul>
+<li>hadoop-env.sh</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/jdk1.8</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>yarn-env.sh</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/jdk1.8</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>core-site.xml</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://localhost:9000&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/usr/local/hadoop/tmp&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">     &lt;property&gt;</span><br><span class="line">         &lt;name&gt;fs.trash.interval&lt;/name&gt;</span><br><span class="line">         &lt;value&gt;1440&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>hdfs-site.xml</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.permissions&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>yarn-site.xml</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">       &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这个文件默认不存在，需要从 mapred-site.xml.template 复制过来</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mv mapred-site.xml.template mapred-site.xml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-hadoop-集群"><a href="#启动-hadoop-集群" class="headerlink" title="启动 hadoop 集群"></a>启动 hadoop 集群</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">/usr/local/hadoop 目录下执行</span></span><br><span class="line">sbin/start-all.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h3><p>创建本地测试文件，在 /opt 目录下创建测试文件目录。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir wcinput</span><br><span class="line">cd wcinput</span><br><span class="line">vi wc.input</span><br></pre></td></tr></table></figure>
+
+<p>wc.input文件内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hadoop mapreduce</span><br><span class="line">hadoop yarn</span><br><span class="line">hadoop hdfs</span><br><span class="line">mapreduce spark</span><br><span class="line">hadoop hello</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+
+<p>创建 HDFS 目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -mkdir -p /user/hadoop/input</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+
+<p>上传文件，把测试文件上传到刚刚创建的目录中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -put /opt/wcinput/wc.input /user/hadoop/input</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+
+<p>查看文件上传是否正确</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -ls /user/hadoop/input</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -ls /user/hadoop/input</span><br><span class="line">Found 1 items</span><br><span class="line">-rw-r--r--   1 root supergroup         70 2019-01-21 10:07 /user/hadoop/input/wc.input</span><br><span class="line">[root@hadoop0 wcinput]#</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+
+<p>运行 mapreduce 程序</p>
+<p>hadoop 安装包中提供了一个示例程序，我们可以使用它对刚刚上传的文件进行测试</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount /user/hadoop/input /user/hadoop/output</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：在执行过程中，如果长时间处于 Running 状态不动，虽然没有报错，但实际上是出错了，后台在不断重试，需要到 logs 目录下（/usr/local/hadoop/logs）查看日志文件中的错误信息。</p>
+</blockquote>
+<p>查看输出结果</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -ls /user/hadoop/output</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -ls /user/hadoop/output</span><br><span class="line">Found 2 items</span><br><span class="line">-rw-r--r--   1 root supergroup          0 2019-01-22 05:35 /user/hadoop/output/_SUCCESS</span><br><span class="line">-rw-r--r--   1 root supergroup         51 2019-01-22 05:35 /user/hadoop/output/part-r-00000</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+
+<p>_SUCCESS 表示 HDFS 文件状态，生成的结果在 part-r-00000 中查看。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -cat /user/hadoop/output/part-r-00000</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -cat /user/hadoop/output/part-r-00000</span><br><span class="line">hadoop    4</span><br><span class="line">hdfs    1</span><br><span class="line">hello    1</span><br><span class="line">mapreduce    2</span><br><span class="line">spark    1</span><br><span class="line">yarn    1</span><br><span class="line">[root@hadoop0 wcinput]#</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+
+<p>以上就是使用 Docker 环境搭建 Hadoop 镜像容器，配置 Hadoop 集群，并启动和测试的实例，测试用的是 hadoop 官方给的一个 wordcount 统计，利用 hadoop 安装包里的 mapreduce 示例 jar 计算指定 HDFS 文件里的单词数，并将结果输出到指定 HDFS 目录。后面会介绍 HDFS 常用文件操作命令。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>DolphinScheduler 3.1.0 本地环境搭建</title>
     <url>/posts/20221228222917-aa59cf36.html</url>
     <content><![CDATA[<p>环境准备</p>
@@ -176,79 +266,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>hexo换主题乱码问题的解决</title>
-    <url>/posts/20221208120419-a0fbf222.html</url>
-    <content><![CDATA[<p>使用next主题时运行报错</p>
-<h2 id="问题的表现"><a href="#问题的表现" class="headerlink" title="问题的表现"></a>问题的表现</h2><p><code>&#123;% extends '_layout.swig' %&#125; &#123;% import '_macro/post.swig' as post_template %&#125;....................</code></p>
-<h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>原因是hexo在5.0之后把swig给删除了需要自己手动安装</p>
-<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line">npm <span class="selector-tag">i</span> hexo-renderer-swig</span><br></pre></td></tr></table></figure>
-
-<p>之后重新</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">hexo clean          </span><br><span class="line">hexo <span class="keyword">generate</span>      </span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-]]></content>
-  </entry>
-  <entry>
-    <title>Jellyfin 添加字体库解决中文乱码</title>
-    <url>/posts/20230430133503-ff462b52.html</url>
-    <content><![CDATA[<p>最近使用Jellyfin搭建家庭影音出现中文乱码问题，下面是我搜到的一些方案，我用的是扩展中文字体库</p>
-<ul>
-<li>使用nyanmisaka/jellyfin 套件</li>
-<li>使用actime转字幕</li>
-<li>扩展中文字体库</li>
-</ul>
-<p>下面是一些指令，针对小白用的，大佬无视</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">远程登录到NAS并切换最高权限</span></span><br><span class="line">ssh admin@192.168.30.5 -p 22</span><br><span class="line">sudo -i</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入到NAS自己创建的目录，这个目录自己改</span></span><br><span class="line">cd /volume1/media/fonts</span><br><span class="line">pwd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用docker命令查看jellyfin 的<span class="built_in">id</span></span></span><br><span class="line">docker ps</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入到容器内部查看目录文件结构1538f09eaa85要替换成自己的<span class="built_in">id</span></span></span><br><span class="line">docker exec -it 1538f09eaa85 /bin/bash</span><br><span class="line">cd /usr/share/fonts/</span><br><span class="line">exit</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制宿主机的文件到容器内</span></span><br><span class="line">docker cp fz.tar.gz 1538f09eaa85:/usr/share/fonts/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">到容器目录中解压</span></span><br><span class="line">docker exec -it 1538f09eaa85 /bin/bash</span><br><span class="line">cd /usr/share/fonts/</span><br><span class="line">tar -zxvf fz.tar.gz</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>链接：<a href="https://share.weiyun.com/5Wg55FF5">https://share.weiyun.com/5Wg55FF5</a> 密码：nhqe76</p>
-<p>视频已经传到B站，欢迎观看<a href="https://www.bilibili.com/video/BV1jg4y1L7sR/?vd_source=8054953f896f7243d95be264ebdece29">Jellyfin中文字幕乱码解决_哔哩哔哩_bilibili</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>ksqlDB</title>
-    <url>/posts/20230314161612-f30a9b25.html</url>
-    <content><![CDATA[<p>目前需要对Kafka Topic中的数据进行分析，查询了一下KSQLDB挺不错，它是一个流处理引擎，主要用于处理实时数据流，并支持 SQL 查询和流处理操作。KSQLDB 可以运行在 Apache Kafka 平台之上，它不需要额外的基础设施，因此可以方便地与 Kafka 进行集成。KSQLDB 可以实现流数据的可视化、数据的清洗和去重、流式计算等。KSQLDB 的主要特点包括易于使用、接近实时的处理速度、强大的 SQL 查询功能以及灵活的流处理操作。</p>
-<p>环境准备</p>
-<ul>
-<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
-<li>Docker &amp; Docker compose</li>
-</ul>
-<p>下面代码用于部署Standalone</p>
-<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">version: <span class="string">&#x27;2&#x27;</span></span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  zookeeper:</span><br><span class="line">    image: confluentinc/cp-zookeeper:<span class="number">7.3</span>.<span class="number">0</span></span><br><span class="line">    hostname: zookeeper</span><br><span class="line">    container_name: zookeeper</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;2181:2181&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      ZOOKEEPER_CLIENT_PORT: <span class="number">2181</span></span><br><span class="line">      ZOOKEEPER_TICK_TIME: <span class="number">2000</span></span><br><span class="line"></span><br><span class="line">  broker:</span><br><span class="line">    image: confluentinc/cp-kafka:<span class="number">7.3</span>.<span class="number">0</span></span><br><span class="line">    hostname: broker</span><br><span class="line">    container_name: broker</span><br><span class="line">    depends_on:</span><br><span class="line">      - zookeeper</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;29092:29092&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KAFKA_BROKER_ID: <span class="number">1</span></span><br><span class="line">      KAFKA_ZOOKEEPER_CONNECT: <span class="string">&#x27;zookeeper:2181&#x27;</span></span><br><span class="line">      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT</span><br><span class="line">      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:<span class="number">9092</span>,PLAINTEXT_HOST://localhost:<span class="number">29092</span></span><br><span class="line">      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: <span class="number">1</span></span><br><span class="line">      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: <span class="number">0</span></span><br><span class="line">      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: <span class="number">1</span></span><br><span class="line">      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">  ksqldb-server:</span><br><span class="line">    image: confluentinc/ksqldb-server:<span class="number">0.28</span>.<span class="number">3</span></span><br><span class="line">    hostname: ksqldb-server</span><br><span class="line">    container_name: ksqldb-server</span><br><span class="line">    depends_on:</span><br><span class="line">      - broker</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;8088:8088&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KSQL_LISTENERS: http://<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8088</span></span><br><span class="line">      KSQL_BOOTSTRAP_SERVERS: broker:<span class="number">9092</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line"></span><br><span class="line">  ksqldb-cli:</span><br><span class="line">    image: confluentinc/ksqldb-cli:<span class="number">0.28</span>.<span class="number">3</span></span><br><span class="line">    container_name: ksqldb-cli</span><br><span class="line">    depends_on:</span><br><span class="line">      - broker</span><br><span class="line">      - ksqldb-server</span><br><span class="line">    <span class="keyword">entrypoint</span><span class="language-bash">: /bin/sh</span></span><br><span class="line">    tty: true</span><br></pre></td></tr></table></figure>
-
-<p>启动KsqlDB服务:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker-compose up</span><br></pre></td></tr></table></figure>
-
-<p>使用Docker链接到Cli中</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker exec -it ksqldb-cli</span><br></pre></td></tr></table></figure>
-
-<p>链接到cli中后，在终端运行命令链接：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[ksqldb-cli] docker exec -it ksqldb-cli ksql http://ksqldb-server:8088</span><br></pre></td></tr></table></figure>
-
-<p>可以运行命令查看topic</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">show topics;</span><br></pre></td></tr></table></figure>
-
-<p>如果你想链接远端Kafka集群，将<KSQL_BOOTSTRAP_SERVERS> 替换成自己的远程Kafka集群，像下面这个dockerfile一样：</p>
-<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">version: <span class="string">&#x27;2&#x27;</span></span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  ksqldb-server-juneyao:</span><br><span class="line">    image: confluentinc/ksqldb-server</span><br><span class="line">    hostname: ksqldb-server-juneyao</span><br><span class="line">    container_name: ksqldb-server-juneyao</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;8088:8088&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KSQL_LISTENERS: http://<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8088</span></span><br><span class="line">      KSQL_BOOTSTRAP_SERVERS: <span class="number">172.22</span>.<span class="number">17.28</span>:<span class="number">9092</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line"></span><br><span class="line">  ksqldb-cli-juneyao:</span><br><span class="line">    image: confluentinc/ksqldb-cli</span><br><span class="line">    container_name: ksqldb-cli-juneyao</span><br><span class="line">    depends_on:</span><br><span class="line">      - ksqldb-server-juneyao</span><br><span class="line">    <span class="keyword">entrypoint</span><span class="language-bash">: /bin/sh</span></span><br><span class="line">    tty: true</span><br></pre></td></tr></table></figure>
-
-<p> 后面的操作和上面都一样了，启动的时候注意修改名称</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230314162231259.png" alt="image-20230314162231259"></p>
-<h3 id="Example-1：-创建流表并查询"><a href="#Example-1：-创建流表并查询" class="headerlink" title="Example 1： 创建流表并查询"></a>Example 1： 创建流表并查询</h3><p>展示有多少Topic:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> topics;</span><br><span class="line"><span class="keyword">show</span> streams;</span><br></pre></td></tr></table></figure>
-
-<p>在cli链接后，我们创建一个riderLocations流，如果locations这个topic在kafka中不存在，则会对应创建。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> STREAM riderLocations (</span><br><span class="line">    profileId <span class="type">VARCHAR</span>,</span><br><span class="line">    latitude  <span class="keyword">DOUBLE</span>,</span><br><span class="line">    longitude <span class="keyword">DOUBLE</span></span><br><span class="line">) <span class="keyword">WITH</span> ( kafka_topic<span class="operator">=</span><span class="string">&#x27;locations&#x27;</span>, value_format<span class="operator">=</span><span class="string">&#x27;json&#x27;</span>, PARTITIONS <span class="operator">=</span><span class="number">1</span> );</span><br></pre></td></tr></table></figure>
-
-<p>然后往topic中插入一批数据</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">kafka-console-producer --broker-list localhost:9092 --topic locations </span><br><span class="line">&#123;&quot;profileId&quot;:&quot;1&quot;,&quot;latitude&quot;:2.0,&quot;longitude&quot;:1.0&#125;</span><br><span class="line">&#123;&quot;profileId&quot;:&quot;2&quot;,&quot;latitude&quot;:3.0,&quot;longitude&quot;:3.0&#125;</span><br><span class="line">&#123;&quot;profileId&quot;:&quot;3&quot;,&quot;latitude&quot;:1.0,&quot;longitude&quot;:1.0&#125;</span><br></pre></td></tr></table></figure>
-
-<p>就可以愉快的查询它了</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="string">&#x27;auto.offset.reset&#x27;</span><span class="operator">=</span><span class="string">&#x27;earliest&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> riderLocations;</span><br></pre></td></tr></table></figure>
-
-<p>更多的详细用法可以参考网站<a href="https://ksqldb.io/quickstart.html#quickstart-content">ksqldb</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>github配置多用户</title>
     <url>/posts/20221208121846-ef5df40e.html</url>
     <content><![CDATA[<p>因为需要使用多个github账号，但只有一台电脑，想要动态切换不同用户，并且做到免密提交。</p>
@@ -265,11 +282,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#x6e;&#110;&#113;&#106;&#x62;&#97;&#110;&#x35;&#x32;&#49;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#99;&#x6e;&#110;&#113;&#106;&#x62;&#97;&#110;&#x35;&#x32;&#49;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
 <td>hoey94</td>
 </tr>
 <tr>
-<td><a href="mailto:&#51;&#53;&#x31;&#56;&#x36;&#x35;&#x35;&#x37;&#x36;&#64;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;">&#51;&#53;&#x31;&#56;&#x36;&#x35;&#x35;&#x37;&#x36;&#64;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;</a></td>
+<td><a href="mailto:&#x33;&#x35;&#49;&#56;&#54;&#53;&#53;&#x37;&#x36;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;">&#x33;&#x35;&#49;&#56;&#54;&#53;&#53;&#x37;&#x36;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>hoey1994</td>
 </tr>
 </tbody></table>
@@ -284,11 +301,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#97;&#x6e;&#x35;&#50;&#x31;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#97;&#x6e;&#x35;&#50;&#x31;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a></td>
+<td><a href="mailto:&#x63;&#x6e;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#53;&#x32;&#x31;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x63;&#x6e;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#53;&#x32;&#x31;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></td>
 <td>Test</td>
 </tr>
 <tr>
-<td><a href="mailto:&#51;&#x35;&#49;&#x38;&#54;&#53;&#53;&#x37;&#54;&#x40;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;">&#51;&#x35;&#49;&#x38;&#54;&#53;&#53;&#x37;&#54;&#x40;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#x33;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#55;&#x36;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#x6d;">&#x33;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#55;&#x36;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#x6d;</a></td>
 <td>test</td>
 </tr>
 </tbody></table>
@@ -337,14 +354,52 @@
 
 
 
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#110;&#x6e;&#x71;&#x6a;&#x62;&#x61;&#110;&#53;&#50;&#49;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;">&#x63;&#110;&#x6e;&#x71;&#x6a;&#x62;&#x61;&#110;&#53;&#50;&#49;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#x33;&#x35;&#49;&#56;&#54;&#x35;&#53;&#55;&#54;&#x40;&#x71;&#x71;&#x2e;&#99;&#111;&#109;">&#x33;&#x35;&#49;&#56;&#54;&#x35;&#53;&#55;&#54;&#x40;&#x71;&#x71;&#x2e;&#99;&#111;&#109;</a>(hoey1994)下创建test项目</p>
+<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a>(hoey94)下创建Test项目</p>
+<p>在账号<a href="mailto:&#51;&#53;&#x31;&#x38;&#x36;&#53;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;">&#51;&#53;&#x31;&#x38;&#x36;&#53;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;</a>(hoey1994)下创建test项目</p>
 <p>使用下面命令分别克隆到本地</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
 
 
 
 <p>改动一下里面的内容并提交完成测试。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>hexo换主题乱码问题的解决</title>
+    <url>/posts/20221208120419-a0fbf222.html</url>
+    <content><![CDATA[<p>使用next主题时运行报错</p>
+<h2 id="问题的表现"><a href="#问题的表现" class="headerlink" title="问题的表现"></a>问题的表现</h2><p><code>&#123;% extends '_layout.swig' %&#125; &#123;% import '_macro/post.swig' as post_template %&#125;....................</code></p>
+<h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>原因是hexo在5.0之后把swig给删除了需要自己手动安装</p>
+<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line">npm <span class="selector-tag">i</span> hexo-renderer-swig</span><br></pre></td></tr></table></figure>
+
+<p>之后重新</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">hexo clean          </span><br><span class="line">hexo <span class="keyword">generate</span>      </span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>Jellyfin 添加字体库解决中文乱码</title>
+    <url>/posts/20230430133503-ff462b52.html</url>
+    <content><![CDATA[<p>最近使用Jellyfin搭建家庭影音出现中文乱码问题，下面是我搜到的一些方案，我用的是扩展中文字体库</p>
+<ul>
+<li>使用nyanmisaka/jellyfin 套件</li>
+<li>使用actime转字幕</li>
+<li>扩展中文字体库</li>
+</ul>
+<p>下面是一些指令，针对小白用的，大佬无视</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">远程登录到NAS并切换最高权限</span></span><br><span class="line">ssh admin@192.168.30.5 -p 22</span><br><span class="line">sudo -i</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入到NAS自己创建的目录，这个目录自己改</span></span><br><span class="line">cd /volume1/media/fonts</span><br><span class="line">pwd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用docker命令查看jellyfin 的<span class="built_in">id</span></span></span><br><span class="line">docker ps</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入到容器内部查看目录文件结构1538f09eaa85要替换成自己的<span class="built_in">id</span></span></span><br><span class="line">docker exec -it 1538f09eaa85 /bin/bash</span><br><span class="line">cd /usr/share/fonts/</span><br><span class="line">exit</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制宿主机的文件到容器内</span></span><br><span class="line">docker cp fz.tar.gz 1538f09eaa85:/usr/share/fonts/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">到容器目录中解压</span></span><br><span class="line">docker exec -it 1538f09eaa85 /bin/bash</span><br><span class="line">cd /usr/share/fonts/</span><br><span class="line">tar -zxvf fz.tar.gz</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>链接：<a href="https://share.weiyun.com/5Wg55FF5">https://share.weiyun.com/5Wg55FF5</a> 密码：nhqe76</p>
+<p>视频已经传到B站，欢迎观看<a href="https://www.bilibili.com/video/BV1jg4y1L7sR/?vd_source=8054953f896f7243d95be264ebdece29">Jellyfin中文字幕乱码解决_哔哩哔哩_bilibili</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>拉链表</title>
+    <url>/posts/20230221094327-2e5ad32b.html</url>
+    <content><![CDATA[<p>拉链表思路图：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094438645.png" alt="image-20230221094438645"></p>
+<p>使用HiveSQL增量完成拉链表加工思路：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094348740.png" alt="image-20230221094348740"></p>
 ]]></content>
   </entry>
   <entry>
@@ -359,12 +414,47 @@
 ]]></content>
   </entry>
   <entry>
-    <title>拉链表</title>
-    <url>/posts/20230221094327-2e5ad32b.html</url>
-    <content><![CDATA[<p>拉链表思路图：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094438645.png" alt="image-20230221094438645"></p>
-<p>使用HiveSQL增量完成拉链表加工思路：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094348740.png" alt="image-20230221094348740"></p>
+    <title>ksqlDB</title>
+    <url>/posts/20230314161612-f30a9b25.html</url>
+    <content><![CDATA[<p>目前需要对Kafka Topic中的数据进行分析，查询了一下KSQLDB挺不错，它是一个流处理引擎，主要用于处理实时数据流，并支持 SQL 查询和流处理操作。KSQLDB 可以运行在 Apache Kafka 平台之上，它不需要额外的基础设施，因此可以方便地与 Kafka 进行集成。KSQLDB 可以实现流数据的可视化、数据的清洗和去重、流式计算等。KSQLDB 的主要特点包括易于使用、接近实时的处理速度、强大的 SQL 查询功能以及灵活的流处理操作。</p>
+<p>环境准备</p>
+<ul>
+<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
+<li>Docker &amp; Docker compose</li>
+</ul>
+<p>下面代码用于部署Standalone</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">version: <span class="string">&#x27;2&#x27;</span></span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  zookeeper:</span><br><span class="line">    image: confluentinc/cp-zookeeper:<span class="number">7.3</span>.<span class="number">0</span></span><br><span class="line">    hostname: zookeeper</span><br><span class="line">    container_name: zookeeper</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;2181:2181&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      ZOOKEEPER_CLIENT_PORT: <span class="number">2181</span></span><br><span class="line">      ZOOKEEPER_TICK_TIME: <span class="number">2000</span></span><br><span class="line"></span><br><span class="line">  broker:</span><br><span class="line">    image: confluentinc/cp-kafka:<span class="number">7.3</span>.<span class="number">0</span></span><br><span class="line">    hostname: broker</span><br><span class="line">    container_name: broker</span><br><span class="line">    depends_on:</span><br><span class="line">      - zookeeper</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;29092:29092&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KAFKA_BROKER_ID: <span class="number">1</span></span><br><span class="line">      KAFKA_ZOOKEEPER_CONNECT: <span class="string">&#x27;zookeeper:2181&#x27;</span></span><br><span class="line">      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT</span><br><span class="line">      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:<span class="number">9092</span>,PLAINTEXT_HOST://localhost:<span class="number">29092</span></span><br><span class="line">      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: <span class="number">1</span></span><br><span class="line">      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: <span class="number">0</span></span><br><span class="line">      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: <span class="number">1</span></span><br><span class="line">      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">  ksqldb-server:</span><br><span class="line">    image: confluentinc/ksqldb-server:<span class="number">0.28</span>.<span class="number">3</span></span><br><span class="line">    hostname: ksqldb-server</span><br><span class="line">    container_name: ksqldb-server</span><br><span class="line">    depends_on:</span><br><span class="line">      - broker</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;8088:8088&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KSQL_LISTENERS: http://<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8088</span></span><br><span class="line">      KSQL_BOOTSTRAP_SERVERS: broker:<span class="number">9092</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line"></span><br><span class="line">  ksqldb-cli:</span><br><span class="line">    image: confluentinc/ksqldb-cli:<span class="number">0.28</span>.<span class="number">3</span></span><br><span class="line">    container_name: ksqldb-cli</span><br><span class="line">    depends_on:</span><br><span class="line">      - broker</span><br><span class="line">      - ksqldb-server</span><br><span class="line">    <span class="keyword">entrypoint</span><span class="language-bash">: /bin/sh</span></span><br><span class="line">    tty: true</span><br></pre></td></tr></table></figure>
+
+<p>启动KsqlDB服务:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker-compose up</span><br></pre></td></tr></table></figure>
+
+<p>使用Docker链接到Cli中</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker exec -it ksqldb-cli</span><br></pre></td></tr></table></figure>
+
+<p>链接到cli中后，在终端运行命令链接：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[ksqldb-cli] docker exec -it ksqldb-cli ksql http://ksqldb-server:8088</span><br></pre></td></tr></table></figure>
+
+<p>可以运行命令查看topic</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">show topics;</span><br></pre></td></tr></table></figure>
+
+<p>如果你想链接远端Kafka集群，将<KSQL_BOOTSTRAP_SERVERS> 替换成自己的远程Kafka集群，像下面这个dockerfile一样：</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">version: <span class="string">&#x27;2&#x27;</span></span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  ksqldb-server-juneyao:</span><br><span class="line">    image: confluentinc/ksqldb-server</span><br><span class="line">    hostname: ksqldb-server-juneyao</span><br><span class="line">    container_name: ksqldb-server-juneyao</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;8088:8088&quot;</span></span><br><span class="line">    environment:</span><br><span class="line">      KSQL_LISTENERS: http://<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8088</span></span><br><span class="line">      KSQL_BOOTSTRAP_SERVERS: <span class="number">172.22</span>.<span class="number">17.28</span>:<span class="number">9092</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line">      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: <span class="string">&quot;true&quot;</span></span><br><span class="line"></span><br><span class="line">  ksqldb-cli-juneyao:</span><br><span class="line">    image: confluentinc/ksqldb-cli</span><br><span class="line">    container_name: ksqldb-cli-juneyao</span><br><span class="line">    depends_on:</span><br><span class="line">      - ksqldb-server-juneyao</span><br><span class="line">    <span class="keyword">entrypoint</span><span class="language-bash">: /bin/sh</span></span><br><span class="line">    tty: true</span><br></pre></td></tr></table></figure>
+
+<p> 后面的操作和上面都一样了，启动的时候注意修改名称</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230314162231259.png" alt="image-20230314162231259"></p>
+<h3 id="Example-1：-创建流表并查询"><a href="#Example-1：-创建流表并查询" class="headerlink" title="Example 1： 创建流表并查询"></a>Example 1： 创建流表并查询</h3><p>展示有多少Topic:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> topics;</span><br><span class="line"><span class="keyword">show</span> streams;</span><br></pre></td></tr></table></figure>
+
+<p>在cli链接后，我们创建一个riderLocations流，如果locations这个topic在kafka中不存在，则会对应创建。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> STREAM riderLocations (</span><br><span class="line">    profileId <span class="type">VARCHAR</span>,</span><br><span class="line">    latitude  <span class="keyword">DOUBLE</span>,</span><br><span class="line">    longitude <span class="keyword">DOUBLE</span></span><br><span class="line">) <span class="keyword">WITH</span> ( kafka_topic<span class="operator">=</span><span class="string">&#x27;locations&#x27;</span>, value_format<span class="operator">=</span><span class="string">&#x27;json&#x27;</span>, PARTITIONS <span class="operator">=</span><span class="number">1</span> );</span><br></pre></td></tr></table></figure>
+
+<p>然后往topic中插入一批数据</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">kafka-console-producer --broker-list localhost:9092 --topic locations </span><br><span class="line">&#123;&quot;profileId&quot;:&quot;1&quot;,&quot;latitude&quot;:2.0,&quot;longitude&quot;:1.0&#125;</span><br><span class="line">&#123;&quot;profileId&quot;:&quot;2&quot;,&quot;latitude&quot;:3.0,&quot;longitude&quot;:3.0&#125;</span><br><span class="line">&#123;&quot;profileId&quot;:&quot;3&quot;,&quot;latitude&quot;:1.0,&quot;longitude&quot;:1.0&#125;</span><br></pre></td></tr></table></figure>
+
+<p>就可以愉快的查询它了</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="string">&#x27;auto.offset.reset&#x27;</span><span class="operator">=</span><span class="string">&#x27;earliest&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> riderLocations;</span><br></pre></td></tr></table></figure>
+
+<p>更多的详细用法可以参考网站<a href="https://ksqldb.io/quickstart.html#quickstart-content">ksqldb</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -479,7 +569,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#109;&#x69;&#110;&#64;&#101;&#120;&#x61;&#x6d;&#112;&#108;&#101;&#46;&#x63;&#111;&#x6d;">&#x61;&#100;&#109;&#x69;&#110;&#64;&#101;&#120;&#x61;&#x6d;&#112;&#108;&#101;&#46;&#x63;&#111;&#x6d;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#x6d;&#105;&#110;&#x40;&#x65;&#120;&#97;&#109;&#x70;&#108;&#x65;&#46;&#x63;&#111;&#109;">&#x61;&#100;&#x6d;&#105;&#110;&#x40;&#x65;&#120;&#97;&#109;&#x70;&#108;&#x65;&#46;&#x63;&#111;&#109;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
