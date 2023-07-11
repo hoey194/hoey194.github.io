@@ -355,12 +355,11 @@
         
           
             <p>前段时间618新入手了几块硬盘，买回来组一个NAS，下面是家里的网络拓扑逻辑图 </p>
-<img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230711112431402.png" alt="image-20230711112431402" style="zoom:100%;" />
-
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230711130249774.png" alt="image-20230711130249774"></p>
 <p>在其中完成了以下内容：</p>
 <ol>
-<li>网络统一管理，包括网络分割如划分子网；网络的优化如实现拦截、翻墙、过滤广告、加速；网络的安全如内外网穿透。</li>
-<li>ESXI虚拟化技术，对物理机的CPU计算、存储和网络资源高效利用，高效的横向拓展能力和简易的操作。</li>
+<li>网络统一管理，包括网络分割如划分子网；网络的优化如实现拦截、翻墙、过滤广告、加速；内外网穿透。</li>
+<li>ESXI虚拟化，对物理机的CPU计算、存储和网络资源高效利用，EXSI高效的横向拓展能力和简易的操作都非常的优秀。</li>
 <li>NAS（网络附加存储），数据共享与存储、备份与恢复、远程访问、横向磁盘扩容。</li>
 <li>边缘计算，网络资源共享，提升网络三大运营商CDN网络加速。</li>
 </ol>
@@ -368,7 +367,7 @@
 <ol>
 <li>全端的无差异实时备份，包括Mac、Windows、IPad、IPhone等设备</li>
 <li>现在市面上各大云盘，某度云、某里云等等，现在统统废弃，全部用NAS就可以解决，相当于买了个所有云盘的VIP</li>
-<li>网络方面的国内外无差异化上网体验，无墙的飞速还是蛮爽的，而且无视终端。</li>
+<li>网络方面的国内外无差异化上网体验。</li>
 <li>给老婆刷刷剧，看看电影都很方便。</li>
 </ol>
 
@@ -803,7 +802,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#109;&#x69;&#110;&#64;&#x65;&#120;&#x61;&#109;&#x70;&#x6c;&#101;&#x2e;&#x63;&#111;&#109;">&#x61;&#100;&#109;&#x69;&#110;&#64;&#x65;&#120;&#x61;&#109;&#x70;&#x6c;&#101;&#x2e;&#x63;&#111;&#109;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#109;&#x69;&#x6e;&#x40;&#101;&#120;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#99;&#111;&#109;">&#x61;&#100;&#109;&#x69;&#x6e;&#x40;&#101;&#120;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#99;&#111;&#109;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
