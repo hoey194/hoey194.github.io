@@ -4,18 +4,18 @@
     <title>Docker中部署单节点Hadoop</title>
     <url>/posts/20230705150512-edf97c6c.html</url>
     <content><![CDATA[<p>之前介绍了Docker中部署多节点集群见链接<a href="https://blog.hoey.tk/2020/11/15/2020%E5%B9%B411%E6%9C%8815%E6%97%A514:11:53_%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2hadoop/">Docker部署多节点Hadoop</a></p>
-<p>在开发环境中，但节点的集群用来做验证还是十分方便的，下面介绍一下部署单节点的Hadoop集群。</p>
+<p>在开发环境中，单节点的集群用来做验证还是十分方便的，下面介绍一下部署单节点的Hadoop集群。</p>
 <h3 id="创建自定义网络"><a href="#创建自定义网络" class="headerlink" title="创建自定义网络"></a>创建自定义网络</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建自定义网络</span> </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip段为：192.168.10.1/24，名字为：hadoop</span></span><br><span class="line">docker network create --subnet=192.168.10.1/24 hadoop</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">显示自定义网络列表</span></span><br><span class="line">docker network ls</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h3><p>创建容器时，开放端口8088（Yarn）、9000（HDFS通信端口，新版本时8020）、50010（数据传输端口）</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name hadoop-standalone \</span><br><span class="line">--hostname hadoop-standalone \</span><br><span class="line">--net hadoop --ip 192.168.10.9 \</span><br><span class="line">-p 50070:50070 \</span><br><span class="line">-p 8088:8088 \</span><br><span class="line">-p 9000:9000 \</span><br><span class="line">-p 8020:8020 \</span><br><span class="line">-p 50010:50010 \</span><br><span class="line">-d -P ryaning/hadoop</span><br></pre></td></tr></table></figure>
+<h3 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h3><p>创建容器时，开放端口8088（Yarn）、9000（HDFS通信端口，新版本时8020）、50010（数据传输端口）、50075（web页面下载文件端口）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name hadoop-standalone \</span><br><span class="line">--hostname hadoop-standalone \</span><br><span class="line">--net hadoop --ip 192.168.10.9 \</span><br><span class="line">-p 50070:50070 \</span><br><span class="line">-p 8088:8088 \</span><br><span class="line">-p 9000:9000 \</span><br><span class="line">-p 8020:8020 \</span><br><span class="line">-p 50010:50010 \</span><br><span class="line">-p 50075:50075 \</span><br><span class="line">-d -P ryaning/hadoop</span><br></pre></td></tr></table></figure>
 
 
 
 <p>如果你想将上文中创建的hadoop0、hadoop1、hadoop2节点也加入到网络组，可一用下面命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name hadoop-standalone \</span><br><span class="line">--hostname hadoop-standalone \</span><br><span class="line">--net hadoop --ip 192.168.10.9 \</span><br><span class="line">--add-host hadoop0:192.168.10.10 \</span><br><span class="line">--add-host hadoop1:192.168.10.11 \</span><br><span class="line">--add-host hadoop2:192.168.10.12 \</span><br><span class="line">-p 50070:50070 \</span><br><span class="line">-p 8088:8088 \</span><br><span class="line">-p 9000:9000 \</span><br><span class="line">-p 8020:8020 \</span><br><span class="line">-p 50010:50010 \</span><br><span class="line">-d -P ryaning/hadoop</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name hadoop-standalone \</span><br><span class="line">--hostname hadoop-standalone \</span><br><span class="line">--net hadoop --ip 192.168.10.9 \</span><br><span class="line">--add-host hadoop0:192.168.10.10 \</span><br><span class="line">--add-host hadoop1:192.168.10.11 \</span><br><span class="line">--add-host hadoop2:192.168.10.12 \</span><br><span class="line">-p 50070:50070 \</span><br><span class="line">-p 8088:8088 \</span><br><span class="line">-p 9000:9000 \</span><br><span class="line">-p 8020:8020 \</span><br><span class="line">-p 50010:50010 \</span><br><span class="line">-p 50075:50075 \</span><br><span class="line">-d -P ryaning/hadoop</span><br></pre></td></tr></table></figure>
 
 
 
@@ -36,12 +36,12 @@
 <ul>
 <li>core-site.xml</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://localhost:9000&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/usr/local/hadoop/tmp&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">     &lt;property&gt;</span><br><span class="line">         &lt;name&gt;fs.trash.interval&lt;/name&gt;</span><br><span class="line">         &lt;value&gt;1440&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://hadoop-standalone:9000&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/usr/local/hadoop/tmp&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">     &lt;property&gt;</span><br><span class="line">         &lt;name&gt;fs.trash.interval&lt;/name&gt;</span><br><span class="line">         &lt;value&gt;1440&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>hdfs-site.xml</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.permissions&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">	&lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.datanode.use.datanode.hostname&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.permissions&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>yarn-site.xml</li>
@@ -63,31 +63,48 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir wcinput</span><br><span class="line">cd wcinput</span><br><span class="line">vi wc.input</span><br></pre></td></tr></table></figure>
 
 <p>wc.input文件内容如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hadoop mapreduce</span><br><span class="line">hadoop yarn</span><br><span class="line">hadoop hdfs</span><br><span class="line">mapreduce spark</span><br><span class="line">hadoop hello</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hadoop mapreduce</span><br><span class="line">hadoop yarn</span><br><span class="line">hadoop hdfs</span><br><span class="line">mapreduce spark</span><br><span class="line">hadoop hello</span><br></pre></td></tr></table></figure>
 
 <p>创建 HDFS 目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -mkdir -p /user/hadoop/input</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hdfs dfs -mkdir -p /user/hadoop/input</span><br></pre></td></tr></table></figure>
 
 <p>上传文件，把测试文件上传到刚刚创建的目录中</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -put /opt/wcinput/wc.input /user/hadoop/input</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hdfs dfs -put /opt/wcinput/wc.input /user/hadoop/input</span><br></pre></td></tr></table></figure>
 
 <p>查看文件上传是否正确</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -ls /user/hadoop/input</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -ls /user/hadoop/input</span><br><span class="line">Found 1 items</span><br><span class="line">-rw-r--r--   1 root supergroup         70 2019-01-21 10:07 /user/hadoop/input/wc.input</span><br><span class="line">[root@hadoop0 wcinput]#</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hdfs dfs -ls /user/hadoop/input</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -ls /user/hadoop/input</span><br><span class="line">Found 1 items</span><br><span class="line">-rw-r--r--   1 root supergroup         70 2019-01-21 10:07 /user/hadoop/input/wc.input</span><br><span class="line">[root@hadoop0 wcinput]#</span><br></pre></td></tr></table></figure>
 
 <p>运行 mapreduce 程序</p>
 <p>hadoop 安装包中提供了一个示例程序，我们可以使用它对刚刚上传的文件进行测试</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount /user/hadoop/input /user/hadoop/output</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount /user/hadoop/input /user/hadoop/output</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>注：在执行过程中，如果长时间处于 Running 状态不动，虽然没有报错，但实际上是出错了，后台在不断重试，需要到 logs 目录下（/usr/local/hadoop/logs）查看日志文件中的错误信息。</p>
 </blockquote>
 <p>查看输出结果</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -ls /user/hadoop/output</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -ls /user/hadoop/output</span><br><span class="line">Found 2 items</span><br><span class="line">-rw-r--r--   1 root supergroup          0 2019-01-22 05:35 /user/hadoop/output/_SUCCESS</span><br><span class="line">-rw-r--r--   1 root supergroup         51 2019-01-22 05:35 /user/hadoop/output/part-r-00000</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hdfs dfs -ls /user/hadoop/output</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -ls /user/hadoop/output</span><br><span class="line">Found 2 items</span><br><span class="line">-rw-r--r--   1 root supergroup          0 2019-01-22 05:35 /user/hadoop/output/_SUCCESS</span><br><span class="line">-rw-r--r--   1 root supergroup         51 2019-01-22 05:35 /user/hadoop/output/part-r-00000</span><br></pre></td></tr></table></figure>
 
 <p>_SUCCESS 表示 HDFS 文件状态，生成的结果在 part-r-00000 中查看。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hdfs dfs -cat /user/hadoop/output/part-r-00000</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -cat /user/hadoop/output/part-r-00000</span><br><span class="line">hadoop    4</span><br><span class="line">hdfs    1</span><br><span class="line">hello    1</span><br><span class="line">mapreduce    2</span><br><span class="line">spark    1</span><br><span class="line">yarn    1</span><br><span class="line">[root@hadoop0 wcinput]#</span><br><span class="line"></span><br><span class="line">SHELL</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hdfs dfs -cat /user/hadoop/output/part-r-00000</span><br><span class="line">[root@hadoop0 wcinput]# hdfs dfs -cat /user/hadoop/output/part-r-00000</span><br><span class="line">hadoop    4</span><br><span class="line">hdfs    1</span><br><span class="line">hello    1</span><br><span class="line">mapreduce    2</span><br><span class="line">spark    1</span><br><span class="line">yarn    1</span><br><span class="line">[root@hadoop0 wcinput]#</span><br></pre></td></tr></table></figure>
 
 <p>以上就是使用 Docker 环境搭建 Hadoop 镜像容器，配置 Hadoop 集群，并启动和测试的实例，测试用的是 hadoop 官方给的一个 wordcount 统计，利用 hadoop 安装包里的 mapreduce 示例 jar 计算指定 HDFS 文件里的单词数，并将结果输出到指定 HDFS 目录。后面会介绍 HDFS 常用文件操作命令。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hexo隐藏文章</title>
+    <url>/posts/20221212095216-1c5dc392.html</url>
+    <content><![CDATA[<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>在站点根目录下执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cnpm install hexo-hide-posts --save</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>在站点目录下的<code>_config.yml</code>中如下配置：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">hexo-hide-posts</span></span><br><span class="line">hide_posts:</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">可以改成其他你喜欢的名字</span></span><br><span class="line">  filter: hidden</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">指定你想要传递隐藏文章的位置，比如让所有隐藏文章在存档页面可见</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">常见的位置有：index, tag, category, archive, sitemap, feed, etc.</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">留空则默认全部隐藏</span></span><br><span class="line">  public_generators: []</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">为隐藏的文章添加 noindex meta 标签，阻止搜索引擎收录</span></span><br><span class="line">  noindex: true</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>在文章的属性中定义 <code>hidden: true</code> 即可隐藏文章。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: hidden test</span><br><span class="line">date: 2022-12-12 09:49:19</span><br><span class="line">hidden: true</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>虽然首页上被隐藏了，但你仍然可以通过 <code>https://hexo.test/lorem-ipsum/</code> 链接访问它。</p>
+<p>你可以在命令行运行 <code>hexo hidden:list</code> 来获取当前所有的已隐藏文章列表。</p>
+<p>参考blog：<a href="https://www.cnblogs.com/yangstar/articles/16690342.html">https://www.cnblogs.com/yangstar/articles/16690342.html</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -211,23 +228,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Hexo隐藏文章</title>
-    <url>/posts/20221212095216-1c5dc392.html</url>
-    <content><![CDATA[<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>在站点根目录下执行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cnpm install hexo-hide-posts --save</span><br></pre></td></tr></table></figure>
-
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>在站点目录下的<code>_config.yml</code>中如下配置：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">hexo-hide-posts</span></span><br><span class="line">hide_posts:</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">可以改成其他你喜欢的名字</span></span><br><span class="line">  filter: hidden</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">指定你想要传递隐藏文章的位置，比如让所有隐藏文章在存档页面可见</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">常见的位置有：index, tag, category, archive, sitemap, feed, etc.</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">留空则默认全部隐藏</span></span><br><span class="line">  public_generators: []</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">为隐藏的文章添加 noindex meta 标签，阻止搜索引擎收录</span></span><br><span class="line">  noindex: true</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>在文章的属性中定义 <code>hidden: true</code> 即可隐藏文章。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: hidden test</span><br><span class="line">date: 2022-12-12 09:49:19</span><br><span class="line">hidden: true</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p>虽然首页上被隐藏了，但你仍然可以通过 <code>https://hexo.test/lorem-ipsum/</code> 链接访问它。</p>
-<p>你可以在命令行运行 <code>hexo hidden:list</code> 来获取当前所有的已隐藏文章列表。</p>
-<p>参考blog：<a href="https://www.cnblogs.com/yangstar/articles/16690342.html">https://www.cnblogs.com/yangstar/articles/16690342.html</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>Mac下VIM配置</title>
     <url>/posts/20221208222030-7a63f10c.html</url>
     <content><![CDATA[<h1 id="安装gruvbox主题"><a href="#安装gruvbox主题" class="headerlink" title="安装gruvbox主题"></a>安装gruvbox主题</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir -p ~/.vim/colors ; cd ~/.vim/colors</span><br><span class="line">curl -O https://raw.githubusercontent.com/morhetz/gruvbox/blob/master/colors/gruvbox.vim</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vim ~/.vimrc</span><br><span class="line">&quot;********************************gruvbox主题******************************&quot;</span><br><span class="line">call plug#begin()</span><br><span class="line">Plug &#x27;morhetz/gruvbox&#x27;</span><br><span class="line">call plug#end()</span><br><span class="line">colorscheme gruvbox</span><br><span class="line">set background=dark</span><br></pre></td></tr></table></figure>
@@ -282,11 +282,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#99;&#110;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#x63;&#x6e;&#x6e;&#113;&#x6a;&#98;&#x61;&#x6e;&#53;&#50;&#49;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#x63;&#x6e;&#x6e;&#113;&#x6a;&#98;&#x61;&#x6e;&#53;&#50;&#49;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>hoey94</td>
 </tr>
 <tr>
-<td><a href="mailto:&#x33;&#x35;&#49;&#56;&#54;&#53;&#53;&#x37;&#x36;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;">&#x33;&#x35;&#49;&#56;&#54;&#53;&#53;&#x37;&#x36;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;</a></td>
+<td><a href="mailto:&#51;&#x35;&#49;&#x38;&#54;&#53;&#x35;&#55;&#x36;&#x40;&#113;&#x71;&#46;&#x63;&#x6f;&#x6d;">&#51;&#x35;&#49;&#x38;&#54;&#53;&#x35;&#55;&#x36;&#x40;&#113;&#x71;&#46;&#x63;&#x6f;&#x6d;</a></td>
 <td>hoey1994</td>
 </tr>
 </tbody></table>
@@ -301,11 +301,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#x63;&#x6e;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#53;&#x32;&#x31;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x63;&#x6e;&#x6e;&#113;&#x6a;&#x62;&#x61;&#110;&#53;&#x32;&#x31;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#99;&#x6e;&#x6e;&#113;&#106;&#x62;&#97;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;">&#99;&#x6e;&#x6e;&#113;&#106;&#x62;&#97;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a></td>
 <td>Test</td>
 </tr>
 <tr>
-<td><a href="mailto:&#x33;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#55;&#x36;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#x6d;">&#x33;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#55;&#x36;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#51;&#x35;&#x31;&#56;&#x36;&#x35;&#53;&#55;&#54;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;">&#51;&#x35;&#x31;&#56;&#x36;&#x35;&#53;&#55;&#54;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;</a></td>
 <td>test</td>
 </tr>
 </tbody></table>
@@ -354,8 +354,8 @@
 
 
 
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x63;&#x6e;&#110;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#51;&#53;&#x31;&#x38;&#x36;&#53;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;">&#51;&#53;&#x31;&#x38;&#x36;&#53;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;</a>(hoey1994)下创建test项目</p>
+<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#x6e;&#x6e;&#x71;&#106;&#x62;&#97;&#x6e;&#53;&#x32;&#49;&#x40;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;">&#x63;&#x6e;&#x6e;&#x71;&#106;&#x62;&#97;&#x6e;&#53;&#x32;&#49;&#x40;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;</a>(hoey94)下创建Test项目</p>
+<p>在账号<a href="mailto:&#51;&#53;&#x31;&#x38;&#54;&#x35;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#99;&#111;&#x6d;">&#51;&#53;&#x31;&#x38;&#54;&#x35;&#53;&#55;&#54;&#64;&#113;&#x71;&#x2e;&#99;&#111;&#x6d;</a>(hoey1994)下创建test项目</p>
 <p>使用下面命令分别克隆到本地</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
 
@@ -391,26 +391,6 @@
 
 <p>链接：<a href="https://share.weiyun.com/5Wg55FF5">https://share.weiyun.com/5Wg55FF5</a> 密码：nhqe76</p>
 <p>视频已经传到B站，欢迎观看<a href="https://www.bilibili.com/video/BV1jg4y1L7sR/?vd_source=8054953f896f7243d95be264ebdece29">Jellyfin中文字幕乱码解决_哔哩哔哩_bilibili</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>拉链表</title>
-    <url>/posts/20230221094327-2e5ad32b.html</url>
-    <content><![CDATA[<p>拉链表思路图：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094438645.png" alt="image-20230221094438645"></p>
-<p>使用HiveSQL增量完成拉链表加工思路：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094348740.png" alt="image-20230221094348740"></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>基于Python的简易FS服务</title>
-    <url>/posts/20221212164304-b422eee5.html</url>
-    <content><![CDATA[<p>创建start.py，代码如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># Python 3</span></span><br><span class="line">    <span class="keyword">from</span> http.server <span class="keyword">import</span> HTTPServer, SimpleHTTPRequestHandler, test <span class="keyword">as</span> test_orig</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span> (*args):</span><br><span class="line">        test_orig(*args, port=<span class="built_in">int</span>(sys.argv[<span class="number">1</span>]) <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="number">8000</span>)</span><br><span class="line"><span class="keyword">except</span> ImportError: <span class="comment"># Python 2</span></span><br><span class="line">    <span class="keyword">from</span> BaseHTTPServer <span class="keyword">import</span> HTTPServer, test</span><br><span class="line">    <span class="keyword">from</span> SimpleHTTPServer <span class="keyword">import</span> SimpleHTTPRequestHandler</span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CORSRequestHandler</span> (<span class="title class_ inherited__">SimpleHTTPRequestHandler</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">end_headers</span> (self):</span><br><span class="line">        self.send_header(<span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>)</span><br><span class="line">        SimpleHTTPRequestHandler.end_headers(self)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test(CORSRequestHandler, HTTPServer)</span><br></pre></td></tr></table></figure>
-
-<p>运行start.py,端口为8000</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python start.py 8000</span><br></pre></td></tr></table></figure>
-
 ]]></content>
   </entry>
   <entry>
@@ -569,7 +549,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#x6d;&#105;&#110;&#x40;&#x65;&#120;&#97;&#109;&#x70;&#108;&#x65;&#46;&#x63;&#111;&#109;">&#x61;&#100;&#x6d;&#105;&#110;&#x40;&#x65;&#120;&#97;&#109;&#x70;&#108;&#x65;&#46;&#x63;&#111;&#109;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#109;&#x69;&#110;&#64;&#x65;&#120;&#x61;&#109;&#x70;&#x6c;&#101;&#x2e;&#x63;&#111;&#109;">&#x61;&#100;&#109;&#x69;&#110;&#64;&#x65;&#120;&#x61;&#109;&#x70;&#x6c;&#101;&#x2e;&#x63;&#111;&#109;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
@@ -580,6 +560,48 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>配置完成以后，就可以使用nas.hoey.tk访问nas服务了，当用户访问nas.hoey.tk时，在网络中它的链路应该如下图所示：</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214857962.png" alt="image-20230504214857962"></p>
 <p>以上</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>基于Python的简易FS服务</title>
+    <url>/posts/20221212164304-b422eee5.html</url>
+    <content><![CDATA[<p>创建start.py，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># Python 3</span></span><br><span class="line">    <span class="keyword">from</span> http.server <span class="keyword">import</span> HTTPServer, SimpleHTTPRequestHandler, test <span class="keyword">as</span> test_orig</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span> (*args):</span><br><span class="line">        test_orig(*args, port=<span class="built_in">int</span>(sys.argv[<span class="number">1</span>]) <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="number">8000</span>)</span><br><span class="line"><span class="keyword">except</span> ImportError: <span class="comment"># Python 2</span></span><br><span class="line">    <span class="keyword">from</span> BaseHTTPServer <span class="keyword">import</span> HTTPServer, test</span><br><span class="line">    <span class="keyword">from</span> SimpleHTTPServer <span class="keyword">import</span> SimpleHTTPRequestHandler</span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CORSRequestHandler</span> (<span class="title class_ inherited__">SimpleHTTPRequestHandler</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">end_headers</span> (self):</span><br><span class="line">        self.send_header(<span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>)</span><br><span class="line">        SimpleHTTPRequestHandler.end_headers(self)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test(CORSRequestHandler, HTTPServer)</span><br></pre></td></tr></table></figure>
+
+<p>运行start.py,端口为8000</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python start.py 8000</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>家庭网络拓扑</title>
+    <url>/posts/20230711112128-628a2fb5.html</url>
+    <content><![CDATA[<p>前段时间618新入手了几块硬盘，买回来组一个NAS，下面是家里的网络拓扑逻辑图 </p>
+<img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230711112431402.png" alt="image-20230711112431402" style="zoom:100%;" />
+
+<p>在其中完成了以下内容：</p>
+<ol>
+<li>网络统一管理，包括网络分割如划分子网；网络的优化如实现拦截、翻墙、过滤广告、加速；网络的安全如内外网穿透。</li>
+<li>ESXI虚拟化技术，对物理机的CPU计算、存储和网络资源高效利用，高效的横向拓展能力和简易的操作。</li>
+<li>NAS（网络附加存储），数据共享与存储、备份与恢复、远程访问、横向磁盘扩容。</li>
+<li>边缘计算，网络资源共享，提升网络三大运营商CDN网络加速。</li>
+</ol>
+<p>得到的好处：</p>
+<ol>
+<li>全端的无差异实时备份，包括Mac、Windows、IPad、IPhone等设备</li>
+<li>现在市面上各大云盘，某度云、某里云等等，现在统统废弃，全部用NAS就可以解决，相当于买了个所有云盘的VIP</li>
+<li>网络方面的国内外无差异化上网体验，无墙的飞速还是蛮爽的，而且无视终端。</li>
+<li>给老婆刷刷剧，看看电影都很方便。</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>拉链表</title>
+    <url>/posts/20230221094327-2e5ad32b.html</url>
+    <content><![CDATA[<p>拉链表思路图：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094438645.png" alt="image-20230221094438645"></p>
+<p>使用HiveSQL增量完成拉链表加工思路：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094348740.png" alt="image-20230221094348740"></p>
 ]]></content>
   </entry>
 </search>
