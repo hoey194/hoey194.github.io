@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="在使用processFunction实现两张事实表的JOIN操作时，接触到了Timer，下面对Flink定时器的核心知识做一个简单总结： 1.1 Timers支持使用在KeyedStream因为 Timer 是基于每个键即 key 注册并触发，所以 KeyedStream 是 Timer 在 Flink 中使用的先决条件 a1ctx.timerService.deleteEventTimeTime">
+<meta name="description" content="在使用processFunction实现两张事实表的JOIN操作时，接触到了Timer，下面对Flink定时器的核心知识做一个简单总结： 1.1 Timers支持使用在KeyedStream因为 Timer 是基于每个键即 key 注册并触发，所以 KeyedStream 是 Timer 在 Flink 中使用的先决条件 1ctx.timerService.deleteEventTimeTimer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink Timer定时器">
 <meta property="og:url" content="http://example.com/posts/20230724172424-e9455fee.html">
 <meta property="og:site_name" content="Hoey笔记">
-<meta property="og:description" content="在使用processFunction实现两张事实表的JOIN操作时，接触到了Timer，下面对Flink定时器的核心知识做一个简单总结： 1.1 Timers支持使用在KeyedStream因为 Timer 是基于每个键即 key 注册并触发，所以 KeyedStream 是 Timer 在 Flink 中使用的先决条件 a1ctx.timerService.deleteEventTimeTime">
+<meta property="og:description" content="在使用processFunction实现两张事实表的JOIN操作时，接触到了Timer，下面对Flink定时器的核心知识做一个简单总结： 1.1 Timers支持使用在KeyedStream因为 Timer 是基于每个键即 key 注册并触发，所以 KeyedStream 是 Timer 在 Flink 中使用的先决条件 1ctx.timerService.deleteEventTimeTimer">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-07-24T09:24:24.000Z">
-<meta property="article:modified_time" content="2023-07-24T09:29:43.485Z">
+<meta property="article:modified_time" content="2023-07-25T01:34:13.161Z">
 <meta property="article:author" content="Hoey">
 <meta name="twitter:card" content="summary">
 
@@ -355,16 +355,16 @@
       
         <p>在使用processFunction实现两张事实表的JOIN操作时，接触到了Timer，下面对Flink定时器的核心知识做一个简单总结：</p>
 <h3 id="1-1-Timers支持使用在KeyedStream"><a href="#1-1-Timers支持使用在KeyedStream" class="headerlink" title="1.1 Timers支持使用在KeyedStream"></a>1.1 Timers支持使用在KeyedStream</h3><p>因为 Timer 是基于每个键即 key 注册并触发，所以 KeyedStream 是 Timer 在 Flink 中使用的先决条件</p>
-<figure class="highlight plaintext"><figcaption><span>a</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ctx.timerService.deleteEventTimeTimer(timeStamp)</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ctx.timerService.deleteEventTimeTimer(timeStamp)</span><br></pre></td></tr></table></figure>
 
 <h3 id="1-2-Timers的唯一性"><a href="#1-2-Timers的唯一性" class="headerlink" title="1.2 Timers的唯一性"></a>1.2 Timers的唯一性</h3><p>TimerService 会自动消除计时器的重复数据，始终保持每个键 key 最多只有一个计时器，当一个键 key 注册多个 Timer 计时器时，onTimer 方法只会调用一次，重复注册会覆盖之前的 timer 注册</p>
 <h3 id="1-3-Timers支持checkpoint"><a href="#1-3-Timers支持checkpoint" class="headerlink" title="1.3 Timers支持checkpoint"></a>1.3 Timers支持checkpoint</h3><p>ValueState 可以通过 checkpoint 进行检查点保存和恢复，同理 Timer 也可以由 checkpoint 托管，从 Flink checkpoint 检查点恢复任务时，将立即启动恢复前应启动的处于恢复状态的每个已注册计时器，这也提高了 Timer 的容错性</p>
 <h3 id="1-4-Timers支持被删除"><a href="#1-4-Timers支持被删除" class="headerlink" title="1.4 Timers支持被删除"></a>1.4 Timers支持被删除</h3><p>从 Flink 1.6.x 开始，计时器可以暂停和删除，提供更便捷的 Timer 处理方式</p>
-<p>文章发布自：[都会|更多_Flink - Timer 与 TimerService 源码分析与详解 (cha138.com)](<a target="_blank" rel="noopener" href="https://it.cha138.com/ios/show-36808.html#2.1">https://it.cha138.com/ios/show-36808.html#2.1</a> 注册 Timer)</p>
+<p>文章发布自：[Flink - Timer 与 TimerService 源码分析与详解](<a target="_blank" rel="noopener" href="https://it.cha138.com/ios/show-36808.html#2.1">https://it.cha138.com/ios/show-36808.html#2.1</a> 注册 Timer)</p>
 <p>写的十分好，推荐阅读，除此之外推荐阅读：</p>
-<p><a target="_blank" rel="noopener" href="https://it.cha138.com/mysql/show-110719.html">这个名字|主线_Flink Timer 机制原理，源码整理。 (cha138.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://it.cha138.com/shida/show-452473.html">Flink的定时器（EventTime和ProcessTime） (cha138.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43923463/article/details/128043877">(127条消息) 【Flink】使用CoProcessFunction完成实时对账、基于时间的双流join_flink实时对账_OneTenTwo76的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://it.cha138.com/mysql/show-110719.html">Flink Timer 机制原理，源码整理</a></p>
+<p><a target="_blank" rel="noopener" href="https://it.cha138.com/shida/show-452473.html">Flink的定时器EventTime和ProcessTime</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43923463/article/details/128043877">Flink使用CoProcessFunction完成实时对账、基于时间的双流join_flink实时对账</a></p>
 
       
     </div>
