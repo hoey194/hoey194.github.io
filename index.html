@@ -283,6 +283,202 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20231108093604-8614bb4c.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20231108093604-8614bb4c.html" itemprop="url">ES操作模版</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-11-08T09:36:04+08:00">
+                2023-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#查看集群的健康情况<br><code>GET /_cat/health?v</code></p>
+<p>#查看节点的情况<br><code>GET /_cat/nodes?v</code></p>
+<p>#查询各个索引状态<br><code>GET /_cat/indices?v</code></p>
+<p>#创建索引<br><code>PUT /movie_index</code></p>
+<p>#查看某一个索引的分片情况<br>GET /_cat/shards/movie_index?v</p>
+<p>#删除索引<br>DELETE /movie_index</p>
+<p>#创建文档<br>PUT /movie_index/movie/1<br>{ “id”:100,<br>  “name”:”operation red sea”,<br>  “doubanScore”:8.5,<br>  “actorList”:[<br>  {“id”:1,”name”:”zhang yi”},<br>  {“id”:2,”name”:”hai qing”},<br>  {“id”:3,”name”:”zhang han yu”}<br>  ]<br>}</p>
+<p>PUT /movie_index/movie/2<br>{<br>  “id”:200,<br>  “name”:”operation meigong river”,<br>  “doubanScore”:8.0,<br>  “actorList”:[<br>{“id”:3,”name”:”zhang han yu”}<br>]<br>}</p>
+<p>PUT /movie_index/movie/3<br>{<br>  “id”:300,<br>  “name”:”incident red sea”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”zhang san feng”}<br>]<br>}</p>
+<p>#查询某一个索引中的全部文档<br>GET /movie_index/_search</p>
+<p>#根据id查询某一个文档<br>GET /movie_index/movie/3</p>
+<p>#根据文档id，删除某一个文档<br>DELETE /movie_index/movie/3</p>
+<p>POST /_forcemerge</p>
+<p>#put 对已经存在的文档进行替换(幂等性)<br>PUT /movie_index/movie/3<br>{<br>  “id”:300,<br>  “name”:”incident red sea”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”zhang cuishan”}<br>]<br>}</p>
+<p>#post 进行新增操作，无法保证幂等性<br>#根据主键保证幂等性<br>POST /movie_index/movie/<br>{<br>  “id”:300,<br>  “name”:”incident red sea”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”zhang cuishan111”}<br>]<br>}</p>
+<p>GET /movie_index/_search</p>
+<p>GET /movie_index/movie/1</p>
+<p>POST /movie_index/movie/1/_update<br>{<br>  “doc”:  { “name”: “新的字段值” }<br>}</p>
+<p>POST /movie_index/_update_by_query<br>{<br>    “query”: {<br>      “match”:{<br>        “actorList.id”:1<br>      }<br>    },<br>    “script”: {<br>      “lang”: “painless”,<br>      “source”:”for(int i=0;i&lt;ctx._source.actorList.length;i++){if(ctx._source.actorList[i].id==3){ctx._source.actorList[i].name=’tttt’}}”<br>    }<br>}</p>
+<p>GET /movie_index/_search</p>
+<p>POST /movie_index/_delete_by_query<br>{<br>  “query”: {<br>    “match_all”: {}<br>  }<br>}</p>
+<p>#批量添加两个document<br>POST /movie_index/movie/_bulk<br>{“index”:{“_id”:66}}<br>{“id”:300,”name”:”incident red sea”,”doubanScore”:5.0,”actorList”:[{“id”:4,”name”:”zhang cuishan”}]}<br>{“index”:{“_id”:88}}<br>{“id”:300,”name”:”incident red sea”,”doubanScore”:5.0,”actorList”:[{“id”:4,”name”:”zhang cuishan”}]}</p>
+<p>POST /movie_index/movie/_bulk<br>{“update”:{“_id”:”66”}}<br>{“doc”: { “name”: “wudangshanshang” } }<br>{“delete”:{“_id”:”88”}}</p>
+<p>#——————查询操作——————–<br>#查询出当前索引中的全部数据<br>GET /movie_index/_search</p>
+<p>GET /movie_index/_search?q=_id:66</p>
+<p>#查询全部<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match_all”: {}<br>  }<br>}</p>
+<p>#根据电影的名称进行查询<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “operation red sea”<br>    }<br>  }<br>}</p>
+<p>GET /movie_index</p>
+<p>#按分词进行查询<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “actorList.name”: “zhang han yu”<br>    }<br>  }<br>}</p>
+<p>#按短语查询  相当于like<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match_phrase”: {<br>      “actorList.name”: “zhang han yu”<br>    }<br>  }<br>}</p>
+<p>#不分词 通过精准匹配进行查询  term精准匹配<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “term”: {<br>       “actorList.name.keyword”:”zhang han yu”<br>    }<br>  }<br>}</p>
+<p>#容错匹配<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “fuzzy”: {<br>      “name”: “radd”<br>    }<br>  }<br>}</p>
+<p>#先匹配 再过滤<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “red”<br>    }<br>  },<br>  “post_filter”: {<br>    “term”: {<br>      “actorList.id”: “3”<br>    }<br>  }<br>}</p>
+<p>#匹配和过滤同时<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “bool”: {<br>      “must”: [<br>        {<br>          “match”: {<br>            “name”: “red”<br>          }<br>        }<br>      ],<br>      “filter”: {<br>        “term”: {<br>          “actorList.id”: “3”<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>#范围过滤  ，将豆瓣评分在6到9的文档查询出来<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “range”: {<br>      “doubanScore”: {<br>        “gte”: 6,<br>        “lte”: 9<br>      }<br>    }<br>  }<br>}</p>
+<p>#按照豆瓣评分降序排序<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “red”<br>    }<br>  },<br>  “sort”: [<br>    {<br>      “doubanScore”: {<br>        “order”: “asc”<br>      }<br>    }<br>  ]<br>}</p>
+<p>#分页查询<br>GET /movie_index/_search<br>{<br>  “from”: 0,<br>  “size”: 2<br>}</p>
+<p>#查询指定字段<br>GET /movie_index/_search<br>{<br>  “_source”: [“name”, “doubanScore”]<br>}</p>
+<p>#高亮显示<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “red”<br>    }<br>  },<br>  “highlight”: {<br>    “fields”:  {“name”:{} },<br>    “pre_tags”: “<a>“,<br>    “post_tags”: “</a>“<br>  }<br>}</p>
+<p>#需求1：取出每个演员共参演了多少部电影<br>#aggs 聚合<br>#term  精准匹配<br>#terms 聚合操作，相当于groupBy<br>GET /movie_index/_search<br>{<br>  “aggs”: {<br>    “myAggs”: {<br>      “terms”: {<br>        “field”: “actorList.name.keyword”,<br>        “size”: 10<br>      }<br>    }<br>  }<br>}</p>
+<p>#需求2：每个演员参演电影的平均分是多少，并按评分排序</p>
+<p>GET /movie_index/_search<br>{<br>  “aggs”: {<br>    “groupByName”: {<br>      “terms”: {<br>        “field”: “actorList.name.keyword”,<br>        “size”: 10,<br>        “order”: {<br>          “avg_score”: “asc”<br>        }<br>      },<br>      “aggs”: {<br>        “avg_score”: {<br>          “avg”: {<br>            “field”: “doubanScore”<br>          }<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>#分词<br>#英文默认分词规则<br>GET /_analyze<br>{<br>  “text”: “hello world”<br>}</p>
+<p>#中文默认分词规则<br>GET /_analyze<br>{<br>  “text”: “蓝瘦香菇”,<br>  “analyzer”: “ik_smart”<br>}</p>
+<p>GET /_analyze<br>{<br>  “text”: “蓝瘦香菇”,<br>  “analyzer”: “ik_max_word”<br>}</p>
+<p>GET /movie_index</p>
+<p>#自动定义mapping<br>PUT /movie_chn_1/movie/1<br>{ “id”:1,<br>  “name”:”红海行动”,<br>  “doubanScore”:8.5,<br>  “actorList”:[<br>  {“id”:1,”name”:”张译”},<br>  {“id”:2,”name”:”海清”},<br>  {“id”:3,”name”:”张涵予”}<br> ]<br>}<br>PUT /movie_chn_1/movie/2<br>{<br>  “id”:2,<br>  “name”:”湄公河行动”,<br>  “doubanScore”:8.0,<br>  “actorList”:[<br>{“id”:3,”name”:”张涵予”}<br>]<br>}</p>
+<p>PUT /movie_chn_1/movie/3<br>{<br>  “id”:3,<br>  “name”:”红海事件”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”张三丰”}<br>]<br>}</p>
+<p>GET /movie_chn_1/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “海行”<br>    }<br>  }<br>}</p>
+<p>GET /movie_chn_1/_mapping</p>
+<p>#自定义mapping<br>DELETE movie_chn_2</p>
+<p>PUT movie_chn_2<br>{<br>  “mappings”: {<br>    “movie”:{<br>      “properties”: {<br>        “id”:{<br>          “type”: “long”<br>        },<br>        “name”:{<br>          “type”: “keyword”<br>        },<br>        “doubanScore”:{<br>          “type”: “double”<br>        },<br>        “actorList”:{<br>          “properties”: {<br>            “id”:{<br>              “type”:”long”<br>            },<br>            “name”:{<br>              “type”:”keyword”<br>            }<br>          }<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>PUT /movie_chn_2/movie/1<br>{ “id”:1,<br>  “name”:”红海行动”,<br>  “doubanScore”:8.5,<br>  “actorList”:[<br>  {“id”:1,”name”:”张译”},<br>  {“id”:2,”name”:”海清”},<br>  {“id”:3,”name”:”张涵予”}<br> ]<br>}<br>PUT /movie_chn_2/movie/2<br>{<br>  “id”:2,<br>  “name”:”湄公河行动”,<br>  “doubanScore”:8.0,<br>  “actorList”:[<br>{“id”:3,”name”:”张涵予”}<br>]<br>}</p>
+<p>PUT /movie_chn_2/movie/3<br>{<br>  “id”:3,<br>  “name”:”红海事件”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”张三丰”}<br>]<br>}</p>
+<p>GET /movie_chn_2/_mapping</p>
+<p>GET /movie_chn_2/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “海行”<br>    }<br>  }<br>}</p>
+<p>POST /_reindex<br>{<br>  “source”: {}<br>  , “dest”: {}<br>}</p>
+<p>#创建索引  并指定别名<br>PUT movie_chn_3<br>{<br>  “aliases”: {<br>      “movie_chn_3_aliase”: {}<br>  },<br>  “mappings”: {<br>    “movie”:{<br>      “properties”: {<br>        “id”:{<br>          “type”: “long”<br>        },<br>        “name”:{<br>          “type”: “text”,<br>          “analyzer”: “ik_smart”<br>        },<br>        “doubanScore”:{<br>          “type”: “double”<br>        },<br>        “actorList”:{<br>          “properties”: {<br>            “id”:{<br>              “type”:”long”<br>            },<br>            “name”:{<br>              “type”:”keyword”<br>            }<br>          }<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>GET /_cat/indices</p>
+<p>GET /_cat/aliases</p>
+<p>POST /_aliases<br>{<br>  “actions”: [<br>    {<br>      “add”: {<br>        “index”: “movie_chn_3”,<br>        “alias”: “movie_chn_3_a2”<br>      }<br>    }<br>  ]<br>}</p>
+<p>GET /movie_chn_3/_search</p>
+<p>GET /movie_chn_3_a2/_search</p>
+<p>GET /_cat/aliases</p>
+<p>POST /_aliases<br>{<br>  “actions”: [<br>    {<br>      “remove”: {“index”: “movie_chn_3”,”alias”: “movie_chn_3_a2”}<br>    }<br>  ]<br>}</p>
+<p>GET /movie_chn_1/_search</p>
+<p>GET /movie_chn_2/_search</p>
+<p>POST  _aliases<br>{<br>    “actions”: [<br>        { “add”:    { “index”: “movie_chn_1”, “alias”: “movie_chn_query” }},<br>        { “add”:    { “index”: “movie_chn_2”, “alias”: “movie_chn_query” }}<br>    ]<br>}</p>
+<p>GET /movie_chn_query/_search</p>
+<p>POST  _aliases<br>{<br>    “actions”: [<br>        {<br>          “add”:<br>          {<br>            “index”: “movie_chn_1”,<br>            “alias”: “movie_chn_1_sub_query”,<br>            “filter”: {<br>                “term”: {  “actorList.id”: “4”}<br>            }<br>          }<br>        }<br>    ]<br>}</p>
+<p>GET /movie_chn_1_sub_query/_search</p>
+<p>POST /_aliases<br>{<br>    “actions”: [<br>        { “remove”: { “index”: “movie_chn_1”, “alias”: “movie_chn_query” }},<br>        { “remove”: { “index”: “movie_chn_2”, “alias”: “movie_chn_query” }},<br>        { “add”:    { “index”: “movie_chn_3”, “alias”: “movie_chn_query” }}<br>    ]<br>}</p>
+<p>#创建模板<br>PUT _template/template_movie0523<br>{<br>  “index_patterns”: [“movie_test*”],<br>  “settings”: {<br>    “number_of_shards”: 1<br>  },<br>  “aliases” : {<br>    “{index}-query”: {},<br>    “movie_test-query”:{}<br>  },<br>  “mappings”: {<br>    “_doc”: {<br>      “properties”: {<br>        “id”: {<br>          “type”: “keyword”<br>        },<br>        “movie_name”: {<br>          “type”: “text”,<br>          “analyzer”: “ik_smart”<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>POST movie_test_202010/_doc<br>{<br>  “id”:”333”,<br>  “name”:”zhang3”<br>}</p>
+<p>GET /movie_test_202010-query/_mapping</p>
+<p>GET /_cat/templates</p>
+<p>GET /_template/template_movie*</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230724172424-e9455fee.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -850,7 +1046,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#109;&#x69;&#110;&#64;&#101;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#46;&#x63;&#111;&#109;">&#x61;&#100;&#109;&#x69;&#110;&#64;&#101;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#46;&#x63;&#111;&#109;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#100;&#x6d;&#105;&#x6e;&#x40;&#101;&#120;&#x61;&#109;&#x70;&#108;&#101;&#x2e;&#x63;&#111;&#109;">&#97;&#100;&#x6d;&#105;&#x6e;&#x40;&#101;&#120;&#x61;&#109;&#x70;&#108;&#101;&#x2e;&#x63;&#111;&#109;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
@@ -1655,131 +1851,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221212164304-b422eee5.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20221212164304-b422eee5.html" itemprop="url">基于Python的简易FS服务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-12T16:43:04+08:00">
-                2022-12-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>创建start.py，代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># Python 3</span></span><br><span class="line">    <span class="keyword">from</span> http.server <span class="keyword">import</span> HTTPServer, SimpleHTTPRequestHandler, test <span class="keyword">as</span> test_orig</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span> (*args):</span><br><span class="line">        test_orig(*args, port=<span class="built_in">int</span>(sys.argv[<span class="number">1</span>]) <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="number">8000</span>)</span><br><span class="line"><span class="keyword">except</span> ImportError: <span class="comment"># Python 2</span></span><br><span class="line">    <span class="keyword">from</span> BaseHTTPServer <span class="keyword">import</span> HTTPServer, test</span><br><span class="line">    <span class="keyword">from</span> SimpleHTTPServer <span class="keyword">import</span> SimpleHTTPRequestHandler</span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CORSRequestHandler</span> (<span class="title class_ inherited__">SimpleHTTPRequestHandler</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">end_headers</span> (self):</span><br><span class="line">        self.send_header(<span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>)</span><br><span class="line">        SimpleHTTPRequestHandler.end_headers(self)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test(CORSRequestHandler, HTTPServer)</span><br></pre></td></tr></table></figure>
-
-<p>运行start.py,端口为8000</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python start.py 8000</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1830,7 +1901,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

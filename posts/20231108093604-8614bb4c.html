@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,17 +79,16 @@
 
 
 
-<meta name="description" content="入职场的新人，往往很努力做事，而且总是躲着领导，认为自己这么努力做事，领导肯定会发现，但是事实是，你不汇报，领导都觉得这个事你没做过，领导都看不见你。 加班写个代码，我们觉得是在做实事。让我们写个材料、PPT第二天去和领导汇报一下，内心就会很抗拒，觉得这不是做事，这是在浪费时间。内心抗拒就会下应付，PPT奇丑无比，内容没有任何条例，并且还会安慰自己，我其实是在干正事，干实事，没有时间浪费在这上面，">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不仅要会下蛋也要会叫">
-<meta property="og:url" content="http://example.com/sage/%E4%B8%8D%E4%BB%85%E8%A6%81%E4%BC%9A%E4%B8%8B%E8%9B%8B%E4%B9%9F%E8%A6%81%E4%BC%9A%E5%8F%AB.html">
+<meta name="description" content="#查看集群的健康情况GET &#x2F;_cat&#x2F;health?v #查看节点的情况GET &#x2F;_cat&#x2F;nodes?v #查询各个索引状态GET &#x2F;_cat&#x2F;indices?v #创建索引PUT &#x2F;movie_index #查看某一个索引的分片情况GET &#x2F;_cat&#x2F;shards&#x2F;movie_index?v #删除索引DELETE &#x2F;movie_index #创建文档PUT &#x2F;movie_index&#x2F;mov">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES操作模版">
+<meta property="og:url" content="http://example.com/posts/20231108093604-8614bb4c.html">
 <meta property="og:site_name" content="Hoey笔记">
-<meta property="og:description" content="入职场的新人，往往很努力做事，而且总是躲着领导，认为自己这么努力做事，领导肯定会发现，但是事实是，你不汇报，领导都觉得这个事你没做过，领导都看不见你。 加班写个代码，我们觉得是在做实事。让我们写个材料、PPT第二天去和领导汇报一下，内心就会很抗拒，觉得这不是做事，这是在浪费时间。内心抗拒就会下应付，PPT奇丑无比，内容没有任何条例，并且还会安慰自己，我其实是在干正事，干实事，没有时间浪费在这上面，">
+<meta property="og:description" content="#查看集群的健康情况GET &#x2F;_cat&#x2F;health?v #查看节点的情况GET &#x2F;_cat&#x2F;nodes?v #查询各个索引状态GET &#x2F;_cat&#x2F;indices?v #创建索引PUT &#x2F;movie_index #查看某一个索引的分片情况GET &#x2F;_cat&#x2F;shards&#x2F;movie_index?v #删除索引DELETE &#x2F;movie_index #创建文档PUT &#x2F;movie_index&#x2F;mov">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-12-14T13:00:35.000Z">
-<meta property="article:modified_time" content="2022-12-29T11:27:36.987Z">
+<meta property="article:published_time" content="2023-11-08T01:36:04.000Z">
+<meta property="article:modified_time" content="2023-11-08T01:36:42.075Z">
 <meta property="article:author" content="Hoey">
-<meta property="article:tag" content="h">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/sage/不仅要会下蛋也要会叫.html"/>
+  <link rel="canonical" href="http://example.com/posts/20231108093604-8614bb4c.html"/>
 
 
 
 
 
-  <title>不仅要会下蛋也要会叫 | Hoey笔记</title><meta name="robots" content="noindex">
+  <title>ES操作模版 | Hoey笔记</title>
   
 
 
@@ -275,56 +274,214 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20231108093604-8614bb4c.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">不仅要会下蛋也要会叫</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>入职场的新人，往往很努力做事，而且总是躲着领导，认为自己这么努力做事，领导肯定会发现，但是事实是，你不汇报，领导都觉得这个事你没做过，领导都看不见你。</p>
-<p>加班写个代码，我们觉得是在做实事。让我们写个材料、PPT第二天去和领导汇报一下，内心就会很抗拒，觉得这不是做事，这是在浪费时间。内心抗拒就会下应付，PPT奇丑无比，内容没有任何条例，并且还会安慰自己，我其实是在干正事，干实事，没有时间浪费在这上面，如果你也有这样的心理，那就要及时的纠正了。 </p>
-<p>汇报的好处：</p>
-<ol>
-<li>汇报能争取更多的资源，你的手下是不是轻松一些</li>
-<li>跨部门协调，比你自己求人效率高10倍</li>
-</ol>
-<p>调整： </p>
-<p>7分做事，3分汇报</p>
-<p>顶头上司每天沟通，非正式 ，(领导心理也很慌的)</p>
-<p>每个季度和大领导非正式汇报，但是必须提前和顶头上司打招呼(主动准备话题)</p>
-<p>大领导在做什么要了解</p>
-<p>隔壁部门的领导，不得罪，推动的项目要让他知道</p>
-<p>公式：</p>
-<ol>
-<li>现状</li>
-<li>去哪</li>
-<li>后续行动</li>
-<li>支持</li>
-</ol>
-<p>旅服这块共6个主题域、剩余票务主题域还在验证中</p>
-<p>昨天晚上我把14个业务场景对应的表清单又搂了一遍，</p>
-<p>短期内我们会优先测试比较重要的场景：售票、预售票、中转旅客、旅客值机、航班接载等几个比较重要的业务场景。后续慢慢</p>
-<!-- flag of hidden posts -->
+          <h1 class="post-title" itemprop="name headline">ES操作模版</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-11-08T09:36:04+08:00">
+                2023-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>#查看集群的健康情况<br><code>GET /_cat/health?v</code></p>
+<p>#查看节点的情况<br><code>GET /_cat/nodes?v</code></p>
+<p>#查询各个索引状态<br><code>GET /_cat/indices?v</code></p>
+<p>#创建索引<br><code>PUT /movie_index</code></p>
+<p>#查看某一个索引的分片情况<br>GET /_cat/shards/movie_index?v</p>
+<p>#删除索引<br>DELETE /movie_index</p>
+<p>#创建文档<br>PUT /movie_index/movie/1<br>{ “id”:100,<br>  “name”:”operation red sea”,<br>  “doubanScore”:8.5,<br>  “actorList”:[<br>  {“id”:1,”name”:”zhang yi”},<br>  {“id”:2,”name”:”hai qing”},<br>  {“id”:3,”name”:”zhang han yu”}<br>  ]<br>}</p>
+<p>PUT /movie_index/movie/2<br>{<br>  “id”:200,<br>  “name”:”operation meigong river”,<br>  “doubanScore”:8.0,<br>  “actorList”:[<br>{“id”:3,”name”:”zhang han yu”}<br>]<br>}</p>
+<p>PUT /movie_index/movie/3<br>{<br>  “id”:300,<br>  “name”:”incident red sea”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”zhang san feng”}<br>]<br>}</p>
+<p>#查询某一个索引中的全部文档<br>GET /movie_index/_search</p>
+<p>#根据id查询某一个文档<br>GET /movie_index/movie/3</p>
+<p>#根据文档id，删除某一个文档<br>DELETE /movie_index/movie/3</p>
+<p>POST /_forcemerge</p>
+<p>#put 对已经存在的文档进行替换(幂等性)<br>PUT /movie_index/movie/3<br>{<br>  “id”:300,<br>  “name”:”incident red sea”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”zhang cuishan”}<br>]<br>}</p>
+<p>#post 进行新增操作，无法保证幂等性<br>#根据主键保证幂等性<br>POST /movie_index/movie/<br>{<br>  “id”:300,<br>  “name”:”incident red sea”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”zhang cuishan111”}<br>]<br>}</p>
+<p>GET /movie_index/_search</p>
+<p>GET /movie_index/movie/1</p>
+<p>POST /movie_index/movie/1/_update<br>{<br>  “doc”:  { “name”: “新的字段值” }<br>}</p>
+<p>POST /movie_index/_update_by_query<br>{<br>    “query”: {<br>      “match”:{<br>        “actorList.id”:1<br>      }<br>    },<br>    “script”: {<br>      “lang”: “painless”,<br>      “source”:”for(int i=0;i&lt;ctx._source.actorList.length;i++){if(ctx._source.actorList[i].id==3){ctx._source.actorList[i].name=’tttt’}}”<br>    }<br>}</p>
+<p>GET /movie_index/_search</p>
+<p>POST /movie_index/_delete_by_query<br>{<br>  “query”: {<br>    “match_all”: {}<br>  }<br>}</p>
+<p>#批量添加两个document<br>POST /movie_index/movie/_bulk<br>{“index”:{“_id”:66}}<br>{“id”:300,”name”:”incident red sea”,”doubanScore”:5.0,”actorList”:[{“id”:4,”name”:”zhang cuishan”}]}<br>{“index”:{“_id”:88}}<br>{“id”:300,”name”:”incident red sea”,”doubanScore”:5.0,”actorList”:[{“id”:4,”name”:”zhang cuishan”}]}</p>
+<p>POST /movie_index/movie/_bulk<br>{“update”:{“_id”:”66”}}<br>{“doc”: { “name”: “wudangshanshang” } }<br>{“delete”:{“_id”:”88”}}</p>
+<p>#——————查询操作——————–<br>#查询出当前索引中的全部数据<br>GET /movie_index/_search</p>
+<p>GET /movie_index/_search?q=_id:66</p>
+<p>#查询全部<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match_all”: {}<br>  }<br>}</p>
+<p>#根据电影的名称进行查询<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “operation red sea”<br>    }<br>  }<br>}</p>
+<p>GET /movie_index</p>
+<p>#按分词进行查询<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “actorList.name”: “zhang han yu”<br>    }<br>  }<br>}</p>
+<p>#按短语查询  相当于like<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match_phrase”: {<br>      “actorList.name”: “zhang han yu”<br>    }<br>  }<br>}</p>
+<p>#不分词 通过精准匹配进行查询  term精准匹配<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “term”: {<br>       “actorList.name.keyword”:”zhang han yu”<br>    }<br>  }<br>}</p>
+<p>#容错匹配<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “fuzzy”: {<br>      “name”: “radd”<br>    }<br>  }<br>}</p>
+<p>#先匹配 再过滤<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “red”<br>    }<br>  },<br>  “post_filter”: {<br>    “term”: {<br>      “actorList.id”: “3”<br>    }<br>  }<br>}</p>
+<p>#匹配和过滤同时<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “bool”: {<br>      “must”: [<br>        {<br>          “match”: {<br>            “name”: “red”<br>          }<br>        }<br>      ],<br>      “filter”: {<br>        “term”: {<br>          “actorList.id”: “3”<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>#范围过滤  ，将豆瓣评分在6到9的文档查询出来<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “range”: {<br>      “doubanScore”: {<br>        “gte”: 6,<br>        “lte”: 9<br>      }<br>    }<br>  }<br>}</p>
+<p>#按照豆瓣评分降序排序<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “red”<br>    }<br>  },<br>  “sort”: [<br>    {<br>      “doubanScore”: {<br>        “order”: “asc”<br>      }<br>    }<br>  ]<br>}</p>
+<p>#分页查询<br>GET /movie_index/_search<br>{<br>  “from”: 0,<br>  “size”: 2<br>}</p>
+<p>#查询指定字段<br>GET /movie_index/_search<br>{<br>  “_source”: [“name”, “doubanScore”]<br>}</p>
+<p>#高亮显示<br>GET /movie_index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “red”<br>    }<br>  },<br>  “highlight”: {<br>    “fields”:  {“name”:{} },<br>    “pre_tags”: “<a>“,<br>    “post_tags”: “</a>“<br>  }<br>}</p>
+<p>#需求1：取出每个演员共参演了多少部电影<br>#aggs 聚合<br>#term  精准匹配<br>#terms 聚合操作，相当于groupBy<br>GET /movie_index/_search<br>{<br>  “aggs”: {<br>    “myAggs”: {<br>      “terms”: {<br>        “field”: “actorList.name.keyword”,<br>        “size”: 10<br>      }<br>    }<br>  }<br>}</p>
+<p>#需求2：每个演员参演电影的平均分是多少，并按评分排序</p>
+<p>GET /movie_index/_search<br>{<br>  “aggs”: {<br>    “groupByName”: {<br>      “terms”: {<br>        “field”: “actorList.name.keyword”,<br>        “size”: 10,<br>        “order”: {<br>          “avg_score”: “asc”<br>        }<br>      },<br>      “aggs”: {<br>        “avg_score”: {<br>          “avg”: {<br>            “field”: “doubanScore”<br>          }<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>#分词<br>#英文默认分词规则<br>GET /_analyze<br>{<br>  “text”: “hello world”<br>}</p>
+<p>#中文默认分词规则<br>GET /_analyze<br>{<br>  “text”: “蓝瘦香菇”,<br>  “analyzer”: “ik_smart”<br>}</p>
+<p>GET /_analyze<br>{<br>  “text”: “蓝瘦香菇”,<br>  “analyzer”: “ik_max_word”<br>}</p>
+<p>GET /movie_index</p>
+<p>#自动定义mapping<br>PUT /movie_chn_1/movie/1<br>{ “id”:1,<br>  “name”:”红海行动”,<br>  “doubanScore”:8.5,<br>  “actorList”:[<br>  {“id”:1,”name”:”张译”},<br>  {“id”:2,”name”:”海清”},<br>  {“id”:3,”name”:”张涵予”}<br> ]<br>}<br>PUT /movie_chn_1/movie/2<br>{<br>  “id”:2,<br>  “name”:”湄公河行动”,<br>  “doubanScore”:8.0,<br>  “actorList”:[<br>{“id”:3,”name”:”张涵予”}<br>]<br>}</p>
+<p>PUT /movie_chn_1/movie/3<br>{<br>  “id”:3,<br>  “name”:”红海事件”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”张三丰”}<br>]<br>}</p>
+<p>GET /movie_chn_1/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “海行”<br>    }<br>  }<br>}</p>
+<p>GET /movie_chn_1/_mapping</p>
+<p>#自定义mapping<br>DELETE movie_chn_2</p>
+<p>PUT movie_chn_2<br>{<br>  “mappings”: {<br>    “movie”:{<br>      “properties”: {<br>        “id”:{<br>          “type”: “long”<br>        },<br>        “name”:{<br>          “type”: “keyword”<br>        },<br>        “doubanScore”:{<br>          “type”: “double”<br>        },<br>        “actorList”:{<br>          “properties”: {<br>            “id”:{<br>              “type”:”long”<br>            },<br>            “name”:{<br>              “type”:”keyword”<br>            }<br>          }<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>PUT /movie_chn_2/movie/1<br>{ “id”:1,<br>  “name”:”红海行动”,<br>  “doubanScore”:8.5,<br>  “actorList”:[<br>  {“id”:1,”name”:”张译”},<br>  {“id”:2,”name”:”海清”},<br>  {“id”:3,”name”:”张涵予”}<br> ]<br>}<br>PUT /movie_chn_2/movie/2<br>{<br>  “id”:2,<br>  “name”:”湄公河行动”,<br>  “doubanScore”:8.0,<br>  “actorList”:[<br>{“id”:3,”name”:”张涵予”}<br>]<br>}</p>
+<p>PUT /movie_chn_2/movie/3<br>{<br>  “id”:3,<br>  “name”:”红海事件”,<br>  “doubanScore”:5.0,<br>  “actorList”:[<br>{“id”:4,”name”:”张三丰”}<br>]<br>}</p>
+<p>GET /movie_chn_2/_mapping</p>
+<p>GET /movie_chn_2/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “name”: “海行”<br>    }<br>  }<br>}</p>
+<p>POST /_reindex<br>{<br>  “source”: {}<br>  , “dest”: {}<br>}</p>
+<p>#创建索引  并指定别名<br>PUT movie_chn_3<br>{<br>  “aliases”: {<br>      “movie_chn_3_aliase”: {}<br>  },<br>  “mappings”: {<br>    “movie”:{<br>      “properties”: {<br>        “id”:{<br>          “type”: “long”<br>        },<br>        “name”:{<br>          “type”: “text”,<br>          “analyzer”: “ik_smart”<br>        },<br>        “doubanScore”:{<br>          “type”: “double”<br>        },<br>        “actorList”:{<br>          “properties”: {<br>            “id”:{<br>              “type”:”long”<br>            },<br>            “name”:{<br>              “type”:”keyword”<br>            }<br>          }<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>GET /_cat/indices</p>
+<p>GET /_cat/aliases</p>
+<p>POST /_aliases<br>{<br>  “actions”: [<br>    {<br>      “add”: {<br>        “index”: “movie_chn_3”,<br>        “alias”: “movie_chn_3_a2”<br>      }<br>    }<br>  ]<br>}</p>
+<p>GET /movie_chn_3/_search</p>
+<p>GET /movie_chn_3_a2/_search</p>
+<p>GET /_cat/aliases</p>
+<p>POST /_aliases<br>{<br>  “actions”: [<br>    {<br>      “remove”: {“index”: “movie_chn_3”,”alias”: “movie_chn_3_a2”}<br>    }<br>  ]<br>}</p>
+<p>GET /movie_chn_1/_search</p>
+<p>GET /movie_chn_2/_search</p>
+<p>POST  _aliases<br>{<br>    “actions”: [<br>        { “add”:    { “index”: “movie_chn_1”, “alias”: “movie_chn_query” }},<br>        { “add”:    { “index”: “movie_chn_2”, “alias”: “movie_chn_query” }}<br>    ]<br>}</p>
+<p>GET /movie_chn_query/_search</p>
+<p>POST  _aliases<br>{<br>    “actions”: [<br>        {<br>          “add”:<br>          {<br>            “index”: “movie_chn_1”,<br>            “alias”: “movie_chn_1_sub_query”,<br>            “filter”: {<br>                “term”: {  “actorList.id”: “4”}<br>            }<br>          }<br>        }<br>    ]<br>}</p>
+<p>GET /movie_chn_1_sub_query/_search</p>
+<p>POST /_aliases<br>{<br>    “actions”: [<br>        { “remove”: { “index”: “movie_chn_1”, “alias”: “movie_chn_query” }},<br>        { “remove”: { “index”: “movie_chn_2”, “alias”: “movie_chn_query” }},<br>        { “add”:    { “index”: “movie_chn_3”, “alias”: “movie_chn_query” }}<br>    ]<br>}</p>
+<p>#创建模板<br>PUT _template/template_movie0523<br>{<br>  “index_patterns”: [“movie_test*”],<br>  “settings”: {<br>    “number_of_shards”: 1<br>  },<br>  “aliases” : {<br>    “{index}-query”: {},<br>    “movie_test-query”:{}<br>  },<br>  “mappings”: {<br>    “_doc”: {<br>      “properties”: {<br>        “id”: {<br>          “type”: “keyword”<br>        },<br>        “movie_name”: {<br>          “type”: “text”,<br>          “analyzer”: “ik_smart”<br>        }<br>      }<br>    }<br>  }<br>}</p>
+<p>POST movie_test_202010/_doc<br>{<br>  “id”:”333”,<br>  “name”:”zhang3”<br>}</p>
+<p>GET /movie_test_202010-query/_mapping</p>
+<p>GET /_cat/templates</p>
+<p>GET /_template/template_movie*</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/20230724172424-e9455fee.html" rel="next" title="Flink Timer定时器">
+                <i class="fa fa-chevron-left"></i> Flink Timer定时器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
