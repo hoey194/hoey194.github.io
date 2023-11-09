@@ -489,7 +489,7 @@
       
         
           
-            <h3 id="Datahub"><a href="#Datahub" class="headerlink" title="Datahub"></a>Datahub</h3><p><img src="https://img-blog.csdnimg.cn/f59f0c929e8b48ce839c2b543ccc3bfd.png" alt="在这里插入图片描述"></p>
+            <h3 id="Datahub"><a href="#Datahub" class="headerlink" title="Datahub"></a>Datahub</h3><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174154093.png" alt="image-20231108174154093"></p>
 <p><strong>开源地址</strong>：<a target="_blank" rel="noopener" href="https://github.com/datahub-project/datahub">https://github.com/datahub-project/datahub</a> </p>
 <p>DataHub是由Linkedin开源的，官方Slogan：The Metadata Platform for the Modern Data Stack - 为现代数据栈而生的元数据平台。目的就是为了解决多种多样数据生态系统的元数据管理问题，它提供元数据检索、数据发现、数据监测和数据监管能力，帮助大家解决数据管理的复杂性。</p>
 <p>DataHub基于Apache License 2开源，采用基于推送的数据收集架构（当然也支持pull拉取的方式），能够持续收集变化的元数据。当前版本已经集成了大部分流行数据生态系统接入能力，包括但不限于：Kafka, Airflow, MySQL, SQL Server, Postgres, LDAP, Snowflake, Hive, BigQuery。</p>
@@ -536,7 +536,6 @@
 <p><a target="_blank" rel="noopener" href="http://localhost:9002/login?redirect_uri=/">http://localhost:9002/login?redirect_uri=%2F</a></p>
 <p>user/pass: datahub/datahub</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174130857.png" alt="image-20231108174130857"></p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174154093.png" alt="image-20231108174154093"></p>
 <p>部署细节不懂的，可以参考: <a target="_blank" rel="noopener" href="https://datahubproject.io/docs/quickstart">https://datahubproject.io/docs/quickstart</a></p>
 <p>下一章我们结合Datahub API + 血缘解析工具，简单说一下怎么构建企业知识图谱</p>
 
@@ -658,7 +657,7 @@
       
         
           
-            <h3 id="Marquez"><a href="#Marquez" class="headerlink" title="Marquez"></a>Marquez</h3><p><img src="https://img-blog.csdnimg.cn/0467027b86764a2d9c43f089aa5a55e1.png" alt="在这里插入图片描述"></p>
+            <h3 id="Marquez"><a href="#Marquez" class="headerlink" title="Marquez"></a>Marquez</h3><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231109105214566.png" alt="image-20231109105214566"></p>
 <p><strong>开源地址</strong>：<a target="_blank" rel="noopener" href="https://github.com/MarquezProject/marquez">https://github.com/MarquezProject/marquez</a> </p>
 <p><strong>Marquez的优点：</strong></p>
 <ul>
@@ -696,205 +695,6 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://localhost:5000/api/v1/lineage \</span><br><span class="line">-H &#x27;Content-Type: application/json&#x27; \</span><br><span class="line">-d &#x27;&#123;</span><br><span class="line">      &quot;eventType&quot;: &quot;COMPLETE&quot;,</span><br><span class="line">      &quot;eventTime&quot;: &quot;2020-12-28T20:52:00.001+10:00&quot;,</span><br><span class="line">      &quot;run&quot;: &#123;</span><br><span class="line">        &quot;runId&quot;: &quot;d46e465b-d358-4d32-83d4-df660ff614dd&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;job&quot;: &#123;</span><br><span class="line">        &quot;namespace&quot;: &quot;my-namespace&quot;,</span><br><span class="line">        &quot;name&quot;: &quot;my-job&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;outputs&quot;: [&#123;</span><br><span class="line">        &quot;namespace&quot;: &quot;my-namespace&quot;,</span><br><span class="line">        &quot;name&quot;: &quot;my-output&quot;,</span><br><span class="line">        &quot;facets&quot;: &#123;</span><br><span class="line">          &quot;schema&quot;: &#123;</span><br><span class="line">            &quot;_producer&quot;: &quot;https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client&quot;,</span><br><span class="line">            &quot;_schemaURL&quot;: &quot;https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/spec/OpenLineage.json#/definitions/SchemaDatasetFacet&quot;,</span><br><span class="line">            &quot;fields&quot;: [</span><br><span class="line">              &#123; &quot;name&quot;: &quot;a&quot;, &quot;type&quot;: &quot;VARCHAR&quot;&#125;,</span><br><span class="line">              &#123; &quot;name&quot;: &quot;b&quot;, &quot;type&quot;: &quot;VARCHAR&quot;&#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;],     </span><br><span class="line">      &quot;producer&quot;: &quot;https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client&quot;</span><br><span class="line">    &#125;&#x27;</span><br></pre></td></tr></table></figure>
 
 <p>更多细节可以参考一下下面文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43947468/article/details/129593234">https://blog.csdn.net/weixin_43947468/article/details/129593234</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20231108104851-d513764b.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20231108104851-d513764b.html" itemprop="url">数据治理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-11-08T10:48:51+08:00">
-                2023-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="DataHub"><a href="#DataHub" class="headerlink" title="DataHub"></a>DataHub</h2><p>文章写的非常的好，摘录一下。<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/74gK3hTt7-j1lTbKFagbTQ">DataHub——实时数据治理平台 (qq.com)</a></p>
-<p>首先，阿里云也有一款名为DataHub的产品，是一个流式处理平台，本文所述DataHub与其无关。</p>
-<p>数据治理是大佬们最近谈的一个火热的话题。不管国家层面，还是企业层面现在对这个问题是越来越重视。数据治理要解决数据质量，数据管理，数据资产，数据安全等等。而数据治理的关键就在于<strong>元数据管理</strong>，我们要知道数据的来龙去脉，才能对数据进行全方位的管理，监控，洞察。</p>
-<p>DataHub是由LinkedIn的数据团队开源的一款提供元数据搜索与发现的工具。</p>
-<p>提到LinkedIn，不得不想到大名鼎鼎的Kafka，Kafka就是LinkedIn开源的。LinkedIn开源的Kafka直接影响了整个实时计算领域的发展，而LinkedIn的数据团队也一直在探索数据治理的问题，不断努力扩展其基础架构，以满足不断增长的大数据生态系统的需求。随着数据的数量和丰富性的增长，数据科学家和工程师要发现可用的数据资产，了解其出处并根据见解采取适当的行动变得越来越具有挑战性。为了帮助增长的同时继续扩大生产力和数据创新，创建了通用的元数据搜索和发现工具DataHub。</p>
-<p>市面上常见的元数据管理系统有如下几个：</p>
-<p>a) linkedin datahub: <a target="_blank" rel="noopener" href="https://github.com/linkedin/datahub">https://github.com/linkedin/datahub</a> </p>
-<p>b) apache atlas: <a target="_blank" rel="noopener" href="https://github.com/apache/atlas">https://github.com/apache/atlas</a> </p>
-<p>c) lyft amundsen <a target="_blank" rel="noopener" href="https://github.com/lyft/amundsen">https://github.com/lyft/amundsen</a></p>
-<p>atlas之前我们也介绍过，对hive有非常好的支持，但是部署起来非常的吃力。amundsen还是一个新兴的框架，还没有release版本，未来可能会发展起来还需要慢慢观察。</p>
-<p>综上，datahub是目前我们实时数据治理的最佳选择，只是目前datahub的资料还较少，未来我们将持续关注与更新datahub的更多资讯。</p>
-<h2 id="DataHub诞生"><a href="#DataHub诞生" class="headerlink" title="DataHub诞生"></a>DataHub诞生</h2><p><strong>Github</strong> <a target="_blank" rel="noopener" href="https://github.com/linkedin/datahub">https://github.com/linkedin/datahub</a></p>
-<p><strong>License</strong> Apache-2.0</p>
-<p><strong>支持数据源</strong> LDAP, Hive, Kafka, MySQL, DB2, Firebird, SQL Server, Oracle, Postgres, SQLite, ODBC</p>
-<p><strong>实现功能</strong> 元数据 数据血缘 权限 描述 生命周期</p>
-<p>datahub的前身是LinkedIn为了提高数据团队的工作效率，开发并开源的WhereHows。</p>
-<p>这是一个中央元数据存储库和数据集门户。存储的元数据类型包括技术元数据（例如位置，架构，分区，所有权）和过程元数据（例如沿袭，作业执行，生命周期信息）。WhereHows还提供了搜索引擎来帮助找到感兴趣的数据集。</p>
-<p>自2016年首次发布WhereHows以来，业界对通过使用元数据提高数据科学家的生产力的兴趣日益浓厚。例如，在此领域开发的工具包括AirBnb的Dataportal，Uber的Databook，Netflix的Metacat，Lyft的Amundsen以及最近的Google的Data Catalog。</p>
-<p>但是，LinkedIn很快意识到WhereHows具有根本的局限性，使其无法满足不断发展的元数据需求。主要问题是：</p>
-<ol>
-<li><strong>推送比拉动要好：</strong>虽然直接从源中拉动元数据似乎是收集元数据的最直接方法，但开发和维护集中的特定域爬网程序却很快成为噩梦。让各个元数据提供者通过API或消息将信息推送到中央存储库具有更大的可伸缩性。这种基于推送的方法还可以确保更及时地反映新的和更新的元数据。</li>
-<li><strong>一般胜于特定：</strong>关于数据集或工作的元数据有着固定的API，数据模型和存储格式。对元数据模型进行小的更改将导致在堆栈上下进行一系列更改。如果我们设计了一个通用的体系结构，而该体系结构与其存储和服务的元数据模型无关，那么它将具有更大的可扩展性。反过来，这将使我们能够专注于入门和不断发展的，有见地的元数据模型，而不必担心堆栈的底层。</li>
-<li><strong>联机与脱机同样重要：</strong>收集了元数据后，自然要分析该元数据以获取价值。一种简单的解决方案是将所有元数据转储到脱机系统（如Hadoop），在该系统中可以执行任意分析。但是，我们很快发现仅支持离线分析还不够。有许多用例，例如访问控制和数据隐私处理，必须在线查询最新的元数据。</li>
-<li><strong>关系确实很重要：</strong>元数据通常传达重要的关系（例如，血统，所有权和依赖性），这些关系可以提供强大的功能，例如影响分析，数据汇总，更好的搜索相关性等。将所有这些关系建模为头等公民和支持对其进行有效的分析查询。</li>
-<li><strong>多中心宇宙：</strong>我们意识到仅对单个实体（数据集）周围的元数据进行建模是不够的。有一个完整的数据，代码和人员实体生态系统（数据集，数据科学家，团队，代码，微服务API，指标，AI功能，AI模型，仪表板，笔记本等），需要通过以下方式进行集成和连接：单个元数据图。</li>
-</ol>
-<h2 id="认识datahub"><a href="#认识datahub" class="headerlink" title="认识datahub"></a>认识datahub</h2><p>LinkedIn意识到不断增长的需求，即跨各种数据实体以及将它们连接在一起的元数据图的一致的搜索和发现体验。于是决定扩展项目的范围，以建立一个雄心勃勃的愿景：将LinkedIn员工与他们重要的数据联系起来，从而构建一个完全通用的元数据搜索和发现工具DataHub。</p>
-<p><strong>组件服务框架</strong></p>
-<p>DataHub Web由Ember Framework开发，在应用模块化UI基础结构中，将DataHub Web应用程序构建为一系列紧密结合功能的组件，这些组件被分组为可安装的软件包。该软件包体系结构在基础上使用了Yarn Workspaces和Ember附加组件，并使用Ember的组件和服务进行了组件化。您可以将其视为一个使用小型构建块（即组件和服务）构建的UI，以创建较大的构建块（即Ember附加组件和npm / Yarn软件包），这些UI放在一起构成最终构成DataHub Web应用程序。</p>
-<p>以组件和服务为应用程序的核心，该框架使我们能够分解不同的方面并将应用程序中的其他功能组合在一起。此外，每一层的分段都提供了非常可定制的体系结构，该体系结构允许消费者扩展或简化其应用程序，以仅利用与其领域相关的功能或新的元数据模型。</p>
-<p>前端提供三种交互类型：（1）搜索，（2）浏览和（3）查看/编辑元数据。以下是实际应用中的一些示例屏幕截图：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQtWtFkJUhib9aTaHVVCu1KGETg6jIeDP5khBSicHIKPzPd4FhYHiaMKW0Og/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQt4ZGnPmORg8ljzmb046qpducDQ8RSYVT3IObyP8vAJRgHUD7cKyouVw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQtXricgghWp6v7jIjrYZ8ia8DbPTYsDeXiaVTj83uOWg5oF2dgSCeF841Aw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQtlicCfpicpoWoBgicYWVg7sTNCPvvSuT7s96zOM2MccIJ4NravRNBrWrXw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQtMGpbFDES3KpOwsMkHh7Nt5icry9hMuvdk2lj3thef4nOYqhlQYwm7ibg/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQtToCXaY8VU3aXHgymgH0LOnAYO9C4a72y6HjmKGG8yYBhzVgGSeZsiag/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p><em>DataHub应用截图</em></p>
-<p>类似于典型的搜索引擎体验，用户可以通过提供关键字列表来搜索一种或多种类型的实体。他们可以通过筛选多个方面来进一步对结果进行切片和切块。高级用户还可以利用运算符（例如OR，NOT和regex）执行复杂的搜索。</p>
-<p>DataHub中的数据实体可以以树状方式组织和浏览，其中每个实体都可以出现在树中的多个位置。这使用户能够以不同方式（例如，通过物理部署配置或业务功能组织）浏览同一目录。甚至有树的专用部分仅显示“认证实体”，这些实体是通过单独的治理流程进行管理的。</p>
-<p>最终交互（查看/编辑元数据）也是最复杂的交互。每个数据实体都有一个“配置文件页面”，其中显示了所有关联的元数据。例如，数据集配置文件页面可能包含其架构，所有权，合规性，运行状况和沿袭元数据。它还可以显示实体与其他实体之间的关系，例如，生成数据集的作业，从该数据集计算出的度量或图表等。对于可编辑的元数据，用户也可以直接通过UI更新。</p>
-<h3 id="元数据获取"><a href="#元数据获取" class="headerlink" title="元数据获取"></a>元数据获取</h3><p>简而言之，元数据是“ 提供有关其他数据的信息的数据。” 对于元数据建模，这带来了两个不同的要求：</p>
-<ol>
-<li><strong>元数据也是数据：</strong>要对元<strong>数据</strong>建模，我们需要一种语言，其功能至少应与通用数据建模所使用的语言一样丰富。</li>
-<li><strong>元数据是分布式的：</strong>期望所有元数据都来自单一来源是不现实的。例如，管理数据集的访问控制列表（ACL）的系统很可能不同于存储架构元数据的系统。一个好的建模框架应允许多个团队独立地发展其元数据模型，同时提供与数据实体相关联的所有元数据的统一视图。</li>
-</ol>
-<p>我们没有发明一种新的元数据建模方法，而是选择使用Pegasus（一种由LinkedIn创建的开源且完善的数据模式语言）。Pegasus专为通用数据建模而设计，因此适用于大多数元数据。但是，由于Pegasus没有提供对关系或关联进行建模的显式方法，因此我们引入了一些自定义扩展来支持这些用例。</p>
-<p>为了演示如何使用Pegasus对元数据进行建模，让我们看一下下面的修改后的实体关系图（ERD）所说明的简单示例。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQty72RGafWUsx8fT7Ej3BePU7ylNVI8Ngr7D3WCXqY50Zd6SIu345w3Q/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p>该示例包含三种类型的实体-用户，组和数据集-由图中的蓝色圆圈表示。我们使用箭头表示这些实体之间的三种关系类型，即OwnedBy，HasMember和HasAdmin。换句话说，一个组由一个管理员和用户的多个成员组成，而用户又可以拥有一个或多个数据集。</p>
-<p>与传统的ERD不同，我们将实体和关系的属性分别直接放置在圆圈内和关系名称下。这使我们可以将一种称为“元数据方面”的新型组件附加到实体。不同的团队可以为同一实体拥有和发展元数据的不同方面，而不会互相干扰，从而满足了分布式元数据建模的需求。上例中包含绿色矩形的三种类型的元数据方面：所有权，配置文件和成员身份。使用虚线表示元数据方面与实体的关联。例如，配置文件可以与用户相关联，所有权可以与数据集相关联，等等。</p>
-<p>您可能已经注意到，实体和关系属性与元数据方面存在重叠，例如，用户的firstName属性应与关联的配置文件的firstName字段相同。重复信息的原因将在本文的后半部分中进行解释，但是到目前为止，将属性视为元数据方面的“有趣部分”就足够了。</p>
-<p>为了在Pegasus中为示例建模，我们将每个实体，关系和元数据方面转换为单独的Pegasus Schema文件（PDSC）。为简便起见，我们在此仅列出每个类别中的一个模型。首先，让我们看一下User实体的PDSC：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;type&quot;: &quot;record&quot;,</span><br><span class="line">  &quot;name&quot;: &quot;User&quot;,</span><br><span class="line">  &quot;fields&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;urn&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;com.linkedin.common.UserUrn&quot;,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;firstName&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">      &quot;optional&quot;: true</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;lastName&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">      &quot;optional&quot;: true</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;ldap&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;com.linkedin.common.LDAP&quot;,</span><br><span class="line">      &quot;optional&quot;: true</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>每个实体都必须具有URN形式的全局唯一ID ，可以将其视为类型化的GUID。User实体具有的属性包括名字，姓氏和LDAP，每个属性都映射到User记录中的可选字段。</p>
-<p>接下来是OwnedBy关系的PDSC模型：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;type&quot;: &quot;record&quot;,</span><br><span class="line">  &quot;name&quot;: &quot;OwnedBy&quot;,</span><br><span class="line">  &quot;fields&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;source&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;com.linkedin.common.Urn&quot;,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;destination&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;com.linkedin.common.Urn&quot;,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;type&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;com.linkedin.common.OwnershipType&quot;,</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;pairings&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;source&quot;: &quot;com.linkedin.common.urn.DatasetUrn&quot;,</span><br><span class="line">      &quot;destination&quot;: &quot;com.linkedin.common.urn.UserUrn&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>每个关系模型自然包含使用其URN指向特定实体实例的“源”和“目的地”字段。模型可以选择包含其他属性字段，在这种情况下，例如“类型”。在这里，我们还引入了一个称为“ pairings”的自定义属性，以将关系限制为特定的源和目标URN类型对。在这种情况下，OwnedBy关系只能用于将数据集连接到用户。</p>
-<p>最后，您将在下面找到所有权元数据方面的模型。在这里，我们选择将所有权建模为包含type和ldap字段的记录数组。但是，在建模元数据方面时，只要它是有效的PDSC记录，实际上就没有限制。这样就可以满足前面提到的“元数据也是数据”的要求。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;type&quot;: &quot;record&quot;,</span><br><span class="line">  &quot;name&quot;: &quot;Ownership&quot;,</span><br><span class="line">  &quot;fields&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;owners&quot;,</span><br><span class="line">      &quot;type&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;array&quot;,</span><br><span class="line">        &quot;items&quot;: &#123;</span><br><span class="line">          &quot;name&quot;: &quot;owner&quot;,</span><br><span class="line">          &quot;type&quot;: &quot;record&quot;,</span><br><span class="line">          &quot;fields&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;name&quot;: &quot;type&quot;,</span><br><span class="line">              &quot;type&quot;: &quot;com.linkedin.common.OwnershipType&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;name&quot;: &quot;ldap&quot;,</span><br><span class="line">              &quot;type&quot;: &quot;string&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="元数据摄取"><a href="#元数据摄取" class="headerlink" title="元数据摄取"></a><strong>元数据摄取</strong></h3><p>DataHub提供两种形式的元数据摄取：通过直接API调用或Kafka流。前者适合离线，后者适合实时。</p>
-<p>DataHub的API基于Rest.li，这是一种可扩展的，强类型的RESTful服务架构，已在LinkedIn上广泛使用。由于Rest.li使用Pegasus作为其接口定义，因此可以逐字使用上一节中定义的所有元数据模型。从API到存储需要多层转换的日子已经一去不复返了-API和模型将始终保持同步。</p>
-<p>对于基于Kafka的提取，预计元数据生产者将发出标准化的元数据更改事件（MCE），其中包含由相应实体URN键控的针对特定元数据方面的建议更改列表。</p>
-<p>对API和Kafka事件模式使用相同的元数据模型，使我们能够轻松地开发模型，而无需精心维护相应的转换逻辑。</p>
-<h3 id="元数据服务"><a href="#元数据服务" class="headerlink" title="元数据服务"></a><strong>元数据服务</strong></h3><p>旦摄取并存储了元数据，有效地处理原始和派生的元数据就很重要。DataHub旨在支持对大量元数据的四种常见查询类型：</p>
-<ol>
-<li>面向文档的查询</li>
-<li>面向图的查询</li>
-<li>涉及联接的复杂查询</li>
-<li>全文搜索</li>
-</ol>
-<p>为此，DataHub需要使用多种数据系统，每种数据系统专门用于扩展和服务于有限类型的查询。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQtpjQA4Q5a1KmJQpQfH0EInB0p5yd2krH5licn9Q9NypLM8nPicWu3YMbw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p>在本文中，我们介绍了DataHub，这是LinkedIn上元数据之旅的最新进展。该项目包括一个模块化UI前端和一个通用元数据体系结构后端。</p>
-<p>目前datahub正在迅速发展，虽然还不是很活跃，也缺少相关的资料，但凭着与kafka的良好融合，datahub一定会在实时数据治理领域崭露头角。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/mqibsuEhdUyJGibez3wOcUb7h83c4WBIQtvA6p3a1ed8LEmRcDoWibDZmh6yFLibgGlFzpd6rNJNHLmTy3iaTnibSckg/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
-<p>更多实时数据分析相关博文与科技资讯，欢迎关注 “实时流式计算”</p>
 
           
         
@@ -1634,7 +1434,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#109;&#x69;&#x6e;&#64;&#101;&#120;&#97;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;">&#x61;&#100;&#109;&#x69;&#x6e;&#64;&#101;&#120;&#97;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#100;&#109;&#x69;&#110;&#64;&#101;&#x78;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;">&#97;&#100;&#109;&#x69;&#110;&#64;&#101;&#x78;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
@@ -1810,6 +1610,176 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230328125112-f144fb4b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230328125112-f144fb4b.html" itemprop="url">Doris使用踩坑总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-03-28T12:51:12+08:00">
+                2023-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>环境</p>
+<ul>
+<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
+<li>[Doris](<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">部署 Docker 集群 - Apache Doris</a>):v1.12.1</li>
+<li><a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>: v1.8.x</li>
+<li>IDEA开发环境</li>
+</ul>
+<h3 id="一、-Docker部署"><a href="#一、-Docker部署" class="headerlink" title="一、 Docker部署"></a>一、 Docker部署</h3><p>官方提供文档<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">Deploy Docker cluster</a></p>
+<p><font color="red">但部署完以后发现集群无法识别BE节点，查看日志发现是因为没有设置<code>vm.max_map_count</code>参数</font></p>
+<blockquote>
+<p>避坑1: 需要设置sysctl -w vm.max_map_count=2000000</p>
+<p>避坑2: 在启动容器时需要添加privileged: true</p>
+</blockquote>
+<h3 id="二、Flink-写入Doris"><a href="#二、Flink-写入Doris" class="headerlink" title="二、Flink 写入Doris"></a>二、Flink 写入Doris</h3><p>官方提供了文档<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/ecosystem/flink-doris-connector?_highlight=flink">Flink Doris Connector</a></p>
+<p>这里选用的是RowData的方式写入到Doris，提前到Doris中创建表代码如下:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE dwd;</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> dwd.TICKET;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> dwd.TICKET (</span><br><span class="line">        event <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        newval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        oldval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        stamp <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        subevent <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptm <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptmms <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        ver <span class="type">VARCHAR</span>(<span class="number">256</span>)</span><br><span class="line">)DISTRIBUTED <span class="keyword">BY</span> HASH(stamp) BUCKETS <span class="number">1</span></span><br><span class="line">PROPERTIES (</span><br><span class="line">&quot;replication_allocation&quot; <span class="operator">=</span> &quot;tag.location.default: 1&quot;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>然后是使用Java代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">StreamExecutionEnvironment</span> <span class="variable">env</span> <span class="operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(<span class="number">1</span>);</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">prop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        prop.setProperty(<span class="string">&quot;format&quot;</span>, <span class="string">&quot;json&quot;</span>);</span><br><span class="line">        prop.setProperty(<span class="string">&quot;strip_outer_array&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">        env.fromElements(<span class="string">&quot;&#123;\&quot;event\&quot;:\&quot;CheckIn\&quot;,\&quot;newval\&quot;:\&quot;90\&quot;,\&quot;oldval\&quot;:\&quot;0\&quot;,\&quot;stamp\&quot;:\&quot;67100c4f-0355-4dba-8a76-2a94202132d1\&quot;,\&quot;subevent\&quot;:\&quot;\&quot;,\&quot;uptm\&quot;:\&quot;20230319094822\&quot;,\&quot;uptmms\&quot;:\&quot;20230319094822031\&quot;,\&quot;ver\&quot;:\&quot;v1.0\&quot;&#125;&quot;</span>)</span><br><span class="line">                .addSink(DorisSink.sink(</span><br><span class="line">                        DorisReadOptions.builder().build(),</span><br><span class="line">                        DorisExecutionOptions.builder().setBatchSize(<span class="number">3</span>)</span><br><span class="line">                                .setBatchIntervalMs(<span class="number">0L</span>)</span><br><span class="line">                                .setMaxRetries(<span class="number">3</span>)</span><br><span class="line">                                .setStreamLoadProp(prop)</span><br><span class="line">                                .build(),</span><br><span class="line">                        DorisOptions.builder().setFenodes(<span class="string">&quot;localhost:8030&quot;</span>)</span><br><span class="line">                                .setTableIdentifier(<span class="string">&quot;dwd.TICKET&quot;</span>)</span><br><span class="line">                                .setUsername(<span class="string">&quot;admin&quot;</span>)</span><br><span class="line">                                .setPassword(<span class="string">&quot;&quot;</span>).build())</span><br><span class="line">                );</span><br><span class="line">        env.execute(<span class="string">&quot;pss-format-job&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font color="red">运行时发现网络不通问题，无法成功写入Dois</font>，具体错误如图下图所示：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131103501.png" alt="image-20230328131103501"></p>
+<p>分析宿主节点和docker集群的关系</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131607049.png" alt="image-20230328131607049"></p>
+<p>由架构图得知，是因为sink写入的时候通过外网地址的fe取到be地址是内网地址。</p>
+<p>解决思路：</p>
+<ol>
+<li><p>程序上传到FE运行，但是我属于本地开发环境，这种方式不适合</p>
+</li>
+<li><p>配置Docker network，使得在宿主节点能够访问容器 BE的IP。这块我也尝试搜索了很多资料，最终以失败告终。</p>
+<ul>
+<li>尝试一： 在宿主节点修改路由表 sudo route add -net 172.20.80.0/24 172.20.80.1</li>
+<li>尝试二： 以Host方式运行FE和BE</li>
+</ul>
+</li>
+<li><p>修改源代码： 找到涉及到“第二步：将BE内网IP返回给主程序”代码，并修改</p>
+</li>
+</ol>
+<p>其中我是用第三种方法，成功在本地开发环境摄入数据到Doris，在这里简单介绍一下快速修改源码的方法。</p>
+<p>第一步： 先找到涉及到代码的相关方法，在该场景中对应的是<code>org.apache.doris.flink.rest.RestService</code>类的<code>randomBackend()</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@VisibleForTesting</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">randomBackend</span><span class="params">(DorisOptions options, DorisReadOptions readOptions, Logger logger)</span> <span class="keyword">throws</span> DorisException, IOException &#123;</span><br><span class="line">        List&lt;BackendRowV2&gt; backends = getBackendsV2(options, readOptions, logger);</span><br><span class="line">        logger.trace(<span class="string">&quot;Parse beNodes &#x27;&#123;&#125;&#x27;.&quot;</span>, backends);</span><br><span class="line">        <span class="keyword">if</span> (backends != <span class="literal">null</span> &amp;&amp; !backends.isEmpty()) &#123;</span><br><span class="line">            Collections.shuffle(backends);</span><br><span class="line">            <span class="type">BackendRowV2</span> <span class="variable">backend</span> <span class="operator">=</span> (BackendRowV2)backends.get(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> backend.getIp() + <span class="string">&quot;:&quot;</span> + backend.getHttpPort();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            logger.error(<span class="string">&quot;argument &#x27;&#123;&#125;&#x27; is illegal, value is &#x27;&#123;&#125;&#x27;.&quot;</span>, <span class="string">&quot;beNodes&quot;</span>, backends);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;beNodes&quot;</span>, String.valueOf(backends));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二步：现在希望返回值并非BE的内网IP，因此我们需要将<code>return</code>的内容写死<code>return &quot;localhost:8040&quot;;</code></p>
+<p>第三步：在代码中我们创建与类相同的包，并将源码原封不动粘贴进去，如果报错，可以修改。紧接着修改<code>return &quot;localhost:8040&quot;;</code>即可</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328133408579.png" alt="image-20230328133408579"></p>
+<p>总结：</p>
+<p>我这里是本地开发环境遇到的问题，并非生产环境；如果生产环境部署基于Doris的应用程序，则需要注意下下面几点：</p>
+<ol>
+<li>运行的代码所在的机器，必须与Doris所在的网络保持通常。</li>
+<li>基于RowData的摄入方式不太友好，现在仍要寻找一种更好的编码方式。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1860,7 +1830,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
