@@ -1,3 +1,7 @@
+http://example.com/posts/20231109104344-b6e0f1c6.html
+http://example.com/posts/20231108113649-81a5898f.html
+http://example.com/posts/20231108111119-4023ca29.html
+http://example.com/posts/20231108104851-d513764b.html
 http://example.com/posts/20231108093604-8614bb4c.html
 http://example.com/sage/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%BB%84%E4%BB%B6%E5%AF%B9%E6%AF%94.html
 http://example.com/sage/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E8%83%8C%E8%AF%B5%E6%8A%80%E5%B7%A7.html
