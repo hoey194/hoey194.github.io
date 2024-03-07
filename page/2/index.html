@@ -303,6 +303,256 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230504205542-a6b71998.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230504205542-a6b71998.html" itemprop="url">使用反向代理解决SSL认证</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-05-04T20:55:42+08:00">
+                2023-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/posts/20230504205542-a6b71998.html#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://example.com/posts/20230504205542-a6b71998.html" class="cy_cmt_count" data-xid="posts/20230504205542-a6b71998.html" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>自己手里有很多私有服务，并且域名还都不一样，例如下面这些：</p>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>ip</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NAS</td>
+<td>192.168.30.5:5000</td>
+</tr>
+<tr>
+<td>Jellyfin</td>
+<td>192.168.30.5:8096</td>
+</tr>
+<tr>
+<td>私人笔记</td>
+<td>hoey94.github.io</td>
+</tr>
+<tr>
+<td>私人网盘</td>
+<td>192.168.30.5:9000</td>
+</tr>
+<tr>
+<td>chatgpt</td>
+<td>chat.github.io</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>这些应用管理起来十分不方便，于是就想将这些网站整合在一起，并且对外提供统一域名访问方式。我自身是有一个免费的顶级域名的hoey.tk，那现在的需求就很明确了，其实就是想得到下面这样的效果：</p>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>ip</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NAS</td>
+<td>nas.hoey.tk</td>
+</tr>
+<tr>
+<td>Jellyfin</td>
+<td>jellyfin.hoey.tk</td>
+</tr>
+<tr>
+<td>私人笔记</td>
+<td>notes.hoey.tk</td>
+</tr>
+<tr>
+<td>私人网盘</td>
+<td>pan.hoey.tk</td>
+</tr>
+<tr>
+<td>chatgpt</td>
+<td>chat.hoey.tk</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>最近找到了一款挺不错的软件<a target="_blank" rel="noopener" href="https://github.com/NginxProxyManager/nginx-proxy-manager">Nginx Project Manager</a>，并且还能提供免费的SSL，虽然3个月到期以后还要手动续期，不过白嫖的东西还要什么自行车。它的页面像这样：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504205632731.png" alt="image-20230504205632731"></p>
+<p>配置完以后，访问的时候只需要使用二级域名访问即可，十分方便，维护起来也十分傻瓜。</p>
+<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><ul>
+<li>VPS任意，我的是在国外自购的一台服务器，为什么自购国外，大家懂得都懂，现在是科学时代。</li>
+<li>自建家用机服务器，我的服务器主要插上8T*2机械硬盘组磁盘阵列，搞成NAS存储服务器做个私有云。另外结合esxi或者是docker能跑很多好玩的东西，这里就不一一列举了，感兴趣的小伙伴可以搜索一下自建NAS服务器 ALL IN ONE。</li>
+<li>tk域名是白嫖的，在DNS服务商那里却不被支持（这就是白嫖的代价吧）。自己又穷，买不起域名哈哈哈，就搞了个垃圾域名做中转，4块钱人民币一年哈哈哈。</li>
+</ul>
+<h2 id="网络拓扑图"><a href="#网络拓扑图" class="headerlink" title="网络拓扑图"></a>网络拓扑图</h2><p>下面这个是结合自己家庭网络拓扑图和已有的一些服务的网络拓扑图，用这个实现二级域名访问+SSL。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504212114306.png" alt="image-20230504212114306"></p>
+<p>从最右边开始一层一层解释所做的事情：</p>
+<ol>
+<li><p>首先联系联通宽带，给到公网IP，将自己内网服务，在软路由内部通过端口映射的方式开放到外网。如果没有公网IP，也可以用frp等工具实现内网穿透。</p>
+</li>
+<li><p>接下来要解决公网IP变动的问题（联通给的公网IP是动态的，每隔一段时间就会变）。DNS服务商我选择的是Cloudflare，实现DDNS这块是参考开源项目，改写了一个脚本，其主要功能是：以轮训的方式，动态监测公网IP变更，将A记录通过API的方式更新到Cloudflare以实现DNS解析，具体脚本参考<a target="_blank" rel="noopener" href="https://github.com/hoey94/cloudflare-api-ddns">cloudflare-api-dns</a>，当然网上也有很多类似以封装好的工具实现DDNS，比如<a target="_blank" rel="noopener" href="https://github.com/jeessy2/ddns-go">ddns-go</a></p>
+</li>
+<li><p>在自己的VPS上搭建好<a target="_blank" rel="noopener" href="https://github.com/NginxProxyManager/nginx-proxy-manager">Nginx Project Manager</a>（后面我们简称NPM），用来整合自己所有的服务，并添加SSL认证。</p>
+</li>
+<li><p>在Cloudflare创建记录将tk域名映射到VPS上，反向代理接受到请求，转发到4块钱买的域名(hoey.asia)上，哈哈哈。</p>
+</li>
+</ol>
+<h2 id="在CentOS-7上-安装-NPM"><a href="#在CentOS-7上-安装-NPM" class="headerlink" title="在CentOS 7上 安装 NPM"></a>在CentOS 7上 安装 NPM</h2><ol>
+<li>确保安装了docker 和docker-compose</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker</span></span><br><span class="line">yum remove -y docker   docker-client   docker-client-latest   docker-common   docker-latest   docker-latest-logrotate   docker-logrotate   docker-selinux   docker-engine-selinux   docker-engine</span><br><span class="line">yum install -y yum-utils   device-mapper-persistent-data   lvm2</span><br><span class="line">sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">sudo yum makecache fast</span><br><span class="line">yum install -y docker-ce</span><br><span class="line">systemctl start docker.service</span><br><span class="line">systemctl enable docker.service</span><br><span class="line">docker -v</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker-compose</span></span><br><span class="line">curl -L https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose</span><br><span class="line">chmod +x /usr/local/bin/docker-compose</span><br><span class="line">docker-compose --version</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启ipv6防止日志文件过大 (可选)</span></span><br><span class="line">cat &gt; /etc/docker/daemon.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">    &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">    &quot;log-opts&quot;: &#123;</span><br><span class="line">        &quot;max-size&quot;: &quot;20m&quot;,</span><br><span class="line">        &quot;max-file&quot;: &quot;3&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;ipv6&quot;: true,</span><br><span class="line">    &quot;fixed-cidr-v6&quot;: &quot;fd00:dead:beef:c0::/80&quot;,</span><br><span class="line">    &quot;experimental&quot;:true,</span><br><span class="line">    &quot;ip6tables&quot;:true</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用docker-compose 安装npm</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/docker_data/npm</span><br><span class="line">cd /data/docker_data/npm</span><br><span class="line">vim docker-compose.yml</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将内容粘贴进去 start</span></span><br><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  app:</span><br><span class="line">    image: &#x27;jc21/nginx-proxy-manager:latest&#x27;</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &#x27;80:80&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;81:81&#x27;  # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">      - &#x27;443:443&#x27; # 冒号左边可以改成自己服务器未被占用的端口</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data:/data # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 data 文件夹中</span><br><span class="line">      - ./letsencrypt:/etc/letsencrypt  # 冒号左边可以改路径，现在是表示把数据存放在在当前文件夹下的 letsencrypt 文件夹中</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将内容粘贴进去 end</span> </span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>更新NPM</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cd /root/data/docker_data/npm</span><br><span class="line"></span><br><span class="line">docker-compose down </span><br><span class="line"></span><br><span class="line">cp -r /data/docker_data/npm /data/docker_data/npm.archive  # 万事先备份，以防万一</span><br><span class="line"></span><br><span class="line">docker-compose pull</span><br><span class="line"></span><br><span class="line">docker-compose up -d    # 请不要使用 docker-compose stop 来停止容器，因为这么做需要额外的时间等待容器停止；docker-compose up -d 直接升级容器时会自动停止并立刻重建新的容器，完全没有必要浪费那些时间。</span><br><span class="line"></span><br><span class="line">docker image prune  # prune 命令用来删除不再使用的 docker 对象。删除所有未被 tag 标记和未被容器使用的镜像</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>卸载NPM</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /root/data/docker_data/npm</span><br><span class="line"></span><br><span class="line">docker-compose down </span><br><span class="line"></span><br><span class="line">rm -rf /root/data/docker_data/npm  # 完全删除映射到本地的数据</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#100;&#109;&#105;&#x6e;&#x40;&#101;&#x78;&#97;&#109;&#112;&#x6c;&#101;&#46;&#99;&#111;&#109;">&#97;&#100;&#109;&#105;&#x6e;&#x40;&#101;&#x78;&#97;&#109;&#112;&#x6c;&#101;&#46;&#99;&#111;&#109;</a>/changeme，登录后修改</p>
+<p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
+<p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214014283.png" alt="image-20230504214014283"></p>
+<p>之后开启SSL认证</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214052552.png" alt="image-20230504214052552"></p>
+<p>点击保存即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>配置完成以后，就可以使用nas.hoey.tk访问nas服务了，当用户访问nas.hoey.tk时，在网络中它的链路应该如下图所示：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214857962.png" alt="image-20230504214857962"></p>
+<p>以上</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230430133503-ff462b52.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1670,230 +1920,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221208121846-ef5df40e.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20221208121846-ef5df40e.html" itemprop="url">github配置多用户</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-08T12:18:46+08:00">
-                2022-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/posts/20221208121846-ef5df40e.html#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://example.com/posts/20221208121846-ef5df40e.html" class="cy_cmt_count" data-xid="posts/20221208121846-ef5df40e.html" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>因为需要使用多个github账号，但只有一台电脑，想要动态切换不同用户，并且做到免密提交。</p>
-<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><ul>
-<li>Mac book Pro 2020</li>
-<li>git version 2.24.3 (Apple Git-128)</li>
-<li>github账号</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>github登录账号</th>
-<th>github用户名</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="mailto:&#99;&#x6e;&#x6e;&#x71;&#x6a;&#x62;&#97;&#x6e;&#x35;&#50;&#49;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#99;&#x6e;&#x6e;&#x71;&#x6a;&#x62;&#97;&#x6e;&#x35;&#50;&#49;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></td>
-<td>hoey94</td>
-</tr>
-<tr>
-<td><a href="mailto:&#x33;&#x35;&#49;&#x38;&#x36;&#53;&#53;&#55;&#54;&#x40;&#x71;&#x71;&#46;&#99;&#111;&#x6d;">&#x33;&#x35;&#49;&#x38;&#x36;&#53;&#53;&#55;&#54;&#x40;&#x71;&#x71;&#46;&#99;&#111;&#x6d;</a></td>
-<td>hoey1994</td>
-</tr>
-</tbody></table>
-<ul>
-<li>测试用的项目(大小写区分)</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Github账号</th>
-<th>项目</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="mailto:&#x63;&#x6e;&#x6e;&#113;&#106;&#98;&#97;&#110;&#53;&#50;&#x31;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;">&#x63;&#x6e;&#x6e;&#113;&#106;&#98;&#97;&#110;&#53;&#50;&#x31;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;</a></td>
-<td>Test</td>
-</tr>
-<tr>
-<td><a href="mailto:&#51;&#x35;&#49;&#56;&#54;&#53;&#x35;&#55;&#54;&#x40;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;">&#51;&#x35;&#49;&#56;&#54;&#53;&#x35;&#55;&#54;&#x40;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;</a></td>
-<td>test</td>
-</tr>
-</tbody></table>
-<h1 id="免密登录"><a href="#免密登录" class="headerlink" title="免密登录"></a>免密登录</h1><p>为两个账号生成不同的公钥(*.pub)和密钥</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;cnnqjban521@gmail.com&quot; -f ~/.ssh/id_rsa_hoey94</span><br><span class="line">ssh-keygen -t rsa -C &quot;351865576@qq.com&quot; -f ~/.ssh/id_rsa_hoey1994</span><br></pre></td></tr></table></figure>
-
-<p>生成的两组，公钥和密钥，分别到github官网上配置免密登录 Settings-&gt;SSH and GPG Keys-&gt;New SSH Key，填写的内容可以是用下面命令查看</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat ~/.ssh/id_rsa_hoey94.pub</span><br><span class="line">cat ~/.ssh/id_rsa_hoey1994.pub</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="配置映射"><a href="#配置映射" class="headerlink" title="配置映射"></a>配置映射</h1><p>创建~/.ssh/config，将内容填入进去</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.ssh/config</span><br><span class="line"></span><br><span class="line">Host github-hoey1994</span><br><span class="line">HostName github.com</span><br><span class="line">IdentityFile ~/.ssh/id_rsa_hoey1994</span><br></pre></td></tr></table></figure>
-
-
-
-<p>这里解释一下这一组内容的含义，平常克隆的时候我们会这么写:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:hoey1994/test.git</span><br></pre></td></tr></table></figure>
-
-<p>但如果如果按照上面内容进行配置以后，在克隆的时候要改成这样：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br></pre></td></tr></table></figure>
-
-<p>请仔细对比一下上面两个克隆命令之间的差异</p>
-<p>按照同样原理，将另一个账号也配置一下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Host github-hoey94</span><br><span class="line">HostName github.com</span><br><span class="line">IdentityFile ~/.ssh/id_rsa_hoey94</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>如果端口有修改，可以按照下面的方式进行填写</p>
-<p>Host gitlib-juneyao<br>HostName gitlab.juneyaoair.com<br>Port 10022<br>IdentityFile /Users/hoey/.ssh/id_rsa_juneyao</p>
-</blockquote>
-<h1 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h1><p>推荐不要跳过这一步，gacm是管理git用户很不错的一个工具，可以稍微熟悉一下命令。对于commit 的author的信息，可以快速的进行切换，因为本地有多个用户，使用它可以大大提高效率。</p>
-<ol>
-<li>取消全局的用户配置</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset user.email</span><br><span class="line">git config --global --unset user.mail</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">可以查看内容是否已经取消</span></span><br><span class="line">git config --global -e</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><p>安装多用户管理工具<a target="_blank" rel="noopener" href="https://github.com/hoey94/gacm">gacm</a>，具体安装步骤见github</p>
-</li>
-<li><p>使用gacm命令添加两个账户</p>
-</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gacm add --name hoey94 --email cnnqjban521@gmail.com</span><br><span class="line">gacm add --name hoey1994 --email 351865576@qq.com</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#x6e;&#110;&#113;&#106;&#98;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#x63;&#x6e;&#110;&#113;&#106;&#98;&#x61;&#110;&#x35;&#x32;&#49;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#51;&#53;&#49;&#x38;&#x36;&#53;&#53;&#x37;&#x36;&#64;&#x71;&#x71;&#46;&#99;&#111;&#x6d;">&#51;&#53;&#49;&#x38;&#x36;&#53;&#53;&#x37;&#x36;&#64;&#x71;&#x71;&#46;&#99;&#111;&#x6d;</a>(hoey1994)下创建test项目</p>
-<p>使用下面命令分别克隆到本地</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
-
-
-
-<p>改动一下里面的内容并提交完成测试。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1944,7 +1970,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
