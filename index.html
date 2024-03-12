@@ -303,6 +303,292 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240312130937-61ee676c.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240312130937-61ee676c.html" itemprop="url">iPhone 自带VPN锁屏自动断开</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-12T13:09:37+08:00">
+                2024-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一、 Mobileconfig</p>
+<p>iOS Mobileconfig是苹果iOS操作系统中的配置文件。这些配置文件以.mobileconfig文件扩展名存储，通常用于配置设备上的各种设置，如VPN配置、电子邮件账户设置、Wi-Fi网络配置、安全策略等。用户可以通过安装.mobileconfig文件来快速轻松地配置设备，而无需手动逐项设置。</p>
+<p>Mobileconfig文件采用XML格式，可以包含各种配置指令和参数，让用户和管理员可以方便地搭建和管理iOS设备的配置。通过安装Mobileconfig文件，用户可以一次性完成多项配置，提高了配置的效率和便捷性。这对于企业中需要大规模配置iOS设备时特别有用，管理员可以通过Mobileconfig文件轻松地为员工设备进行批量配置。</p>
+<p>总的来说，iOS Mobileconfig文件是一种用于配置iOS设备各项设置的文件格式，能够简化配置流程，提高效率，适用于个人、企业以及其他组织对iOS设备的管理和配置需求。</p>
+<p>二、自动断开重连</p>
+<p><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/devicemanagement/vpn/ipsec">VPN.IPSec | Apple Developer Documentation</a></p>
+<ol>
+<li>通过配置MobileConfig实现自动识别重连，我这里使用的是Cisco IPSec，下面这个模版用来参考</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadContent<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>IPSec<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>AuthenticationMethod<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>SharedSecret<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>LocalIdentifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>***** 群租名称 ****<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>LocalIdentifierType<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>KeyID<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>RemoteAddress<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>***** 服务器 ****<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>SharedSecret<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>***** 密钥 ****<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>IPv4<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>OverridePrimary<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>OnDemandEnabled<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>OnDemandRules<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">key</span>&gt;</span>Action<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">string</span>&gt;</span>Connect<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">key</span>&gt;</span>Action<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">string</span>&gt;</span>Connect<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">key</span>&gt;</span>InterfaceTypeMatch<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">string</span>&gt;</span>Cellular<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">key</span>&gt;</span>Action<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">string</span>&gt;</span>Connect<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">key</span>&gt;</span>InterfaceTypeMatch<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">string</span>&gt;</span>WiFi<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">key</span>&gt;</span>Action<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">string</span>&gt;</span>Ignore<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadDescription<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>defualt payload desc<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadDisplayName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>VPN<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadIdentifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>com.apple.vpn.managed.087D3518-3EE4-44AB-B20B-84B150C5825E<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadOrganization<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>default playload org<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadType<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>com.apple.vpn.managed<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadUUID<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>B6E58B82-F683-4CC9-8A05-DFA9A3B06BB4<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadVersion<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>Proxies<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>HTTPEnable<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">integer</span>&gt;</span>0<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>HTTPSEnable<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">integer</span>&gt;</span>0<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>ProxyAutoConfigEnable<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">integer</span>&gt;</span>0<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>ProxyAutoDiscoveryEnable<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">integer</span>&gt;</span>0<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>UserDefinedName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>连接VPN<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">key</span>&gt;</span>VPNType<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>IPSec<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadDescription<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">string</span>&gt;</span>defualt payload desc<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadDisplayName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">string</span>&gt;</span>VPN<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadIdentifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">string</span>&gt;</span>D5CF7299-AF60-45A5-8B40-0051E80C8048<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadOrganization<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">string</span>&gt;</span>default playload org<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadRemovalDisallowed<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">false</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadType<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">string</span>&gt;</span>Configuration<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadUUID<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">string</span>&gt;</span>222010E8-2D18-4BBE-BD19-58B192C4CCE4<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadVersion<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里你只需要填写下面几个参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LocalIdentifier: 群租名称</span><br><span class="line">RemoteAddress: 服务器</span><br><span class="line">SharedSecret: 密钥</span><br></pre></td></tr></table></figure>
+
+<p>你会发现里面没有<strong>用户名</strong>和<strong>密码</strong>，是因为用户名和密码不在这个里面填写，所以不需要填，到后面的时候自然会有地方填。</p>
+<p>下面对应IOS中Cisco IPSec的客户端界面。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240312132344341.png" alt="image-20240312132344341"></p>
+<ol start="2">
+<li>将上面的模版修改以后，保存为后缀.mobileconfig的文件，放在网站上，保证可以被下载。</li>
+</ol>
+<p>你可以启动一个小web file服务器，用来读取到远端的file并下载。可以参考这篇Blog <a target="_blank" rel="noopener" href="https://www.cnblogs.com/hoey94/p/11353214.html">python3 http.server 本地服务支持跨域 - hoey94 - 博客园 (cnblogs.com)</a></p>
+<ol start="3">
+<li>使用手机端下载.mobileconfig文件，并安装描述文件。</li>
+<li>在安装的过程中输入用户名和密码即可</li>
+</ol>
+<p>三、 其他</p>
+<p>如果你使用的是L2TP，你可以参考下面的这个模版，这个模版我没有测试，可以自己测一下，据网友反映是可以使用的。</p>
+<p>这里也有关于它的讨论，可以看一下<a target="_blank" rel="noopener" href="https://discussionschinese.apple.com/thread/253949421?sortBy=best&page=1">iPhone 打开自带VPN后，锁屏没过多久，… - Apple 社区</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadContent<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>IPSec<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>AuthenticationMethod<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">string</span>&gt;</span>SharedSecret<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>IPv4<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>OverridePrimary<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>PPP<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>CommRemoteAddress<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">string</span>&gt;</span>****此处输入 VPN 服务器地址****<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadDisplayName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>VPN<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadIdentifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>com.apple.vpn.managed.087D3518-3EE4-44AB-B20B-84B150C5825E<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadType<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>com.apple.vpn.managed<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadUUID<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>B6E40B84-A912-4249-A73D-DA224AAAC470<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadVersion<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>UserDefinedName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>****此处可以自定义 VPN 显示的名字****<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>VPNType<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>L2TP<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>IPv4<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>OverridePrimary<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>OnDemandEnabled<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>OnDemandRules<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>Action<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>Connect<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>Action<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>Connect<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>InterfaceTypeMatch<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>Cellular<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>Action<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>Connect<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>InterfaceTypeMatch<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>WiFi<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>Action<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>Ignore<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadDisplayName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>****此处自定义描述文件的名字****<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadIdentifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>D653CCA3-DC03-413C-9DE8-D19878CE48A3<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadType<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>Configuration<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadUUID<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>EAB66BD6-D1D4-4326-BF83-09A9042C5507<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadVersion<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240312110019-5cb58a30.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240312110019-5cb58a30.html" itemprop="url">Doris写入数据异常提示actual column number in csv file is less than schema column number</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-12T11:00:19+08:00">
+                2024-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Flink 写入Doris报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Reason: actual column number in csv file is  less than  schema column number.actual number: 34, column separator: [	], line delimiter: [].......</span><br></pre></td></tr></table></figure>
+
+
+
+<p>通过去掉列中的换行和回车，修正了部分问题</p>
+<p>原格式：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">VERSION_J <span class="keyword">as</span> VERSION_J</span><br><span class="line"><span class="keyword">from</span> t</span><br></pre></td></tr></table></figure>
+
+<p>修改后:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">REGEXP_REPLACE(<span class="built_in">coalesce</span>(VERSION_J, <span class="string">&#x27;&#x27;</span>),<span class="string">&#x27;CHAR(13)|CHAR(10)|\r|\n&#x27;</span>,<span class="string">&#x27;&#x27;</span>) <span class="keyword">as</span> VERSION_J</span><br><span class="line"><span class="keyword">from</span> t</span><br></pre></td></tr></table></figure>
+
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240308001148-fe432aac.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1469,264 +1755,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230716095858-f1de28db.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20230716095858-f1de28db.html" itemprop="url">mac下的开发包管理工具-sdk</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-07-16T09:58:58+08:00">
-                2023-07-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>SDK可以帮助我们维护mac下的程序包，比如想安装jdk1.8、又想安装jdk11，比如想安装maven等等，它都可以通过指令进行安装和管理。下面是一些常用的指令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">curl -s &quot;https://get.sdkman.io&quot; | bash</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置path</span></span><br><span class="line">source &quot;$HOME/.sdkman/bin/sdkman-init.sh&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看sdk版本</span></span><br><span class="line">sdk version</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看安装maven安装情况</span></span><br><span class="line">sdk list maven</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装maven 3.6.4</span></span><br><span class="line">sdk install maven  3.6.3</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">maven被安装到的目录</span></span><br><span class="line">cd ~/.sdkman/candidates</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230711112128-628a2fb5.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20230711112128-628a2fb5.html" itemprop="url">家庭网络拓扑</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-07-11T11:21:28+08:00">
-                2023-07-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>前段时间618新入手了几块硬盘，买回来组一个NAS，下面是家里的网络拓扑逻辑图 </p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230711130249774.png" alt="image-20230711130249774"></p>
-<p>在其中完成了以下内容：</p>
-<ol>
-<li>网络统一管理，包括网络分割如划分子网；网络的优化如实现拦截、翻墙、过滤广告、加速；内外网穿透。</li>
-<li>ESXI虚拟化，对物理机的CPU计算、存储和网络资源高效利用，EXSI高效的横向拓展能力和简易的操作都非常的优秀。</li>
-<li>NAS（网络附加存储），数据共享与存储、备份与恢复、远程访问、横向磁盘扩容。</li>
-<li>边缘计算，网络资源共享，提升网络三大运营商CDN网络加速。</li>
-</ol>
-<p>得到的好处：</p>
-<ol>
-<li>全端的无差异实时备份，包括Mac、Windows、IPad、IPhone等设备</li>
-<li>现在市面上各大云盘，某度云、某里云等等，现在统统废弃，全部用NAS就可以解决，相当于买了个所有云盘的VIP</li>
-<li>网络方面的国内外无差异化上网体验。</li>
-<li>给老婆刷刷剧，看看电影都很方便。</li>
-</ol>
-<p><a target="_blank" rel="noopener" href="http://192.168.1.1/cu.html">http://192.168.1.1/cu.html</a></p>
-<p>CUAdmin32216618</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1777,7 +1805,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
