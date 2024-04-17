@@ -303,6 +303,266 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240417164207-f8343c34.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240417164207-f8343c34.html" itemprop="url">中转线路的应用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-04-17T16:42:07+08:00">
+                2024-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>​    中转机指的是一个中间服务器，将用户的请求转发到目标服务器上。在使用VPS的时候，也常常会通过中转机进行访问。例如，用户在国内使用VPS搭建了一个网站，但由于网络限制等问题，国外用户无法直接访问该网站。这时，用户可以在国外租用一台VPS作为中转机，然后将中转机和国内的VPS连接起来，通过中转机实现访问。在此过程中，用户的请求会先到达中转机，再由中转机将请求转发到国内的VPS上，最后再将响应返回给用户。中转机也可以增加一些额外的安全性和隐私保护措施，保护用户的数据和隐私。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240417164517758.png" alt="image-20240417164517758"></p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h2 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h2><p>假设你有 A-B 两台机器，打算使用 A 机器转发流量到 B 机器。</p>
+<p>常见的用途是国内连接到 A 机器的网络比较好，然后希望通过 A 机器转发数据到 B 机器，再通过 B 机器干坏事（</p>
+<p>又或者是 B 机器可以解锁一些在线服务之类，但是直连效果不好，甚至 IP 都被墙了，想要使用 A 机器做前置转发。</p>
+<p>缺点是，只能转发 TCP 或 UDP 流量，带 TLS 的不行</p>
+<p>下面介绍两种中转方案</p>
+<h2 id="方案一、-使用VPN-V2ray"><a href="#方案一、-使用VPN-V2ray" class="headerlink" title="方案一、 使用VPN+V2ray"></a>方案一、 使用VPN+V2ray</h2><p>这种方案在A机器上安装IPsec VPN，在B机器上安装V2ray</p>
+<p>在机器A上安装IPsec VPN，我是在Openwrt旁路由上安装，你也可以参考其他方案自行验证</p>
+<p><a target="_blank" rel="noopener" href="https://wiki.eryajf.net/pages/5363.html#_2-%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5">使用docker快速部署一个 IPsec VPN 服务器 | 二丫讲梵 (eryajf.net)</a></p>
+<h2 id="方案二、使用V2ray-V2ray"><a href="#方案二、使用V2ray-V2ray" class="headerlink" title="方案二、使用V2ray+V2ray"></a>方案二、使用V2ray+V2ray</h2><p>这种方案需要在AB两台机器上配置V2ray，实现互相通信</p>
+<h2 id="1-添加配置"><a href="#1-添加配置" class="headerlink" title="1.添加配置"></a>1.添加配置</h2><p>先在 B 机器添加一个 V2Ray 配置，举例： <code>v2ray add tcp 233</code></p>
+<p>这样来就是添加了一个 VMESS-TCP 的配置，并且端口是 233</p>
+<p>如果你已经有配置就不用再添加了，反正记下 B 机器的 <code>IP</code> 和配置的 <code>端口</code> 即可</p>
+<p>因为利用 A 机器转发的时候必须要填写上 B 机器的 IP，以及要转到到 B 机器的哪个端口</p>
+<h2 id="2-door"><a href="#2-door" class="headerlink" title="2.door"></a>2.door</h2><p>使用方法： <code>v2ray add door [port] [remote-addr] [remote-port]</code></p>
+<p>在 A 机器执行：<code>v2ray add door</code>，然后输入 B 机器的 IP 和端口</p>
+<p>默认情况下 V2Ray 脚本会随机生成一个端口，如果你需要自定义端口请使用 <code>v2ray add door 需要自定义的端口</code></p>
+<h2 id="3-测试"><a href="#3-测试" class="headerlink" title="3.测试"></a>3.测试</h2><p>把 B 机器给出的配置里面的地址和端口，改成 A 机器的 IP 和端口即可</p>
+<p>就是 B 机器的配置，假设你用 v2rayN 通过 URL 导入了配置，把配置的地址和端口改成 A 机器的 IP 和 Dokodemo-door 端口。</p>
+<p>看看是不是能使用了？</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240417142919-0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240417142919-0.html" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-04-17T14:29:19+08:00">
+                2024-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240417142759383.png" alt="image-20240417142759383"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240415174551-ebe1c553.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1641,309 +1901,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20231109104344-b6e0f1c6.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20231109104344-b6e0f1c6.html" itemprop="url">航司运行领域术语</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-11-09T10:43:44+08:00">
-                2023-11-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>FOC(FLIGHT OPERATION CONTROL)即航空公司主要的航班运行控制系统。</p>
-<p>AFTN(Aeronautical Fixed Telecommunication Network)用于民航空管各类工作报文的网络和规范，通常传输有航班的动态信息报文，比如起飞落地报文、天气报文、情报报文、取消报文等等。</p>
-<p>SITA 国际电讯协会,和AFTN一样也是民航一种电报规范，主要用于商务报文传输，比如货运、客运报文、离港订座报文等；</p>
-<p>ACARS（Aircraft Addressing and Reporting System）地空通信的链路，是飞机在空中和地面进行数字化报文传输主要的方式；</p>
-<p>MCC（Maintenance Control Center）工程维修处的一个处室，是AOC值班的重要岗位，是负责每日航班运行的飞机的故障维修保障岗位；</p>
-<p>ADSB （Automatic Dependent Surveillance – Broadcast）通过飞机上的机载GPS等系统，获得飞机自身的位置信息，再通过飞机上的通信设备，将飞机自身的位置信息发送出来，地面人员可以利用通信设备，接收到飞机发送出来的这些信息，从而实现对飞机的监视</p>
-<p>CDM （Collaborative Decision-Making 协同决策）是空管和航空公司以及机场协同运作的一个终端流量控制系统；俗称，飞机跑道排队系统；</p>
-<p>ACDM（Airport Collaborative Decision-Making 机场协同决策）是机场和航空公司协同运作的一个机场协同指挥系统；</p>
-<p>GANTT 条状图(Bar chart)。其通过条状图来显示项目，进度，和其他时间相关的系统进展的内在关系随着时间进展的情况；</p>
-<p>HORAM （HO吉祥的二字码，RAM RISK ANALYSIS MANAGEMENT）吉祥的航班风险分析管理系统</p>
-<p>CI执行率监控 Cost index成本指数，节油中会针对每条特定航线根据经验给出CI指导政策，系统会根据历史数据分析飞行员节油情况和CI对比</p>
-<p>EFB （ELECTRIC FLIGHT BAG)电子飞行包，IPAD代替原来的纸箱，里面可以安装各种电子航图、手册、气象APP、性能计算APP等；</p>
-<p>HCC （Hub Control Center）吉祥的地面保障系统，主要是场站，虹桥、浦东有关地面保障单位调度的系统；</p>
-<p>SMS （Safety Management System）公司安全风险检查系统，涉及公司任何方面的隐患提报以及整改闭环管理</p>
-<p>QAR (Quick Access Recorder)就是黑盒子数据，记录了每个飞行航班的飞机的全部抽样参数</p>
-<p>SOP（Standard Operation Procedure）标准作业程序，吉祥航空公司的飞行员SOP手册就是飞机标准操作手册；</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20231108113649-81a5898f.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20231108113649-81a5898f.html" itemprop="url">DataHub元数据管理体验</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-11-08T11:36:49+08:00">
-                2023-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Datahub"><a href="#Datahub" class="headerlink" title="Datahub"></a>Datahub</h3><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174154093.png" alt="image-20231108174154093"></p>
-<p><strong>开源地址</strong>：<a target="_blank" rel="noopener" href="https://github.com/datahub-project/datahub">https://github.com/datahub-project/datahub</a> </p>
-<p>DataHub是由Linkedin开源的，官方Slogan：The Metadata Platform for the Modern Data Stack - 为现代数据栈而生的元数据平台。目的就是为了解决多种多样数据生态系统的元数据管理问题，它提供元数据检索、数据发现、数据监测和数据监管能力，帮助大家解决数据管理的复杂性。</p>
-<p>DataHub基于Apache License 2开源，采用基于推送的数据收集架构（当然也支持pull拉取的方式），能够持续收集变化的元数据。当前版本已经集成了大部分流行数据生态系统接入能力，包括但不限于：Kafka, Airflow, MySQL, SQL Server, Postgres, LDAP, Snowflake, Hive, BigQuery。</p>
-<p><strong>Datahub的优点：</strong></p>
-<ul>
-<li>名门开源，与Kafka同家庭。社区活跃，发展势头迅猛，版本更新迭代迅速。</li>
-<li>定位清晰且宏远，Slogan可以看出团队的雄心壮志及后期投入，且不断迭代更新的版本也应证了这一点。</li>
-<li>底层架构灵活先进，未扩展集成而生，支持推送和拉去模式，详见：<a target="_blank" rel="noopener" href="https://datahubproject.io/docs/architecture/architecture/">https://datahubproject.io/docs/architecture/architecture/</a></li>
-<li>UI界面简单易用，技术人员及业务人员友好</li>
-<li>接口丰富，功能全面</li>
-</ul>
-<p><strong>Datahub的不足：</strong></p>
-<ul>
-<li>前端界面不支持国际化，界面的构建和使用逻辑不够中国化</li>
-<li>版更更新迭代快，使用后升级是个难题</li>
-<li>较多功能在建设中，例如Hive列级血缘</li>
-<li>部分功能性能还需要优化，例如SQL Profile</li>
-<li>中文资料不多，中文交流社群也不多</li>
-</ul>
-<p><strong>相关介绍</strong>：</p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/74gK3hTt7-j1lTbKFagbTQ">https://mp.weixin.qq.com/s/74gK3hTt7-j1lTbKFagbTQ</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/iP6sc2DzPaeAKpSWNmf8hQ">https://mp.weixin.qq.com/s/iP6sc2DzPaeAKpSWNmf8hQ</a></p>
-<p><strong>选型建议</strong>：</p>
-<p>1）如果有至少半个前端开发人员+后台开发人员；<br>2）如果需要用户体验较好的数据资产管理平台；<br>3）如果有需要扩展支持各种平台、系统的元数据。请把Datahub列为最高选择。<br>尽管列举了一些不足，但是开源产品中Datahub目前是相对最好的选择。笔者也在生产中使用，有问题的可以随时沟通交流。</p>
-<p><strong>商用版本</strong>: Metaphor（<a target="_blank" rel="noopener" href="https://metaphor.io/%EF%BC%89%E6%98%AFDatahub%E7%9A%84SaaS%E7%89%88%E6%9C%AC%E3%80%82">https://metaphor.io/）是Datahub的SaaS版本。</a></p>
-<h3 id="部署及安装"><a href="#部署及安装" class="headerlink" title="部署及安装"></a>部署及安装</h3><ol>
-<li>执行命令</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install --upgrade pip wheel setuptools</span><br><span class="line">python3 -m pip install --upgrade acryl-datahub</span><br><span class="line">datahub version</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>⚠️注: 在我们执行安装前，可以创建python虚拟环境</p>
-</blockquote>
-<ol start="2">
-<li>从docker上拉取镜像部署，datahub提供了自动拉取镜像、自动部署节点的脚本，让部署一键操作</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">datahub docker quickstart</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>⚠️注: 如果你的网络不佳，或者是国内网络，过程会特别的漫长，我就是等了一天才好</p>
-</blockquote>
-<p>成功后terminal中展示：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174029522.png" alt="image-20231108174029522"></p>
-<p>下面我们登陆:</p>
-<p><a target="_blank" rel="noopener" href="http://localhost:9002/login?redirect_uri=/">http://localhost:9002/login?redirect_uri=%2F</a></p>
-<p>user/pass: datahub/datahub</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174130857.png" alt="image-20231108174130857"></p>
-<p>部署细节不懂的，可以参考: <a target="_blank" rel="noopener" href="https://datahubproject.io/docs/quickstart">https://datahubproject.io/docs/quickstart</a></p>
-<p>下一章我们结合Datahub API + 血缘解析工具，简单说一下怎么构建企业知识图谱</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1994,7 +1951,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
