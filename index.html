@@ -303,6 +303,301 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240515150036-22a18a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240515150036-22a18a.html" itemprop="url">Doris关联Hive表</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-05-15T15:00:36+08:00">
+                2024-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Doris关联Hive外部数据源"><a href="#Doris关联Hive外部数据源" class="headerlink" title="Doris关联Hive外部数据源"></a><strong>Doris关联Hive外部数据源</strong></h1><p>元数据创建</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> CATALOG test_hive PROPERTIES (</span><br><span class="line">    <span class="string">&#x27;type&#x27;</span><span class="operator">=</span><span class="string">&#x27;hms&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;hive.metastore.uris&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;thrift://172.22.17.20:9083,thrift://172.22.17.21:9083,thrift://172.22.17.22:9083&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;hadoop.username&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;hive&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.nameservices&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;Tdsop&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.ha.namenodes.Tdsop&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;nn1,nn2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.namenode.rpc-address.Tdsop.nn1&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;172.22.17.20:8022&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.namenode.rpc-address.Tdsop.nn2&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;172.22.17.21:8022&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.client.failover.proxy.provider.Tdsop&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider&#x27;</span></span><br><span class="line">);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>常用命令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> catalogs;</span><br><span class="line"><span class="keyword">SHOW</span> CATALOG test_hive;</span><br><span class="line"><span class="keyword">SHOW</span> DATABASES <span class="keyword">FROM</span> test_hive;</span><br><span class="line"><span class="keyword">SHOW</span> TABLES <span class="keyword">FROM</span> test_hive.ods;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> test_hive.ods.ce_flight;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240515105100-f4a4afc9.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240515105100-f4a4afc9.html" itemprop="url">HSD梳理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-05-15T10:51:00+08:00">
+                2024-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="HSD名称及英文简称映射"><a href="#HSD名称及英文简称映射" class="headerlink" title="HSD名称及英文简称映射"></a>HSD名称及英文简称映射</h3><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>英文简称</th>
+<th>参考黑屏指令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>航班计划数据</td>
+<td>iSCH</td>
+<td>ST</td>
+</tr>
+<tr>
+<td>库存数据</td>
+<td>iINV</td>
+<td>RO</td>
+</tr>
+<tr>
+<td>客票数据</td>
+<td>iETS</td>
+<td>DETR</td>
+</tr>
+<tr>
+<td>EMD票数据</td>
+<td>iEMD</td>
+<td>DEMD</td>
+</tr>
+<tr>
+<td>订座PNR数据</td>
+<td>iPNR</td>
+<td>RT</td>
+</tr>
+<tr>
+<td>订座PNR数据(历史)</td>
+<td>iPNRH</td>
+<td>RTC</td>
+</tr>
+<tr>
+<td>离港旅客数据</td>
+<td>iCKI</td>
+<td>PR</td>
+</tr>
+<tr>
+<td>离港航班数据</td>
+<td>iFLT</td>
+<td>SY</td>
+</tr>
+</tbody></table>
+<h3 id="中转航班的逻辑"><a href="#中转航班的逻辑" class="headerlink" title="中转航班的逻辑"></a>中转航班的逻辑</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 按 照票号+出票日期 取最新的数据</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets <span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    <span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">(</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.stamp,</span><br><span class="line">    a.dttm,</span><br><span class="line">    a.ticketidentification_tktissuedate,</span><br><span class="line">    a.ticketimage_ticketnumber,</span><br><span class="line">    a.itinerary_ticketcoupon,</span><br><span class="line">    <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> a.ticketidentification_tktissuedate, a.ticketimage_ticketnumber <span class="keyword">order</span> <span class="keyword">by</span> a.dttm <span class="keyword">desc</span>) r</span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">    ods.cst_hsd_iets a</span><br><span class="line">) t  </span><br><span class="line"><span class="keyword">where</span>  r<span class="operator">=</span><span class="number">1</span> </span><br><span class="line">;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment">-- 拆分json</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_01;    </span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_01 <span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.stamp,</span><br><span class="line">    a.dttm,</span><br><span class="line">    a.ticketidentification_tktissuedate issuedate, <span class="comment">-- 出票日期</span></span><br><span class="line">    substr(a.ticketimage_ticketnumber,<span class="number">1</span>,<span class="number">13</span>) ticketnumber, <span class="comment">--票号</span></span><br><span class="line">    get_json_object(itinerary, <span class="string">&#x27;$.CouponNumber&#x27;</span>) couponNumber,</span><br><span class="line">    get_json_object(itinerary, <span class="string">&#x27;$.CouponStatus&#x27;</span>) couponStatus, <span class="comment">-- 客票状态</span></span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Carrier&#x27;</span>), <span class="string">&#x27;$.AirlineCode&#x27;</span>) carrier_airlinecode, </span><br><span class="line">    get_json_object(get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Carrier&#x27;</span>), <span class="string">&#x27;$.FlightNumber&#x27;</span>), <span class="string">&#x27;$.Value&#x27;</span>) carrier_flightnumber,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Carrier&#x27;</span>), <span class="string">&#x27;$.FlightNumber&#x27;</span>), <span class="string">&#x27;$.Suffix&#x27;</span>) carrier_flightnumber_suffix,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.OperatingCarrier&#x27;</span>), <span class="string">&#x27;$.AirlineCode&#x27;</span>) operating_airlinecode, <span class="comment">-- 承运航司</span></span><br><span class="line">    get_json_object(get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.OperatingCarrier&#x27;</span>), <span class="string">&#x27;$.FlightNumber&#x27;</span>), <span class="string">&#x27;$.Value&#x27;</span>) operating_flightnumber, <span class="comment">-- 承运航班号</span></span><br><span class="line">    get_json_object(get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.OperatingCarrier&#x27;</span>), <span class="string">&#x27;$.FlightNumber&#x27;</span>), <span class="string">&#x27;$.Suffix&#x27;</span>) operating_flightnumber_suffix, <span class="comment">-- 承运航班号后缀</span></span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Departure&#x27;</span>), <span class="string">&#x27;$.Date&#x27;</span>) departure_date,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Departure&#x27;</span>), <span class="string">&#x27;$.AirportCode&#x27;</span>) departure_airportcode,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Arrival&#x27;</span>), <span class="string">&#x27;$.AirportCode&#x27;</span>) arrival_airportcode,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Open&#x27;</span>), <span class="string">&#x27;$.OpenDeparture&#x27;</span>), <span class="string">&#x27;$.AirportCode&#x27;</span>) open_departure_airportcode,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Open&#x27;</span>), <span class="string">&#x27;$.OpenArrival&#x27;</span>), <span class="string">&#x27;$.AirportCode&#x27;</span>) open_arrival_airportcode,</span><br><span class="line">    get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Open&#x27;</span>), <span class="string">&#x27;$.OperatingCarrier&#x27;</span>) open_operatingcarrier</span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">    test.djj_temp_hsd_iets a</span><br><span class="line">    <span class="keyword">LATERAL</span> <span class="keyword">VIEW</span> explode(split(</span><br><span class="line">     regexp_replace(</span><br><span class="line">         regexp_replace(</span><br><span class="line">            itinerary_ticketcoupon, </span><br><span class="line">            <span class="string">&#x27;\\[|\\]&#x27;</span> , <span class="string">&#x27;&#x27;</span>),<span class="comment">-- 将json数组两边的中括号去掉</span></span><br><span class="line">            </span><br><span class="line">              <span class="string">&#x27;\\&#125;\\,\\&#123;&#x27;</span> , <span class="string">&#x27;\\&#125;\\;\\&#123;&#x27;</span>),<span class="comment">-- 将json数组元素之间的逗号换成分号</span></span><br><span class="line">                </span><br><span class="line">                 <span class="string">&#x27;\\;&#x27;</span>)<span class="comment">-- 以分号作为分隔符(split函数以分号作为分隔)</span></span><br><span class="line">          )  a <span class="keyword">as</span> itinerary</span><br><span class="line">    ;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 合并出发到达</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_02;    </span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_02 <span class="keyword">as</span>    </span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.issuedate,</span><br><span class="line">    a.ticketnumber,</span><br><span class="line">    a.couponnumber,</span><br><span class="line">    a.couponstatus,</span><br><span class="line">    <span class="built_in">coalesce</span>(a.departure_airportcode, a.open_departure_airportcode) departure_airportcode,</span><br><span class="line">    <span class="built_in">coalesce</span>(a.arrival_airportcode, a.open_arrival_airportcode) arrival_airportcode</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">    test.djj_temp_hsd_iets_01 a</span><br><span class="line">    ;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 匹配出发到达城市    </span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_03;    </span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_03 <span class="keyword">as</span>     </span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.issuedate,</span><br><span class="line">    a.ticketnumber,</span><br><span class="line">    a.couponnumber,</span><br><span class="line">    a.couponstatus,</span><br><span class="line">    a.departure_airportcode,</span><br><span class="line">    a.arrival_airportcode,</span><br><span class="line">    b.city_code departure_citycode,</span><br><span class="line">    c.city_code arrival_citycode,</span><br><span class="line">    <span class="built_in">coalesce</span>(b.city_code, a.departure_airportcode) departure, <span class="comment">-- 以防有的机场匹配不到城市</span></span><br><span class="line">    <span class="built_in">coalesce</span>(c.city_code, a.arrival_airportcode) arrival <span class="comment">-- 以防有的机场匹配不到城市</span></span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">    test.djj_temp_hsd_iets_02  a </span><br><span class="line"><span class="keyword">left</span> <span class="keyword">join</span> </span><br><span class="line">    ods.t_airport_info_zp b <span class="keyword">on</span> a.departure_airportcode<span class="operator">=</span>b.airport_code <span class="keyword">and</span> b.dp<span class="operator">=</span><span class="string">&#x27;ACTIVE&#x27;</span></span><br><span class="line"><span class="keyword">left</span> <span class="keyword">join</span> </span><br><span class="line">    ods.t_airport_info_zp c <span class="keyword">on</span> a.arrival_airportcode<span class="operator">=</span>c.airport_code <span class="keyword">and</span> c.dp<span class="operator">=</span><span class="string">&#x27;ACTIVE&#x27;</span></span><br><span class="line"><span class="keyword">where</span> </span><br><span class="line">    a.couponstatus<span class="operator">&lt;&gt;</span><span class="string">&#x27;V&#x27;</span>  <span class="comment">-- 排除废票</span></span><br><span class="line">    ;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 匹配出发到达城市    </span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_04;    </span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_04 <span class="keyword">as</span>      </span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    t.issuedate,</span><br><span class="line">    t.ticketnumber,</span><br><span class="line">    t.seg_num,</span><br><span class="line">    substr(origin,<span class="number">1</span>,<span class="number">3</span>) origin,</span><br><span class="line">    substr(destination,<span class="number">-3</span>,<span class="number">3</span>) destination</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">(</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.issuedate,</span><br><span class="line">    a.ticketnumber,</span><br><span class="line">    <span class="built_in">sum</span>(<span class="number">1</span>) <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span>  a.issuedate, a.ticketnumber) seg_num, <span class="comment">-- 总航段数</span></span><br><span class="line">    concat_ws(<span class="string">&#x27;,&#x27;</span>, collect_list(departure) <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> a.issuedate, a.ticketnumber <span class="keyword">order</span> <span class="keyword">by</span> a.couponnumber)) <span class="keyword">as</span> origin,</span><br><span class="line">    concat_ws(<span class="string">&#x27;,&#x27;</span>, collect_list(arrival) <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> a.issuedate, a.ticketnumber <span class="keyword">order</span> <span class="keyword">by</span> a.couponnumber)) <span class="keyword">as</span> destination,</span><br><span class="line">    <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> a.issuedate, a.ticketnumber <span class="keyword">order</span> <span class="keyword">by</span> a.couponnumber <span class="keyword">desc</span>) <span class="keyword">as</span> r</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">    test.djj_temp_hsd_iets_03 a</span><br><span class="line">) t </span><br><span class="line"><span class="keyword">where</span> </span><br><span class="line">    r<span class="operator">=</span><span class="number">1</span></span><br><span class="line">    <span class="keyword">and</span> substr(origin,<span class="number">1</span>,<span class="number">3</span>)<span class="operator">&lt;&gt;</span>substr(destination,<span class="number">-3</span>,<span class="number">3</span>) <span class="comment">-- 排除往返票</span></span><br><span class="line">    <span class="keyword">and</span> seg_num<span class="operator">&gt;</span><span class="number">1</span> <span class="comment">-- 筛选多段的</span></span><br><span class="line">    ;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    issuedate,</span><br><span class="line">    ticketnumber,</span><br><span class="line">    seg_num,</span><br><span class="line">    origin,</span><br><span class="line">    destination</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">    test.djj_temp_hsd_iets_04 a</span><br><span class="line">    ;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240507163022-23cfc27.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1584,334 +1879,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240304135357-cde09bdf.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20240304135357-cde09bdf.html" itemprop="url">网店搭建</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-04T13:53:57+08:00">
-                2024-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本次网店搭建的项目使用的是<a target="_blank" rel="noopener" href="https://github.com/stilleshan/dockerfiles/tree/main/dujiaoka">dujiaoka</a></p>
-<p>下面逐步描述一下使用docker-compose安装过程</p>
-<ol>
-<li>进入到github中找到docker-compose.yml和env.conf下载到本地</li>
-</ol>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304135642159.png" alt="image-20240304135642159"></p>
-<ol start="2">
-<li><p>创建目录如下目录结构</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dujiaoka</span><br><span class="line">├── dujiaoka/docker-compose.yml</span><br><span class="line">├── dujiaoka/env.conf</span><br><span class="line">├── dujiaoka/mysql</span><br><span class="line">├── dujiaoka/redis</span><br><span class="line">├── dujiaoka/storage</span><br><span class="line">└── dujiaoka/upload</span><br></pre></td></tr></table></figure></li>
-<li><p>修改docker-compose.yml</p>
-</li>
-</ol>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">stilleshan/dujiaoka</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">dujiaoka</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">        <span class="comment"># - INSTALL=false</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">INSTALL=true</span></span><br><span class="line">        <span class="comment"># - MODIFY=true</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./env.conf:/dujiaoka/.env</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./uploads:/dujiaoka/public/uploads</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./storage:/dujiaoka/storage</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">56789</span><span class="string">:80</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mariadb:focal</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">dujiaoka_db</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_ROOT_PASSWORD=YOUR_PASSWORD</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_DATABASE=dujiaoka</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_USER=dujiaoka</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_PASSWORD=dujiaoka</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./mysql:/var/lib/mysql</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:alpine</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">dujiaoka_redis</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./redis:/data</span></span><br></pre></td></tr></table></figure>
-
-<p>添加container_name</p>
-<p>修改 - MYSQL_PASSWORD</p>
-<ol start="4">
-<li>修改env.conf</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">APP_NAME=hoey-shop</span><br><span class="line">APP_ENV=local</span><br><span class="line">APP_KEY=base64:LvuN6MoP5gRmoz+MvyLJKuT89547FyC8SBRsWqGcSLM=</span><br><span class="line">APP_DEBUG=TRUE</span><br><span class="line">APP_URL=http://shop.***.tk</span><br><span class="line"></span><br><span class="line">LOG_CHANNEL=stack</span><br><span class="line"></span><br><span class="line"># 数据库配置</span><br><span class="line">DB_CONNECTION=mysql</span><br><span class="line">DB_HOST=db</span><br><span class="line">DB_PORT=3306</span><br><span class="line">DB_DATABASE=dujiaoka</span><br><span class="line">DB_USERNAME=dujiaoka</span><br><span class="line">DB_PASSWORD=dujiaoka</span><br><span class="line"></span><br><span class="line"># redis配置</span><br><span class="line">REDIS_HOST=redis</span><br><span class="line">REDIS_PASSWORD=</span><br><span class="line">REDIS_PORT=6379</span><br><span class="line"></span><br><span class="line">BROADCAST_DRIVER=log</span><br><span class="line">SESSION_DRIVER=file</span><br><span class="line">SESSION_LIFETIME=120</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 缓存配置</span><br><span class="line"># file为磁盘文件  redis为内存级别</span><br><span class="line"># redis为内存需要安装好redis服务端并配置</span><br><span class="line">CACHE_DRIVER=redis</span><br><span class="line"></span><br><span class="line"># 异步消息队列</span><br><span class="line"># sync为同步  redis为异步</span><br><span class="line"># 使用redis异步需要安装好redis服务端并配置</span><br><span class="line">QUEUE_CONNECTION=redis</span><br><span class="line"></span><br><span class="line"># 后台语言</span><br><span class="line">## zh_CN 简体中文</span><br><span class="line">## zh_TW 繁体中文</span><br><span class="line">## en    英文</span><br><span class="line">DUJIAO_ADMIN_LANGUAGE=zh_CN</span><br><span class="line"></span><br><span class="line"># 后台登录地址</span><br><span class="line">ADMIN_ROUTE_PREFIX=/admin</span><br><span class="line"></span><br><span class="line"># 是否开启https (前端开启了后端也必须为true)</span><br><span class="line"># 后台登录出现0err或者其他登录异常问题，大概率是开启了https而后台没有开启，把下面的false改为true即可</span><br><span class="line">ADMIN_HTTPS=false</span><br></pre></td></tr></table></figure>
-
-<p>其中的APP_UTL自己用自己的域名</p>
-<p>修改DB_PASSWORD</p>
-<ol start="5">
-<li>执行docker-compose</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
-
-
-
-<ol start="6">
-<li>访问ip:56789/install进行安装</li>
-</ol>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304140315291.png" alt="image-20240304140315291"></p>
-<p>MySQL 数据库地址: db</p>
-<p>MySQL端口: 3306</p>
-<p>MySQL数据库名：dujiaoka</p>
-<p>MySQL用户名: dujiaoka </p>
-<p>MySQL密码: dujiaoka</p>
-<p>Redis链接地址: redis</p>
-<p>Redis密码: 默认不填写</p>
-<p>Redis端口: 6379</p>
-<p>网站名称: 自行填写</p>
-<p>网站url: 自行填写， 建议买好域名，如果没有填写<a href="http://ip:port可以试一下">http://ip:port可以试一下</a></p>
-<p>后台登录路径: /admin</p>
-<p>点击安装，并成功安装。</p>
-<ol start="7">
-<li>停止容器</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose down</span><br></pre></td></tr></table></figure>
-
-<p>将docker-compose.yml中的<strong>INSTALL</strong>改为<strong>false</strong></p>
-<p>将env.conf中的<strong>APP_DEBUG</strong>改为<strong>false</strong></p>
-<ol start="8">
-<li>重新启动容器</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
-
-<p>后端</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304141006194.png" alt="image-20240304141006194"></p>
-<p>前端</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304141046406.png" alt="image-20240304141046406"></p>
-<ol start="9">
-<li>集成机器人</li>
-</ol>
-<p>到chatwoot.com注册一个账号</p>
-<p>配置机器人</p>
-<p>a. 在收件箱中添加 New inbox -&gt; Website -&gt; 创建收件箱</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304152836228.png" alt="image-20240304152836228"></p>
-<p>b. 开启自定义问候语</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304152909383.png" alt="image-20240304152909383"></p>
-<p>c. 禁用自带的邮箱收集功能</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304153019845.png" alt="image-20240304153019845"></p>
-<p>d. 使用头像</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304153034687.png" alt="image-20240304153034687"></p>
-<p>e. 找到下面的js</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304153128000.png" alt="image-20240304153128000"></p>
-<p>f. 将js粘贴在dujiaoka的配置页面</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304153215531.png" alt="image-20240304153215531"></p>
-<p>还有一些其他好玩的配置自行探索即可</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240206101518-30c459fa.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20240206101518-30c459fa.html" itemprop="url">doris 分区使用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-02-06T10:15:18+08:00">
-                2024-02-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>下面是一个简单的小例子</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.t1;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.t1(</span><br><span class="line">    dt <span class="type">DATE</span>,</span><br><span class="line">    name <span class="type">varchar</span>(<span class="number">32</span>)</span><br><span class="line">) ENGINE<span class="operator">=</span>OLAP</span><br><span class="line">DUPLICATE KEY(dt)</span><br><span class="line"><span class="keyword">PARTITION</span> <span class="keyword">BY</span> <span class="keyword">RANGE</span>(dt)()</span><br><span class="line">DISTRIBUTED <span class="keyword">BY</span> HASH(dt) BUCKETS auto</span><br><span class="line">PROPERTIES (</span><br><span class="line">&quot;replication_allocation&quot; <span class="operator">=</span> &quot;tag.location.default: 3&quot;,</span><br><span class="line">&quot;dynamic_partition.enable&quot; <span class="operator">=</span> &quot;true&quot;,</span><br><span class="line">&quot;dynamic_partition.time_unit&quot; <span class="operator">=</span> &quot;DAY&quot;,</span><br><span class="line">&quot;dynamic_partition.time_zone&quot; <span class="operator">=</span> &quot;Asia/Shanghai&quot;,</span><br><span class="line">&quot;dynamic_partition.prefix&quot; <span class="operator">=</span> &quot;p&quot;,</span><br><span class="line">&quot;dynamic_partition.start&quot; <span class="operator">=</span> &quot;-30&quot;,</span><br><span class="line">&quot;dynamic_partition.end&quot; <span class="operator">=</span> &quot;3&quot;,</span><br><span class="line">&quot;is_being_synced&quot; <span class="operator">=</span> &quot;false&quot;,</span><br><span class="line">&quot;storage_format&quot; <span class="operator">=</span> &quot;V2&quot;,</span><br><span class="line">&quot;light_schema_change&quot; <span class="operator">=</span> &quot;true&quot;,</span><br><span class="line">&quot;disable_auto_compaction&quot; <span class="operator">=</span> &quot;false&quot;,</span><br><span class="line">&quot;enable_single_replica_compaction&quot; <span class="operator">=</span> &quot;false&quot;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test.t1</span><br><span class="line"><span class="keyword">select</span> <span class="type">date</span> <span class="string">&#x27;2024-02-07&#x27;</span> <span class="keyword">as</span> dt, <span class="string">&#x27;zs&#x27;</span> <span class="keyword">as</span> name ;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- alter table test.t1 add partition if not exists p20240131 values[(&#x27;2024-01-31&#x27;),(&#x27;2024-02-01&#x27;));</span></span><br><span class="line"><span class="comment">-- TRUNCATE TABLE test.t1  PARTITION(p20240207);</span></span><br><span class="line"><span class="comment">-- show partitions FROM test.t1;</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test.t1 <span class="keyword">where</span> dt <span class="operator">=</span> <span class="string">&#x27;2024-02-06&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">&gt;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">&gt;</a>
   </nav>
 
 
@@ -1957,7 +1929,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

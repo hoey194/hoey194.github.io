@@ -303,6 +303,329 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240304135357-cde09bdf.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240304135357-cde09bdf.html" itemprop="url">网店搭建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-04T13:53:57+08:00">
+                2024-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本次网店搭建的项目使用的是<a target="_blank" rel="noopener" href="https://github.com/stilleshan/dockerfiles/tree/main/dujiaoka">dujiaoka</a></p>
+<p>下面逐步描述一下使用docker-compose安装过程</p>
+<ol>
+<li>进入到github中找到docker-compose.yml和env.conf下载到本地</li>
+</ol>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304135642159.png" alt="image-20240304135642159"></p>
+<ol start="2">
+<li><p>创建目录如下目录结构</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dujiaoka</span><br><span class="line">├── dujiaoka/docker-compose.yml</span><br><span class="line">├── dujiaoka/env.conf</span><br><span class="line">├── dujiaoka/mysql</span><br><span class="line">├── dujiaoka/redis</span><br><span class="line">├── dujiaoka/storage</span><br><span class="line">└── dujiaoka/upload</span><br></pre></td></tr></table></figure></li>
+<li><p>修改docker-compose.yml</p>
+</li>
+</ol>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">stilleshan/dujiaoka</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">dujiaoka</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">        <span class="comment"># - INSTALL=false</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">INSTALL=true</span></span><br><span class="line">        <span class="comment"># - MODIFY=true</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./env.conf:/dujiaoka/.env</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./uploads:/dujiaoka/public/uploads</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./storage:/dujiaoka/storage</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">56789</span><span class="string">:80</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mariadb:focal</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">dujiaoka_db</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_ROOT_PASSWORD=YOUR_PASSWORD</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_DATABASE=dujiaoka</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_USER=dujiaoka</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">MYSQL_PASSWORD=dujiaoka</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./mysql:/var/lib/mysql</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:alpine</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">dujiaoka_redis</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./redis:/data</span></span><br></pre></td></tr></table></figure>
+
+<p>添加container_name</p>
+<p>修改 - MYSQL_PASSWORD</p>
+<ol start="4">
+<li>修改env.conf</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">APP_NAME=hoey-shop</span><br><span class="line">APP_ENV=local</span><br><span class="line">APP_KEY=base64:LvuN6MoP5gRmoz+MvyLJKuT89547FyC8SBRsWqGcSLM=</span><br><span class="line">APP_DEBUG=TRUE</span><br><span class="line">APP_URL=http://shop.***.tk</span><br><span class="line"></span><br><span class="line">LOG_CHANNEL=stack</span><br><span class="line"></span><br><span class="line"># 数据库配置</span><br><span class="line">DB_CONNECTION=mysql</span><br><span class="line">DB_HOST=db</span><br><span class="line">DB_PORT=3306</span><br><span class="line">DB_DATABASE=dujiaoka</span><br><span class="line">DB_USERNAME=dujiaoka</span><br><span class="line">DB_PASSWORD=dujiaoka</span><br><span class="line"></span><br><span class="line"># redis配置</span><br><span class="line">REDIS_HOST=redis</span><br><span class="line">REDIS_PASSWORD=</span><br><span class="line">REDIS_PORT=6379</span><br><span class="line"></span><br><span class="line">BROADCAST_DRIVER=log</span><br><span class="line">SESSION_DRIVER=file</span><br><span class="line">SESSION_LIFETIME=120</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 缓存配置</span><br><span class="line"># file为磁盘文件  redis为内存级别</span><br><span class="line"># redis为内存需要安装好redis服务端并配置</span><br><span class="line">CACHE_DRIVER=redis</span><br><span class="line"></span><br><span class="line"># 异步消息队列</span><br><span class="line"># sync为同步  redis为异步</span><br><span class="line"># 使用redis异步需要安装好redis服务端并配置</span><br><span class="line">QUEUE_CONNECTION=redis</span><br><span class="line"></span><br><span class="line"># 后台语言</span><br><span class="line">## zh_CN 简体中文</span><br><span class="line">## zh_TW 繁体中文</span><br><span class="line">## en    英文</span><br><span class="line">DUJIAO_ADMIN_LANGUAGE=zh_CN</span><br><span class="line"></span><br><span class="line"># 后台登录地址</span><br><span class="line">ADMIN_ROUTE_PREFIX=/admin</span><br><span class="line"></span><br><span class="line"># 是否开启https (前端开启了后端也必须为true)</span><br><span class="line"># 后台登录出现0err或者其他登录异常问题，大概率是开启了https而后台没有开启，把下面的false改为true即可</span><br><span class="line">ADMIN_HTTPS=false</span><br></pre></td></tr></table></figure>
+
+<p>其中的APP_UTL自己用自己的域名</p>
+<p>修改DB_PASSWORD</p>
+<ol start="5">
+<li>执行docker-compose</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="6">
+<li>访问ip:56789/install进行安装</li>
+</ol>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304140315291.png" alt="image-20240304140315291"></p>
+<p>MySQL 数据库地址: db</p>
+<p>MySQL端口: 3306</p>
+<p>MySQL数据库名：dujiaoka</p>
+<p>MySQL用户名: dujiaoka </p>
+<p>MySQL密码: dujiaoka</p>
+<p>Redis链接地址: redis</p>
+<p>Redis密码: 默认不填写</p>
+<p>Redis端口: 6379</p>
+<p>网站名称: 自行填写</p>
+<p>网站url: 自行填写， 建议买好域名，如果没有填写<a href="http://ip:port可以试一下">http://ip:port可以试一下</a></p>
+<p>后台登录路径: /admin</p>
+<p>点击安装，并成功安装。</p>
+<ol start="7">
+<li>停止容器</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose down</span><br></pre></td></tr></table></figure>
+
+<p>将docker-compose.yml中的<strong>INSTALL</strong>改为<strong>false</strong></p>
+<p>将env.conf中的<strong>APP_DEBUG</strong>改为<strong>false</strong></p>
+<ol start="8">
+<li>重新启动容器</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>后端</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304141006194.png" alt="image-20240304141006194"></p>
+<p>前端</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304141046406.png" alt="image-20240304141046406"></p>
+<ol start="9">
+<li>集成机器人</li>
+</ol>
+<p>到chatwoot.com注册一个账号</p>
+<p>配置机器人</p>
+<p>a. 在收件箱中添加 New inbox -&gt; Website -&gt; 创建收件箱</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304152836228.png" alt="image-20240304152836228"></p>
+<p>b. 开启自定义问候语</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304152909383.png" alt="image-20240304152909383"></p>
+<p>c. 禁用自带的邮箱收集功能</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304153019845.png" alt="image-20240304153019845"></p>
+<p>d. 使用头像</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304153034687.png" alt="image-20240304153034687"></p>
+<p>e. 找到下面的js</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304153128000.png" alt="image-20240304153128000"></p>
+<p>f. 将js粘贴在dujiaoka的配置页面</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240304153215531.png" alt="image-20240304153215531"></p>
+<p>还有一些其他好玩的配置自行探索即可</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240206101518-30c459fa.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240206101518-30c459fa.html" itemprop="url">doris 分区使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-02-06T10:15:18+08:00">
+                2024-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>下面是一个简单的小例子</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.t1;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.t1(</span><br><span class="line">    dt <span class="type">DATE</span>,</span><br><span class="line">    name <span class="type">varchar</span>(<span class="number">32</span>)</span><br><span class="line">) ENGINE<span class="operator">=</span>OLAP</span><br><span class="line">DUPLICATE KEY(dt)</span><br><span class="line"><span class="keyword">PARTITION</span> <span class="keyword">BY</span> <span class="keyword">RANGE</span>(dt)()</span><br><span class="line">DISTRIBUTED <span class="keyword">BY</span> HASH(dt) BUCKETS auto</span><br><span class="line">PROPERTIES (</span><br><span class="line">&quot;replication_allocation&quot; <span class="operator">=</span> &quot;tag.location.default: 3&quot;,</span><br><span class="line">&quot;dynamic_partition.enable&quot; <span class="operator">=</span> &quot;true&quot;,</span><br><span class="line">&quot;dynamic_partition.time_unit&quot; <span class="operator">=</span> &quot;DAY&quot;,</span><br><span class="line">&quot;dynamic_partition.time_zone&quot; <span class="operator">=</span> &quot;Asia/Shanghai&quot;,</span><br><span class="line">&quot;dynamic_partition.prefix&quot; <span class="operator">=</span> &quot;p&quot;,</span><br><span class="line">&quot;dynamic_partition.start&quot; <span class="operator">=</span> &quot;-30&quot;,</span><br><span class="line">&quot;dynamic_partition.end&quot; <span class="operator">=</span> &quot;3&quot;,</span><br><span class="line">&quot;is_being_synced&quot; <span class="operator">=</span> &quot;false&quot;,</span><br><span class="line">&quot;storage_format&quot; <span class="operator">=</span> &quot;V2&quot;,</span><br><span class="line">&quot;light_schema_change&quot; <span class="operator">=</span> &quot;true&quot;,</span><br><span class="line">&quot;disable_auto_compaction&quot; <span class="operator">=</span> &quot;false&quot;,</span><br><span class="line">&quot;enable_single_replica_compaction&quot; <span class="operator">=</span> &quot;false&quot;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test.t1</span><br><span class="line"><span class="keyword">select</span> <span class="type">date</span> <span class="string">&#x27;2024-02-07&#x27;</span> <span class="keyword">as</span> dt, <span class="string">&#x27;zs&#x27;</span> <span class="keyword">as</span> name ;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- alter table test.t1 add partition if not exists p20240131 values[(&#x27;2024-01-31&#x27;),(&#x27;2024-02-01&#x27;));</span></span><br><span class="line"><span class="comment">-- TRUNCATE TABLE test.t1  PARTITION(p20240207);</span></span><br><span class="line"><span class="comment">-- show partitions FROM test.t1;</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test.t1 <span class="keyword">where</span> dt <span class="operator">=</span> <span class="string">&#x27;2024-02-06&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20231109104344-b6e0f1c6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1456,7 +1779,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#x64;&#109;&#x69;&#x6e;&#64;&#101;&#x78;&#97;&#109;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;">&#97;&#x64;&#109;&#x69;&#x6e;&#64;&#101;&#x78;&#97;&#109;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#100;&#x6d;&#105;&#110;&#64;&#x65;&#120;&#x61;&#109;&#x70;&#x6c;&#101;&#46;&#99;&#x6f;&#x6d;">&#97;&#100;&#x6d;&#105;&#110;&#64;&#x65;&#120;&#x61;&#109;&#x70;&#x6c;&#101;&#46;&#99;&#x6f;&#x6d;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
@@ -1502,311 +1825,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230430133503-ff462b52.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20230430133503-ff462b52.html" itemprop="url">Jellyfin 添加字体库解决中文乱码</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-04-30T13:35:03+08:00">
-                2023-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近使用Jellyfin搭建家庭影音出现中文乱码问题，下面是我搜到的一些方案，我用的是扩展中文字体库</p>
-<ul>
-<li>使用nyanmisaka/jellyfin 套件</li>
-<li>使用actime转字幕</li>
-<li>扩展中文字体库</li>
-</ul>
-<p>下面是一些指令，针对小白用的，大佬无视</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">远程登录到NAS并切换最高权限</span></span><br><span class="line">ssh admin@192.168.30.5 -p 22</span><br><span class="line">sudo -i</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入到NAS自己创建的目录，这个目录自己改</span></span><br><span class="line">cd /volume1/media/fonts</span><br><span class="line">pwd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用docker命令查看jellyfin 的<span class="built_in">id</span></span></span><br><span class="line">docker ps</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入到容器内部查看目录文件结构1538f09eaa85要替换成自己的<span class="built_in">id</span></span></span><br><span class="line">docker exec -it 1538f09eaa85 /bin/bash</span><br><span class="line">cd /usr/share/fonts/</span><br><span class="line">exit</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制宿主机的文件到容器内</span></span><br><span class="line">docker cp fz.tar.gz 1538f09eaa85:/usr/share/fonts/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">到容器目录中解压</span></span><br><span class="line">docker exec -it 1538f09eaa85 /bin/bash</span><br><span class="line">cd /usr/share/fonts/</span><br><span class="line">tar -zxvf fz.tar.gz</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>链接：<a target="_blank" rel="noopener" href="https://share.weiyun.com/5Wg55FF5">https://share.weiyun.com/5Wg55FF5</a> 密码：nhqe76</p>
-<p>视频已经传到B站，欢迎观看<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jg4y1L7sR/?vd_source=8054953f896f7243d95be264ebdece29">Jellyfin中文字幕乱码解决_哔哩哔哩_bilibili</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230328125112-f144fb4b.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20230328125112-f144fb4b.html" itemprop="url">Doris使用踩坑总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-03-28T12:51:12+08:00">
-                2023-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>环境</p>
-<ul>
-<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
-<li>[Doris](<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">部署 Docker 集群 - Apache Doris</a>):v1.12.1</li>
-<li><a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>: v1.8.x</li>
-<li>IDEA开发环境</li>
-</ul>
-<h3 id="一、-Docker部署"><a href="#一、-Docker部署" class="headerlink" title="一、 Docker部署"></a>一、 Docker部署</h3><p>官方提供文档<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">Deploy Docker cluster</a></p>
-<p><font color="red">但部署完以后发现集群无法识别BE节点，查看日志发现是因为没有设置<code>vm.max_map_count</code>参数</font></p>
-<blockquote>
-<p>避坑1: 需要设置sysctl -w vm.max_map_count=2000000</p>
-<p>避坑2: 在启动容器时需要添加privileged: true</p>
-</blockquote>
-<h3 id="二、Flink-写入Doris"><a href="#二、Flink-写入Doris" class="headerlink" title="二、Flink 写入Doris"></a>二、Flink 写入Doris</h3><p>官方提供了文档<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/ecosystem/flink-doris-connector?_highlight=flink">Flink Doris Connector</a></p>
-<p>这里选用的是RowData的方式写入到Doris，提前到Doris中创建表代码如下:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE dwd;</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> dwd.TICKET;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> dwd.TICKET (</span><br><span class="line">        event <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        newval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        oldval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        stamp <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        subevent <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptm <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptmms <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        ver <span class="type">VARCHAR</span>(<span class="number">256</span>)</span><br><span class="line">)DISTRIBUTED <span class="keyword">BY</span> HASH(stamp) BUCKETS <span class="number">1</span></span><br><span class="line">PROPERTIES (</span><br><span class="line">&quot;replication_allocation&quot; <span class="operator">=</span> &quot;tag.location.default: 1&quot;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>然后是使用Java代码:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">StreamExecutionEnvironment</span> <span class="variable">env</span> <span class="operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(<span class="number">1</span>);</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">prop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        prop.setProperty(<span class="string">&quot;format&quot;</span>, <span class="string">&quot;json&quot;</span>);</span><br><span class="line">        prop.setProperty(<span class="string">&quot;strip_outer_array&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">        env.fromElements(<span class="string">&quot;&#123;\&quot;event\&quot;:\&quot;CheckIn\&quot;,\&quot;newval\&quot;:\&quot;90\&quot;,\&quot;oldval\&quot;:\&quot;0\&quot;,\&quot;stamp\&quot;:\&quot;67100c4f-0355-4dba-8a76-2a94202132d1\&quot;,\&quot;subevent\&quot;:\&quot;\&quot;,\&quot;uptm\&quot;:\&quot;20230319094822\&quot;,\&quot;uptmms\&quot;:\&quot;20230319094822031\&quot;,\&quot;ver\&quot;:\&quot;v1.0\&quot;&#125;&quot;</span>)</span><br><span class="line">                .addSink(DorisSink.sink(</span><br><span class="line">                        DorisReadOptions.builder().build(),</span><br><span class="line">                        DorisExecutionOptions.builder().setBatchSize(<span class="number">3</span>)</span><br><span class="line">                                .setBatchIntervalMs(<span class="number">0L</span>)</span><br><span class="line">                                .setMaxRetries(<span class="number">3</span>)</span><br><span class="line">                                .setStreamLoadProp(prop)</span><br><span class="line">                                .build(),</span><br><span class="line">                        DorisOptions.builder().setFenodes(<span class="string">&quot;localhost:8030&quot;</span>)</span><br><span class="line">                                .setTableIdentifier(<span class="string">&quot;dwd.TICKET&quot;</span>)</span><br><span class="line">                                .setUsername(<span class="string">&quot;admin&quot;</span>)</span><br><span class="line">                                .setPassword(<span class="string">&quot;&quot;</span>).build())</span><br><span class="line">                );</span><br><span class="line">        env.execute(<span class="string">&quot;pss-format-job&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><font color="red">运行时发现网络不通问题，无法成功写入Dois</font>，具体错误如图下图所示：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131103501.png" alt="image-20230328131103501"></p>
-<p>分析宿主节点和docker集群的关系</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131607049.png" alt="image-20230328131607049"></p>
-<p>由架构图得知，是因为sink写入的时候通过外网地址的fe取到be地址是内网地址。</p>
-<p>解决思路：</p>
-<ol>
-<li><p>程序上传到FE运行，但是我属于本地开发环境，这种方式不适合</p>
-</li>
-<li><p>配置Docker network，使得在宿主节点能够访问容器 BE的IP。这块我也尝试搜索了很多资料，最终以失败告终。</p>
-<ul>
-<li>尝试一： 在宿主节点修改路由表 sudo route add -net 172.20.80.0/24 172.20.80.1</li>
-<li>尝试二： 以Host方式运行FE和BE</li>
-</ul>
-</li>
-<li><p>修改源代码： 找到涉及到“第二步：将BE内网IP返回给主程序”代码，并修改</p>
-</li>
-</ol>
-<p>其中我是用第三种方法，成功在本地开发环境摄入数据到Doris，在这里简单介绍一下快速修改源码的方法。</p>
-<p>第一步： 先找到涉及到代码的相关方法，在该场景中对应的是<code>org.apache.doris.flink.rest.RestService</code>类的<code>randomBackend()</code>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@VisibleForTesting</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">randomBackend</span><span class="params">(DorisOptions options, DorisReadOptions readOptions, Logger logger)</span> <span class="keyword">throws</span> DorisException, IOException &#123;</span><br><span class="line">        List&lt;BackendRowV2&gt; backends = getBackendsV2(options, readOptions, logger);</span><br><span class="line">        logger.trace(<span class="string">&quot;Parse beNodes &#x27;&#123;&#125;&#x27;.&quot;</span>, backends);</span><br><span class="line">        <span class="keyword">if</span> (backends != <span class="literal">null</span> &amp;&amp; !backends.isEmpty()) &#123;</span><br><span class="line">            Collections.shuffle(backends);</span><br><span class="line">            <span class="type">BackendRowV2</span> <span class="variable">backend</span> <span class="operator">=</span> (BackendRowV2)backends.get(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> backend.getIp() + <span class="string">&quot;:&quot;</span> + backend.getHttpPort();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            logger.error(<span class="string">&quot;argument &#x27;&#123;&#125;&#x27; is illegal, value is &#x27;&#123;&#125;&#x27;.&quot;</span>, <span class="string">&quot;beNodes&quot;</span>, backends);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;beNodes&quot;</span>, String.valueOf(backends));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>第二步：现在希望返回值并非BE的内网IP，因此我们需要将<code>return</code>的内容写死<code>return &quot;localhost:8040&quot;;</code></p>
-<p>第三步：在代码中我们创建与类相同的包，并将源码原封不动粘贴进去，如果报错，可以修改。紧接着修改<code>return &quot;localhost:8040&quot;;</code>即可</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328133408579.png" alt="image-20230328133408579"></p>
-<p>总结：</p>
-<p>我这里是本地开发环境遇到的问题，并非生产环境；如果生产环境部署基于Doris的应用程序，则需要注意下下面几点：</p>
-<ol>
-<li>运行的代码所在的机器，必须与Doris所在的网络保持通常。</li>
-<li>基于RowData的摄入方式不太友好，现在仍要寻找一种更好的编码方式。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&lt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">&gt;</a>
+    <a class="extend prev" rel="prev" href="/">&lt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">&gt;</a>
   </nav>
 
 
@@ -1852,7 +1875,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
