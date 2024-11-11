@@ -303,6 +303,128 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240517104019-885e0603.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240517104019-885e0603.html" itemprop="url">K2K Template 脚本</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-05-17T10:40:19+08:00">
+                2024-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>使用flink 同步Kafka到Kafka</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 前两段是kafka2kafka</span></span><br><span class="line"><span class="comment">-- LDP init的话用目录下面的python脚本</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> kafka_source_ldp (</span><br><span class="line">    a STRING</span><br><span class="line">)<span class="keyword">with</span> ( <span class="string">&#x27;connector&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;kafka&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;topic&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;LOADSHEET.LDP&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;scan.startup.mode&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;earliest-offset&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.group.id&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;pipeline_ums&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.bootstrap.servers&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;jxbigdatakafka01.juneyaoair.com:9092,jxbigdatakafka02.juneyaoair.com:9092,jxbigdatakafka03.juneyaoair.com:9092&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.fetch.max.bytes&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;5242880&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.allow.auto.create.topics&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;false&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.enable.auto.commit&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;true&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;format&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;raw&#x27;</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> kafka_sink_ldp (</span><br><span class="line">    a STRING</span><br><span class="line">)<span class="keyword">with</span> ( <span class="string">&#x27;connector&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;kafka&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;topic&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;JXHK.AUTO.DC_AOC_LOADSHEET_LDP&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.bootstrap.servers&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;172.27.2.3:9092,172.27.2.4:9092,172.27.2.10:9092&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.allow.auto.create.topics&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;false&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.enable.auto.commit&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;true&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;format&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;raw&#x27;</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> kafka_sink_ldp</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> kafka_source_ldp;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240515150036-22a18a.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1738,147 +1860,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240308001148-fe432aac.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20240308001148-fe432aac.html" itemprop="url">手机端使用GPT的方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-08T00:11:48+08:00">
-                2024-03-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>访问下面的邀请链接注册一个账号，链接有效期7天，只允许注册5个人。</li>
-</ol>
-<p><a target="_blank" rel="noopener" href="https://talk.zyh1.cc/#/register?magic_token=4e3c9424a8b516d7a9040835b0c0f8c02dc48a8eac02a5b61e96b29bd5b8cc4700000000000006000000000000003935353636335e46eb65000000000000">https://talk.zyh1.cc/#/register?magic_token=4e3c9424a8b516d7a9040835b0c0f8c02dc48a8eac02a5b61e96b29bd5b8cc4700000000000006000000000000003935353636335e46eb65000000000000</a></p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240308001252437.png" alt="image-20240308001252437"></p>
-<ol start="2">
-<li>下载移动端</li>
-</ol>
-<p>VoceChat 目前支持安卓和苹果两大平台，请前往 VoceChat 官网自行选择下载安装：<a target="_blank" rel="noopener" href="https://voce.chat/#download">VoceChat 官网</a></p>
-<ol start="3">
-<li>打开应用输入服务器地址<a target="_blank" rel="noopener" href="https://talk.zyh1.cc/">https://talk.zyh1.cc</a></li>
-</ol>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240308001645443.png" alt="image-20240308001645443"></p>
-<p>使用刚刚注册的邮箱和密码登陆。</p>
-<ol start="4">
-<li>找到联系人ChatGPT</li>
-</ol>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240308002027340.png" alt="image-20240308002027340"></p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240308002119682.png" alt="image-20240308002119682"></p>
-<p>之后和它对话即可。</p>
-<p>你也可以在频道里面 @ChatGPT，像下面这样</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240308011304177.png" alt="image-20240308011304177"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1945,7 +1926,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
