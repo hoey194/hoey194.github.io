@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>DataHub元数据管理体验</title>
+    <url>/posts/20231108113649-81a5898f.html</url>
+    <content><![CDATA[<h3 id="Datahub"><a href="#Datahub" class="headerlink" title="Datahub"></a>Datahub</h3><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174154093.png" alt="image-20231108174154093"></p>
+<p><strong>开源地址</strong>：<a href="https://github.com/datahub-project/datahub">https://github.com/datahub-project/datahub</a> </p>
+<p>DataHub是由Linkedin开源的，官方Slogan：The Metadata Platform for the Modern Data Stack - 为现代数据栈而生的元数据平台。目的就是为了解决多种多样数据生态系统的元数据管理问题，它提供元数据检索、数据发现、数据监测和数据监管能力，帮助大家解决数据管理的复杂性。</p>
+<p>DataHub基于Apache License 2开源，采用基于推送的数据收集架构（当然也支持pull拉取的方式），能够持续收集变化的元数据。当前版本已经集成了大部分流行数据生态系统接入能力，包括但不限于：Kafka, Airflow, MySQL, SQL Server, Postgres, LDAP, Snowflake, Hive, BigQuery。</p>
+<p><strong>Datahub的优点：</strong></p>
+<ul>
+<li>名门开源，与Kafka同家庭。社区活跃，发展势头迅猛，版本更新迭代迅速。</li>
+<li>定位清晰且宏远，Slogan可以看出团队的雄心壮志及后期投入，且不断迭代更新的版本也应证了这一点。</li>
+<li>底层架构灵活先进，未扩展集成而生，支持推送和拉去模式，详见：<a href="https://datahubproject.io/docs/architecture/architecture/">https://datahubproject.io/docs/architecture/architecture/</a></li>
+<li>UI界面简单易用，技术人员及业务人员友好</li>
+<li>接口丰富，功能全面</li>
+</ul>
+<p><strong>Datahub的不足：</strong></p>
+<ul>
+<li>前端界面不支持国际化，界面的构建和使用逻辑不够中国化</li>
+<li>版更更新迭代快，使用后升级是个难题</li>
+<li>较多功能在建设中，例如Hive列级血缘</li>
+<li>部分功能性能还需要优化，例如SQL Profile</li>
+<li>中文资料不多，中文交流社群也不多</li>
+</ul>
+<p><strong>相关介绍</strong>：</p>
+<p><a href="https://mp.weixin.qq.com/s/74gK3hTt7-j1lTbKFagbTQ">https://mp.weixin.qq.com/s/74gK3hTt7-j1lTbKFagbTQ</a><br><a href="https://mp.weixin.qq.com/s/iP6sc2DzPaeAKpSWNmf8hQ">https://mp.weixin.qq.com/s/iP6sc2DzPaeAKpSWNmf8hQ</a></p>
+<p><strong>选型建议</strong>：</p>
+<p>1）如果有至少半个前端开发人员+后台开发人员；<br>2）如果需要用户体验较好的数据资产管理平台；<br>3）如果有需要扩展支持各种平台、系统的元数据。请把Datahub列为最高选择。<br>尽管列举了一些不足，但是开源产品中Datahub目前是相对最好的选择。笔者也在生产中使用，有问题的可以随时沟通交流。</p>
+<p><strong>商用版本</strong>: Metaphor（<a href="https://metaphor.io/%EF%BC%89%E6%98%AFDatahub%E7%9A%84SaaS%E7%89%88%E6%9C%AC%E3%80%82">https://metaphor.io/）是Datahub的SaaS版本。</a></p>
+<h3 id="部署及安装"><a href="#部署及安装" class="headerlink" title="部署及安装"></a>部署及安装</h3><ol>
+<li>执行命令</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 -m pip install --upgrade pip wheel setuptools</span><br><span class="line">python3 -m pip install --upgrade acryl-datahub</span><br><span class="line">datahub version</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️注: 在我们执行安装前，可以创建python虚拟环境</p>
+</blockquote>
+<ol start="2">
+<li>从docker上拉取镜像部署，datahub提供了自动拉取镜像、自动部署节点的脚本，让部署一键操作</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">datahub docker quickstart</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️注: 如果你的网络不佳，或者是国内网络，过程会特别的漫长，我就是等了一天才好</p>
+</blockquote>
+<p>成功后terminal中展示：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174029522.png" alt="image-20231108174029522"></p>
+<p>下面我们登陆:</p>
+<p><a href="http://localhost:9002/login?redirect_uri=/">http://localhost:9002/login?redirect_uri=%2F</a></p>
+<p>user/pass: datahub/datahub</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174130857.png" alt="image-20231108174130857"></p>
+<p>部署细节不懂的，可以参考: <a href="https://datahubproject.io/docs/quickstart">https://datahubproject.io/docs/quickstart</a></p>
+<p>下一章我们结合Datahub API + 血缘解析工具，简单说一下怎么构建企业知识图谱</p>
+]]></content>
+  </entry>
+  <entry>
     <title>DSM7中Docker MacVLAN的使用</title>
     <url>/posts/20240415174551-ebe1c553.html</url>
     <content><![CDATA[<h1 id="一、-介绍："><a href="#一、-介绍：" class="headerlink" title="一、 介绍："></a>一、 介绍：</h1><p>MACVLAN是一种网络虚拟化技术，它允许用户将多个虚拟的MAC地址映射到不同的容器或虚拟机上，从而使它们能够在同一物理网络上运行，同时保持相互隔离。具体来说，MACVLAN允许用户创建一组虚拟的接口（类似于真实网络接口），每个接口都拥有独立的MAC地址，并且能够与物理网络中的其他设备进行通信。</p>
@@ -162,57 +216,59 @@
 ]]></content>
   </entry>
   <entry>
-    <title>DataHub元数据管理体验</title>
-    <url>/posts/20231108113649-81a5898f.html</url>
-    <content><![CDATA[<h3 id="Datahub"><a href="#Datahub" class="headerlink" title="Datahub"></a>Datahub</h3><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174154093.png" alt="image-20231108174154093"></p>
-<p><strong>开源地址</strong>：<a href="https://github.com/datahub-project/datahub">https://github.com/datahub-project/datahub</a> </p>
-<p>DataHub是由Linkedin开源的，官方Slogan：The Metadata Platform for the Modern Data Stack - 为现代数据栈而生的元数据平台。目的就是为了解决多种多样数据生态系统的元数据管理问题，它提供元数据检索、数据发现、数据监测和数据监管能力，帮助大家解决数据管理的复杂性。</p>
-<p>DataHub基于Apache License 2开源，采用基于推送的数据收集架构（当然也支持pull拉取的方式），能够持续收集变化的元数据。当前版本已经集成了大部分流行数据生态系统接入能力，包括但不限于：Kafka, Airflow, MySQL, SQL Server, Postgres, LDAP, Snowflake, Hive, BigQuery。</p>
-<p><strong>Datahub的优点：</strong></p>
+    <title>Doris使用踩坑总结</title>
+    <url>/posts/20230328125112-f144fb4b.html</url>
+    <content><![CDATA[<p>环境</p>
 <ul>
-<li>名门开源，与Kafka同家庭。社区活跃，发展势头迅猛，版本更新迭代迅速。</li>
-<li>定位清晰且宏远，Slogan可以看出团队的雄心壮志及后期投入，且不断迭代更新的版本也应证了这一点。</li>
-<li>底层架构灵活先进，未扩展集成而生，支持推送和拉去模式，详见：<a href="https://datahubproject.io/docs/architecture/architecture/">https://datahubproject.io/docs/architecture/architecture/</a></li>
-<li>UI界面简单易用，技术人员及业务人员友好</li>
-<li>接口丰富，功能全面</li>
+<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
+<li>[Doris](<a href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">部署 Docker 集群 - Apache Doris</a>):v1.12.1</li>
+<li><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>: v1.8.x</li>
+<li>IDEA开发环境</li>
 </ul>
-<p><strong>Datahub的不足：</strong></p>
+<h3 id="一、-Docker部署"><a href="#一、-Docker部署" class="headerlink" title="一、 Docker部署"></a>一、 Docker部署</h3><p>官方提供文档<a href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">Deploy Docker cluster</a></p>
+<p><font color="red">但部署完以后发现集群无法识别BE节点，查看日志发现是因为没有设置<code>vm.max_map_count</code>参数</font></p>
+<blockquote>
+<p>避坑1: 需要设置sysctl -w vm.max_map_count=2000000</p>
+<p>避坑2: 在启动容器时需要添加privileged: true</p>
+</blockquote>
+<h3 id="二、Flink-写入Doris"><a href="#二、Flink-写入Doris" class="headerlink" title="二、Flink 写入Doris"></a>二、Flink 写入Doris</h3><p>官方提供了文档<a href="https://doris.apache.org/zh-CN/docs/dev/ecosystem/flink-doris-connector?_highlight=flink">Flink Doris Connector</a></p>
+<p>这里选用的是RowData的方式写入到Doris，提前到Doris中创建表代码如下:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE dwd;</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> dwd.TICKET;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> dwd.TICKET (</span><br><span class="line">        event <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        newval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        oldval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        stamp <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        subevent <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptm <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptmms <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        ver <span class="type">VARCHAR</span>(<span class="number">256</span>)</span><br><span class="line">)DISTRIBUTED <span class="keyword">BY</span> HASH(stamp) BUCKETS <span class="number">1</span></span><br><span class="line">PROPERTIES (</span><br><span class="line">&quot;replication_allocation&quot; <span class="operator">=</span> &quot;tag.location.default: 1&quot;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>然后是使用Java代码:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">StreamExecutionEnvironment</span> <span class="variable">env</span> <span class="operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(<span class="number">1</span>);</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">prop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        prop.setProperty(<span class="string">&quot;format&quot;</span>, <span class="string">&quot;json&quot;</span>);</span><br><span class="line">        prop.setProperty(<span class="string">&quot;strip_outer_array&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">        env.fromElements(<span class="string">&quot;&#123;\&quot;event\&quot;:\&quot;CheckIn\&quot;,\&quot;newval\&quot;:\&quot;90\&quot;,\&quot;oldval\&quot;:\&quot;0\&quot;,\&quot;stamp\&quot;:\&quot;67100c4f-0355-4dba-8a76-2a94202132d1\&quot;,\&quot;subevent\&quot;:\&quot;\&quot;,\&quot;uptm\&quot;:\&quot;20230319094822\&quot;,\&quot;uptmms\&quot;:\&quot;20230319094822031\&quot;,\&quot;ver\&quot;:\&quot;v1.0\&quot;&#125;&quot;</span>)</span><br><span class="line">                .addSink(DorisSink.sink(</span><br><span class="line">                        DorisReadOptions.builder().build(),</span><br><span class="line">                        DorisExecutionOptions.builder().setBatchSize(<span class="number">3</span>)</span><br><span class="line">                                .setBatchIntervalMs(<span class="number">0L</span>)</span><br><span class="line">                                .setMaxRetries(<span class="number">3</span>)</span><br><span class="line">                                .setStreamLoadProp(prop)</span><br><span class="line">                                .build(),</span><br><span class="line">                        DorisOptions.builder().setFenodes(<span class="string">&quot;localhost:8030&quot;</span>)</span><br><span class="line">                                .setTableIdentifier(<span class="string">&quot;dwd.TICKET&quot;</span>)</span><br><span class="line">                                .setUsername(<span class="string">&quot;admin&quot;</span>)</span><br><span class="line">                                .setPassword(<span class="string">&quot;&quot;</span>).build())</span><br><span class="line">                );</span><br><span class="line">        env.execute(<span class="string">&quot;pss-format-job&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font color="red">运行时发现网络不通问题，无法成功写入Dois</font>，具体错误如图下图所示：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131103501.png" alt="image-20230328131103501"></p>
+<p>分析宿主节点和docker集群的关系</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131607049.png" alt="image-20230328131607049"></p>
+<p>由架构图得知，是因为sink写入的时候通过外网地址的fe取到be地址是内网地址。</p>
+<p>解决思路：</p>
+<ol>
+<li><p>程序上传到FE运行，但是我属于本地开发环境，这种方式不适合</p>
+</li>
+<li><p>配置Docker network，使得在宿主节点能够访问容器 BE的IP。这块我也尝试搜索了很多资料，最终以失败告终。</p>
 <ul>
-<li>前端界面不支持国际化，界面的构建和使用逻辑不够中国化</li>
-<li>版更更新迭代快，使用后升级是个难题</li>
-<li>较多功能在建设中，例如Hive列级血缘</li>
-<li>部分功能性能还需要优化，例如SQL Profile</li>
-<li>中文资料不多，中文交流社群也不多</li>
+<li>尝试一： 在宿主节点修改路由表 sudo route add -net 172.20.80.0/24 172.20.80.1</li>
+<li>尝试二： 以Host方式运行FE和BE</li>
 </ul>
-<p><strong>相关介绍</strong>：</p>
-<p><a href="https://mp.weixin.qq.com/s/74gK3hTt7-j1lTbKFagbTQ">https://mp.weixin.qq.com/s/74gK3hTt7-j1lTbKFagbTQ</a><br><a href="https://mp.weixin.qq.com/s/iP6sc2DzPaeAKpSWNmf8hQ">https://mp.weixin.qq.com/s/iP6sc2DzPaeAKpSWNmf8hQ</a></p>
-<p><strong>选型建议</strong>：</p>
-<p>1）如果有至少半个前端开发人员+后台开发人员；<br>2）如果需要用户体验较好的数据资产管理平台；<br>3）如果有需要扩展支持各种平台、系统的元数据。请把Datahub列为最高选择。<br>尽管列举了一些不足，但是开源产品中Datahub目前是相对最好的选择。笔者也在生产中使用，有问题的可以随时沟通交流。</p>
-<p><strong>商用版本</strong>: Metaphor（<a href="https://metaphor.io/%EF%BC%89%E6%98%AFDatahub%E7%9A%84SaaS%E7%89%88%E6%9C%AC%E3%80%82">https://metaphor.io/）是Datahub的SaaS版本。</a></p>
-<h3 id="部署及安装"><a href="#部署及安装" class="headerlink" title="部署及安装"></a>部署及安装</h3><ol>
-<li>执行命令</li>
+</li>
+<li><p>修改源代码： 找到涉及到“第二步：将BE内网IP返回给主程序”代码，并修改</p>
+</li>
 </ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 -m pip install --upgrade pip wheel setuptools</span><br><span class="line">python3 -m pip install --upgrade acryl-datahub</span><br><span class="line">datahub version</span><br></pre></td></tr></table></figure>
+<p>其中我是用第三种方法，成功在本地开发环境摄入数据到Doris，在这里简单介绍一下快速修改源码的方法。</p>
+<p>第一步： 先找到涉及到代码的相关方法，在该场景中对应的是<code>org.apache.doris.flink.rest.RestService</code>类的<code>randomBackend()</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@VisibleForTesting</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">randomBackend</span><span class="params">(DorisOptions options, DorisReadOptions readOptions, Logger logger)</span> <span class="keyword">throws</span> DorisException, IOException &#123;</span><br><span class="line">        List&lt;BackendRowV2&gt; backends = getBackendsV2(options, readOptions, logger);</span><br><span class="line">        logger.trace(<span class="string">&quot;Parse beNodes &#x27;&#123;&#125;&#x27;.&quot;</span>, backends);</span><br><span class="line">        <span class="keyword">if</span> (backends != <span class="literal">null</span> &amp;&amp; !backends.isEmpty()) &#123;</span><br><span class="line">            Collections.shuffle(backends);</span><br><span class="line">            <span class="type">BackendRowV2</span> <span class="variable">backend</span> <span class="operator">=</span> (BackendRowV2)backends.get(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> backend.getIp() + <span class="string">&quot;:&quot;</span> + backend.getHttpPort();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            logger.error(<span class="string">&quot;argument &#x27;&#123;&#125;&#x27; is illegal, value is &#x27;&#123;&#125;&#x27;.&quot;</span>, <span class="string">&quot;beNodes&quot;</span>, backends);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;beNodes&quot;</span>, String.valueOf(backends));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>⚠️注: 在我们执行安装前，可以创建python虚拟环境</p>
-</blockquote>
-<ol start="2">
-<li>从docker上拉取镜像部署，datahub提供了自动拉取镜像、自动部署节点的脚本，让部署一键操作</li>
+<p>第二步：现在希望返回值并非BE的内网IP，因此我们需要将<code>return</code>的内容写死<code>return &quot;localhost:8040&quot;;</code></p>
+<p>第三步：在代码中我们创建与类相同的包，并将源码原封不动粘贴进去，如果报错，可以修改。紧接着修改<code>return &quot;localhost:8040&quot;;</code>即可</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328133408579.png" alt="image-20230328133408579"></p>
+<p>总结：</p>
+<p>我这里是本地开发环境遇到的问题，并非生产环境；如果生产环境部署基于Doris的应用程序，则需要注意下下面几点：</p>
+<ol>
+<li>运行的代码所在的机器，必须与Doris所在的网络保持通常。</li>
+<li>基于RowData的摄入方式不太友好，现在仍要寻找一种更好的编码方式。</li>
 </ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">datahub docker quickstart</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>⚠️注: 如果你的网络不佳，或者是国内网络，过程会特别的漫长，我就是等了一天才好</p>
-</blockquote>
-<p>成功后terminal中展示：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174029522.png" alt="image-20231108174029522"></p>
-<p>下面我们登陆:</p>
-<p><a href="http://localhost:9002/login?redirect_uri=/">http://localhost:9002/login?redirect_uri=%2F</a></p>
-<p>user/pass: datahub/datahub</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108174130857.png" alt="image-20231108174130857"></p>
-<p>部署细节不懂的，可以参考: <a href="https://datahubproject.io/docs/quickstart">https://datahubproject.io/docs/quickstart</a></p>
-<p>下一章我们结合Datahub API + 血缘解析工具，简单说一下怎么构建企业知识图谱</p>
 ]]></content>
   </entry>
   <entry>
@@ -277,62 +333,6 @@
 <p>修改dolphinscheduler-ui模块下的pom.xml，修改后记得重新执行<code>./mvnw spotless:apply</code>格式化代码</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--                &lt;plugins&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                    &lt;plugin&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;groupId&gt;com.github.eirslett&lt;/groupId&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;artifactId&gt;frontend-maven-plugin&lt;/artifactId&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;version&gt;$&#123;frontend-maven-plugin.version&#125;&lt;/version&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;pnpmInheritsProxyConfigFromMaven&gt;false&lt;/pnpmInheritsProxyConfigFromMaven&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;executions&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;install node and pnpm&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;install-node-and-pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;nodeVersion&gt;$&#123;node.version&#125;&lt;/nodeVersion&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;pnpmVersion&gt;$&#123;pnpm.version&#125;&lt;/pnpmVersion&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;pnpm install&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;phase&gt;generate-resources&lt;/phase&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;arguments&gt;install&lt;/arguments&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;id&gt;pnpm run build:prod&lt;/id&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;goal&gt;pnpm&lt;/goal&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/goals&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                    &lt;arguments&gt;run build:prod&lt;/arguments&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                                &lt;/configuration&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                            &lt;/execution&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                        &lt;/executions&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                    &lt;/plugin&gt;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--                &lt;/plugins&gt;--&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-]]></content>
-  </entry>
-  <entry>
-    <title>Doris使用踩坑总结</title>
-    <url>/posts/20230328125112-f144fb4b.html</url>
-    <content><![CDATA[<p>环境</p>
-<ul>
-<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
-<li>[Doris](<a href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">部署 Docker 集群 - Apache Doris</a>):v1.12.1</li>
-<li><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>: v1.8.x</li>
-<li>IDEA开发环境</li>
-</ul>
-<h3 id="一、-Docker部署"><a href="#一、-Docker部署" class="headerlink" title="一、 Docker部署"></a>一、 Docker部署</h3><p>官方提供文档<a href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">Deploy Docker cluster</a></p>
-<p><font color="red">但部署完以后发现集群无法识别BE节点，查看日志发现是因为没有设置<code>vm.max_map_count</code>参数</font></p>
-<blockquote>
-<p>避坑1: 需要设置sysctl -w vm.max_map_count=2000000</p>
-<p>避坑2: 在启动容器时需要添加privileged: true</p>
-</blockquote>
-<h3 id="二、Flink-写入Doris"><a href="#二、Flink-写入Doris" class="headerlink" title="二、Flink 写入Doris"></a>二、Flink 写入Doris</h3><p>官方提供了文档<a href="https://doris.apache.org/zh-CN/docs/dev/ecosystem/flink-doris-connector?_highlight=flink">Flink Doris Connector</a></p>
-<p>这里选用的是RowData的方式写入到Doris，提前到Doris中创建表代码如下:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE dwd;</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> dwd.TICKET;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> dwd.TICKET (</span><br><span class="line">        event <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        newval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        oldval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        stamp <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        subevent <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptm <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptmms <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        ver <span class="type">VARCHAR</span>(<span class="number">256</span>)</span><br><span class="line">)DISTRIBUTED <span class="keyword">BY</span> HASH(stamp) BUCKETS <span class="number">1</span></span><br><span class="line">PROPERTIES (</span><br><span class="line">&quot;replication_allocation&quot; <span class="operator">=</span> &quot;tag.location.default: 1&quot;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>然后是使用Java代码:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">StreamExecutionEnvironment</span> <span class="variable">env</span> <span class="operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(<span class="number">1</span>);</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">prop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        prop.setProperty(<span class="string">&quot;format&quot;</span>, <span class="string">&quot;json&quot;</span>);</span><br><span class="line">        prop.setProperty(<span class="string">&quot;strip_outer_array&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">        env.fromElements(<span class="string">&quot;&#123;\&quot;event\&quot;:\&quot;CheckIn\&quot;,\&quot;newval\&quot;:\&quot;90\&quot;,\&quot;oldval\&quot;:\&quot;0\&quot;,\&quot;stamp\&quot;:\&quot;67100c4f-0355-4dba-8a76-2a94202132d1\&quot;,\&quot;subevent\&quot;:\&quot;\&quot;,\&quot;uptm\&quot;:\&quot;20230319094822\&quot;,\&quot;uptmms\&quot;:\&quot;20230319094822031\&quot;,\&quot;ver\&quot;:\&quot;v1.0\&quot;&#125;&quot;</span>)</span><br><span class="line">                .addSink(DorisSink.sink(</span><br><span class="line">                        DorisReadOptions.builder().build(),</span><br><span class="line">                        DorisExecutionOptions.builder().setBatchSize(<span class="number">3</span>)</span><br><span class="line">                                .setBatchIntervalMs(<span class="number">0L</span>)</span><br><span class="line">                                .setMaxRetries(<span class="number">3</span>)</span><br><span class="line">                                .setStreamLoadProp(prop)</span><br><span class="line">                                .build(),</span><br><span class="line">                        DorisOptions.builder().setFenodes(<span class="string">&quot;localhost:8030&quot;</span>)</span><br><span class="line">                                .setTableIdentifier(<span class="string">&quot;dwd.TICKET&quot;</span>)</span><br><span class="line">                                .setUsername(<span class="string">&quot;admin&quot;</span>)</span><br><span class="line">                                .setPassword(<span class="string">&quot;&quot;</span>).build())</span><br><span class="line">                );</span><br><span class="line">        env.execute(<span class="string">&quot;pss-format-job&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><font color="red">运行时发现网络不通问题，无法成功写入Dois</font>，具体错误如图下图所示：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131103501.png" alt="image-20230328131103501"></p>
-<p>分析宿主节点和docker集群的关系</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131607049.png" alt="image-20230328131607049"></p>
-<p>由架构图得知，是因为sink写入的时候通过外网地址的fe取到be地址是内网地址。</p>
-<p>解决思路：</p>
-<ol>
-<li><p>程序上传到FE运行，但是我属于本地开发环境，这种方式不适合</p>
-</li>
-<li><p>配置Docker network，使得在宿主节点能够访问容器 BE的IP。这块我也尝试搜索了很多资料，最终以失败告终。</p>
-<ul>
-<li>尝试一： 在宿主节点修改路由表 sudo route add -net 172.20.80.0/24 172.20.80.1</li>
-<li>尝试二： 以Host方式运行FE和BE</li>
-</ul>
-</li>
-<li><p>修改源代码： 找到涉及到“第二步：将BE内网IP返回给主程序”代码，并修改</p>
-</li>
-</ol>
-<p>其中我是用第三种方法，成功在本地开发环境摄入数据到Doris，在这里简单介绍一下快速修改源码的方法。</p>
-<p>第一步： 先找到涉及到代码的相关方法，在该场景中对应的是<code>org.apache.doris.flink.rest.RestService</code>类的<code>randomBackend()</code>。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@VisibleForTesting</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">randomBackend</span><span class="params">(DorisOptions options, DorisReadOptions readOptions, Logger logger)</span> <span class="keyword">throws</span> DorisException, IOException &#123;</span><br><span class="line">        List&lt;BackendRowV2&gt; backends = getBackendsV2(options, readOptions, logger);</span><br><span class="line">        logger.trace(<span class="string">&quot;Parse beNodes &#x27;&#123;&#125;&#x27;.&quot;</span>, backends);</span><br><span class="line">        <span class="keyword">if</span> (backends != <span class="literal">null</span> &amp;&amp; !backends.isEmpty()) &#123;</span><br><span class="line">            Collections.shuffle(backends);</span><br><span class="line">            <span class="type">BackendRowV2</span> <span class="variable">backend</span> <span class="operator">=</span> (BackendRowV2)backends.get(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> backend.getIp() + <span class="string">&quot;:&quot;</span> + backend.getHttpPort();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            logger.error(<span class="string">&quot;argument &#x27;&#123;&#125;&#x27; is illegal, value is &#x27;&#123;&#125;&#x27;.&quot;</span>, <span class="string">&quot;beNodes&quot;</span>, backends);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;beNodes&quot;</span>, String.valueOf(backends));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>第二步：现在希望返回值并非BE的内网IP，因此我们需要将<code>return</code>的内容写死<code>return &quot;localhost:8040&quot;;</code></p>
-<p>第三步：在代码中我们创建与类相同的包，并将源码原封不动粘贴进去，如果报错，可以修改。紧接着修改<code>return &quot;localhost:8040&quot;;</code>即可</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328133408579.png" alt="image-20230328133408579"></p>
-<p>总结：</p>
-<p>我这里是本地开发环境遇到的问题，并非生产环境；如果生产环境部署基于Doris的应用程序，则需要注意下下面几点：</p>
-<ol>
-<li>运行的代码所在的机器，必须与Doris所在的网络保持通常。</li>
-<li>基于RowData的摄入方式不太友好，现在仍要寻找一种更好的编码方式。</li>
-</ol>
 ]]></content>
   </entry>
   <entry>
@@ -651,6 +651,27 @@
 ]]></content>
   </entry>
   <entry>
+    <title>SEO Google: 添加到 Search Console（有效解决零收录情况）</title>
+    <url>/posts/20241111100308-c50a6b21.html</url>
+    <content><![CDATA[<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>如果发现搜索结果中一条记录都没有，那么在完成本文指引后，再等待 1 天，再去查询收录情况，就会发现提交的网站已经被收录了。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ol>
+<li>打开控制台：<a href="https://search.google.com/search-console/welcome?hl=zh-cn">https://search.google.com/search-console/welcome?hl=zh-cn</a></li>
+<li>根据提示输入域名，添加 DNS 解析，我使用的验证方式是 CNAME，添加完后点击验证</li>
+<li>点击左侧导航栏打开刚刚验证完成的网站，刚刚添加的网站，在 1 天后才能查看数据：<br>![image-20241111100407215](/Users/hoey/Library/Application Support/typora-user-images/image-20241111100407215.png)</li>
+</ol>
+<h2 id="查询是否已被收录"><a href="#查询是否已被收录" class="headerlink" title="查询是否已被收录"></a>查询是否已被收录</h2><p>打开 <a href="https://www.google.com/">Google</a>，在搜索框输入以下内容（将 yourdomain.com 替换为你自己的顶级域名），然后点击搜索按钮：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">site:yourdomain.com</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://developers.google.com/search/docs/monitor-debug/search-operators/all-search-site?hl=zh-cn">深入了解 <code>site:</code> 搜索运算符</a></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>根据 Google 收录后的条目，大概可以得知，GoogleBot 会先访问添加的网址，进而收集该入口页面的所有的超链接（<a/>），然后再访问这些超链接，再收集页面上超链接。</p>
+<p>建议：</p>
+<ul>
+<li>路径层级最好不要超过两级，也就是说最大层级别超过 <code>/a/b</code></li>
+<li>如果有些网址没有展示在页面上，那么就需要提交 <a href="https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview?hl=zh-cn">站点地图</a> 了</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
     <title>doris 分区使用</title>
     <url>/posts/20240206101518-30c459fa.html</url>
     <content><![CDATA[<p>下面是一个简单的小例子</p>
@@ -697,11 +718,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#x6e;&#110;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#49;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#99;&#x6e;&#110;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#49;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#x63;&#110;&#110;&#113;&#106;&#x62;&#x61;&#110;&#x35;&#x32;&#x31;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#x63;&#110;&#110;&#113;&#106;&#x62;&#x61;&#110;&#x35;&#x32;&#x31;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
 <td>hoey94</td>
 </tr>
 <tr>
-<td><a href="mailto:&#51;&#x35;&#49;&#x38;&#x36;&#53;&#x35;&#x37;&#x36;&#64;&#x71;&#x71;&#46;&#99;&#111;&#109;">&#51;&#x35;&#49;&#x38;&#x36;&#53;&#x35;&#x37;&#x36;&#64;&#x71;&#x71;&#46;&#99;&#111;&#109;</a></td>
+<td><a href="mailto:&#x33;&#x35;&#x31;&#x38;&#x36;&#x35;&#53;&#x37;&#54;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#x6d;">&#x33;&#x35;&#x31;&#x38;&#x36;&#x35;&#53;&#x37;&#54;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#x6d;</a></td>
 <td>hoey1994</td>
 </tr>
 </tbody></table>
@@ -716,11 +737,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#x6e;&#110;&#113;&#x6a;&#98;&#97;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#99;&#x6e;&#110;&#113;&#x6a;&#98;&#97;&#110;&#x35;&#x32;&#49;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#99;&#x6e;&#110;&#113;&#106;&#98;&#x61;&#x6e;&#53;&#50;&#49;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#99;&#x6e;&#110;&#113;&#106;&#98;&#x61;&#x6e;&#53;&#50;&#49;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>Test</td>
 </tr>
 <tr>
-<td><a href="mailto:&#x33;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#x37;&#54;&#x40;&#x71;&#113;&#x2e;&#x63;&#x6f;&#x6d;">&#x33;&#53;&#x31;&#x38;&#54;&#x35;&#x35;&#x37;&#54;&#x40;&#x71;&#113;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#51;&#53;&#x31;&#56;&#x36;&#x35;&#x35;&#x37;&#54;&#64;&#113;&#113;&#46;&#99;&#111;&#109;">&#51;&#53;&#x31;&#56;&#x36;&#x35;&#x35;&#x37;&#54;&#64;&#113;&#113;&#46;&#99;&#111;&#109;</a></td>
 <td>test</td>
 </tr>
 </tbody></table>
@@ -769,8 +790,8 @@
 
 
 
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#99;&#x6e;&#110;&#x71;&#x6a;&#x62;&#x61;&#110;&#53;&#x32;&#49;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#99;&#x6e;&#110;&#x71;&#x6a;&#x62;&#x61;&#110;&#53;&#x32;&#49;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#51;&#x35;&#x31;&#x38;&#x36;&#x35;&#53;&#55;&#54;&#x40;&#x71;&#x71;&#x2e;&#x63;&#x6f;&#x6d;">&#51;&#x35;&#x31;&#x38;&#x36;&#x35;&#53;&#55;&#54;&#x40;&#x71;&#x71;&#x2e;&#x63;&#x6f;&#x6d;</a>(hoey1994)下创建test项目</p>
+<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#99;&#110;&#110;&#x71;&#106;&#98;&#x61;&#x6e;&#53;&#x32;&#49;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#99;&#110;&#110;&#x71;&#106;&#98;&#x61;&#x6e;&#53;&#x32;&#49;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a>(hoey94)下创建Test项目</p>
+<p>在账号<a href="mailto:&#x33;&#x35;&#49;&#56;&#54;&#53;&#53;&#55;&#x36;&#x40;&#113;&#113;&#46;&#99;&#x6f;&#x6d;">&#x33;&#x35;&#49;&#56;&#54;&#53;&#53;&#55;&#x36;&#x40;&#113;&#113;&#46;&#99;&#x6f;&#x6d;</a>(hoey1994)下创建test项目</p>
 <p>使用下面命令分别克隆到本地</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
 
@@ -921,13 +942,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>喜当爹</title>
-    <url>/posts/20241027142701-bb4ea6a4.html</url>
-    <content><![CDATA[<p><img src="https://img.yihao.de/1730010431322.png" alt="image-20241027142706017"></p>
-<p>意不意外、惊不惊喜，就是这么快。</p>
-]]></content>
-  </entry>
-  <entry>
     <title>使用反向代理解决SSL认证</title>
     <url>/posts/20230504205542-a6b71998.html</url>
     <content><![CDATA[<p>自己手里有很多私有服务，并且域名还都不一样，例如下面这些：</p>
@@ -1039,7 +1053,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#100;&#x6d;&#105;&#x6e;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#x6c;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#x61;&#100;&#x6d;&#105;&#x6e;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#x6c;&#101;&#x2e;&#x63;&#x6f;&#x6d;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#x64;&#x6d;&#x69;&#x6e;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#97;&#x64;&#x6d;&#x69;&#x6e;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
@@ -1050,6 +1064,13 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>配置完成以后，就可以使用nas.hoey.tk访问nas服务了，当用户访问nas.hoey.tk时，在网络中它的链路应该如下图所示：</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214857962.png" alt="image-20230504214857962"></p>
 <p>以上</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>喜当爹</title>
+    <url>/posts/20241027142701-bb4ea6a4.html</url>
+    <content><![CDATA[<p><img src="https://img.yihao.de/1730010431322.png" alt="image-20241027142706017"></p>
+<p>意不意外、惊不惊喜，就是这么快。</p>
 ]]></content>
   </entry>
   <entry>
