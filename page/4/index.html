@@ -303,6 +303,143 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230711112128-628a2fb5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230711112128-628a2fb5.html" itemprop="url">家庭网络拓扑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-07-11T11:21:28+08:00">
+                2023-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>前段时间618新入手了几块硬盘，买回来组一个NAS，下面是家里的网络拓扑逻辑图 </p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230711130249774.png" alt="image-20230711130249774"></p>
+<p>在其中完成了以下内容：</p>
+<ol>
+<li>网络统一管理，包括网络分割如划分子网；网络的优化如实现拦截、翻墙、过滤广告、加速；内外网穿透。</li>
+<li>ESXI虚拟化，对物理机的CPU计算、存储和网络资源高效利用，EXSI高效的横向拓展能力和简易的操作都非常的优秀。</li>
+<li>NAS（网络附加存储），数据共享与存储、备份与恢复、远程访问、横向磁盘扩容。</li>
+<li>边缘计算，网络资源共享，提升网络三大运营商CDN网络加速。</li>
+</ol>
+<p>得到的好处：</p>
+<ol>
+<li>全端的无差异实时备份，包括Mac、Windows、IPad、IPhone等设备</li>
+<li>现在市面上各大云盘，某度云、某里云等等，现在统统废弃，全部用NAS就可以解决，相当于买了个所有云盘的VIP</li>
+<li>网络方面的国内外无差异化上网体验。</li>
+<li>给老婆刷刷剧，看看电影都很方便。</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="http://192.168.1.1/cu.html">http://192.168.1.1/cu.html</a></p>
+<p>CUAdmin32216618</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230504205542-a6b71998.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -483,7 +620,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#x61;&#x64;&#109;&#x69;&#x6e;&#x40;&#x65;&#x78;&#97;&#109;&#112;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;">&#x61;&#x64;&#109;&#x69;&#x6e;&#x40;&#x65;&#x78;&#97;&#109;&#112;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#x64;&#x6d;&#x69;&#110;&#x40;&#101;&#x78;&#97;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#97;&#x64;&#x6d;&#x69;&#110;&#x40;&#101;&#x78;&#97;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
@@ -1668,148 +1805,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20221208193934-30d40687.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20221208193934-30d40687.html" itemprop="url">Mac自动SSH+MFA</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-12-08T19:39:34+08:00">
-                2022-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>因工作需要，使用Iterm2自动跳转远程终端，提高工作效率</p>
-<h1 id="自动获取MFA-Token"><a href="#自动获取MFA-Token" class="headerlink" title="自动获取MFA Token"></a>自动获取MFA Token</h1><p>安装oath-toolkit</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew search oath-toolkit</span><br><span class="line">brew install oath-toolkit</span><br></pre></td></tr></table></figure>
-
-<p>使用下面命令获取token， 注：${SECKEY} 是一个变量，按照自己的填写</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> smCode=<span class="string">&quot;echo `oathtool --totp -b <span class="variable">$&#123;SECKEY&#125;</span> `| pbcopy&quot;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="自定义SHELL-MFA-TOKEN脚本"><a href="#自定义SHELL-MFA-TOKEN脚本" class="headerlink" title="自定义SHELL+MFA TOKEN脚本"></a>自定义SHELL+MFA TOKEN脚本</h1><p>将脚本保存juneyao_auto_ssh_prd.sh</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">opts=$@</span><br><span class="line">getParam()&#123;</span><br><span class="line">  arg=$1</span><br><span class="line">  echo $opts | xargs -n1 | cut -b 2- | awk -F&#x27;=&#x27; &#x27;&#123;if($1==&quot;&#x27;&quot;$arg&quot;&#x27;&quot;) print $2&#125;&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">USER=zhaoyihao</span><br><span class="line">echo &quot;[INFO] USER: &quot;$&#123;USER&#125;</span><br><span class="line"></span><br><span class="line">HOST=`getParam HOST`</span><br><span class="line">echo &quot;[INFO] HOST: &quot;$&#123;HOST&#125;</span><br><span class="line"></span><br><span class="line">PASSWORD=`getParam PASSWORD`</span><br><span class="line">echo &quot;[INFO] PASSWORD: *****&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">stg:20 prd:2222</span></span><br><span class="line">PORT=`getParam PORT`</span><br><span class="line">echo &quot;[INFO] PORT: &quot;$&#123;PORT&#125;</span><br><span class="line"></span><br><span class="line">PRD_TOKEN=&quot;`oathtool --totp -b 4YIKKGPXJD3G32YP`&quot;</span><br><span class="line"></span><br><span class="line">sw_login()&#123;</span><br><span class="line">        expect -c &quot;</span><br><span class="line">        # 每个判断等待1秒</span><br><span class="line">        set timeout 1</span><br><span class="line">        spawn ssh $USER@$HOST -p $PORT</span><br><span class="line">        # 判断是否需要保存秘钥</span><br><span class="line">        expect &#123;</span><br><span class="line">                \&quot;yes/no\&quot;   &#123; send yes\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送密码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*assword\&quot; &#123; send $PASSWORD\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 判断发送验证码</span><br><span class="line">        expect &#123;        </span><br><span class="line">        				\&quot;*OTP Code*\&quot; &#123; send $PRD_TOKEN\n &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        # 停留在当前登录界面</span><br><span class="line">        interact</span><br><span class="line">        &quot;</span><br><span class="line">&#125;</span><br><span class="line">sw_login</span><br></pre></td></tr></table></figure>
-
-
-
-<p>脚本的使用命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh juneyao_auto_ssh_prd.sh -HOST=jmp.juneyaoair.com -PORT=2222 -PASSWORD=123123</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="与ITerm2集成"><a href="#与ITerm2集成" class="headerlink" title="与ITerm2集成"></a>与ITerm2集成</h1><p>在ITerm2终端中进行配置</p>
-<p>Preference… -&gt; Profiles -&gt; +</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230105095419303.png" alt="image-20230105095419303"></p>
-<p>将脚本运行命令填入到Send text at start:文本框中保存即可。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1876,7 +1871,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
