@@ -376,6 +376,23 @@
 ]]></content>
   </entry>
   <entry>
+    <title>Flink Timer定时器</title>
+    <url>/posts/20230724172424-e9455fee.html</url>
+    <content><![CDATA[<p>在使用processFunction实现两张事实表的JOIN操作时，接触到了Timer，下面对Flink定时器的核心知识做一个简单总结：</p>
+<h3 id="1-1-Timers支持使用在KeyedStream"><a href="#1-1-Timers支持使用在KeyedStream" class="headerlink" title="1.1 Timers支持使用在KeyedStream"></a>1.1 Timers支持使用在KeyedStream</h3><p>因为 Timer 是基于每个键即 key 注册并触发，所以 KeyedStream 是 Timer 在 Flink 中使用的先决条件</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ctx.timerService.deleteEventTimeTimer(timeStamp)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-Timers的唯一性"><a href="#1-2-Timers的唯一性" class="headerlink" title="1.2 Timers的唯一性"></a>1.2 Timers的唯一性</h3><p>TimerService 会自动消除计时器的重复数据，始终保持每个键 key 最多只有一个计时器，当一个键 key 注册多个 Timer 计时器时，onTimer 方法只会调用一次，重复注册会覆盖之前的 timer 注册</p>
+<h3 id="1-3-Timers支持checkpoint"><a href="#1-3-Timers支持checkpoint" class="headerlink" title="1.3 Timers支持checkpoint"></a>1.3 Timers支持checkpoint</h3><p>ValueState 可以通过 checkpoint 进行检查点保存和恢复，同理 Timer 也可以由 checkpoint 托管，从 Flink checkpoint 检查点恢复任务时，将立即启动恢复前应启动的处于恢复状态的每个已注册计时器，这也提高了 Timer 的容错性</p>
+<h3 id="1-4-Timers支持被删除"><a href="#1-4-Timers支持被删除" class="headerlink" title="1.4 Timers支持被删除"></a>1.4 Timers支持被删除</h3><p>从 Flink 1.6.x 开始，计时器可以暂停和删除，提供更便捷的 Timer 处理方式</p>
+<p>文章发布自：[Flink Timer 与 TimerService 源码分析与详解](<a href="https://it.cha138.com/ios/show-36808.html#2.1">https://it.cha138.com/ios/show-36808.html#2.1</a> 注册 Timer)</p>
+<p>写的十分好，推荐阅读，除此之外推荐阅读：</p>
+<p><a href="https://it.cha138.com/mysql/show-110719.html">Flink Timer 机制原理，源码整理</a></p>
+<p><a href="https://it.cha138.com/shida/show-452473.html">Flink的定时器EventTime和ProcessTime</a></p>
+<p><a href="https://blog.csdn.net/weixin_43923463/article/details/128043877">Flink使用CoProcessFunction完成实时对账、基于时间的双流join_flink实时对账</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>FRDS拆包辅种</title>
     <url>/posts/20240326183345-bcf32449.html</url>
     <content><![CDATA[<p>利用拆包大法混一混时魔</p>
@@ -415,23 +432,6 @@
 
 <h2 id="四、-其他"><a href="#四、-其他" class="headerlink" title="四、 其他"></a>四、 其他</h2><p>我按照上面的方法完成以后，大概辅种情况是这样</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240329141625434.png" alt="image-20240329141625434"></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Flink Timer定时器</title>
-    <url>/posts/20230724172424-e9455fee.html</url>
-    <content><![CDATA[<p>在使用processFunction实现两张事实表的JOIN操作时，接触到了Timer，下面对Flink定时器的核心知识做一个简单总结：</p>
-<h3 id="1-1-Timers支持使用在KeyedStream"><a href="#1-1-Timers支持使用在KeyedStream" class="headerlink" title="1.1 Timers支持使用在KeyedStream"></a>1.1 Timers支持使用在KeyedStream</h3><p>因为 Timer 是基于每个键即 key 注册并触发，所以 KeyedStream 是 Timer 在 Flink 中使用的先决条件</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ctx.timerService.deleteEventTimeTimer(timeStamp)</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-2-Timers的唯一性"><a href="#1-2-Timers的唯一性" class="headerlink" title="1.2 Timers的唯一性"></a>1.2 Timers的唯一性</h3><p>TimerService 会自动消除计时器的重复数据，始终保持每个键 key 最多只有一个计时器，当一个键 key 注册多个 Timer 计时器时，onTimer 方法只会调用一次，重复注册会覆盖之前的 timer 注册</p>
-<h3 id="1-3-Timers支持checkpoint"><a href="#1-3-Timers支持checkpoint" class="headerlink" title="1.3 Timers支持checkpoint"></a>1.3 Timers支持checkpoint</h3><p>ValueState 可以通过 checkpoint 进行检查点保存和恢复，同理 Timer 也可以由 checkpoint 托管，从 Flink checkpoint 检查点恢复任务时，将立即启动恢复前应启动的处于恢复状态的每个已注册计时器，这也提高了 Timer 的容错性</p>
-<h3 id="1-4-Timers支持被删除"><a href="#1-4-Timers支持被删除" class="headerlink" title="1.4 Timers支持被删除"></a>1.4 Timers支持被删除</h3><p>从 Flink 1.6.x 开始，计时器可以暂停和删除，提供更便捷的 Timer 处理方式</p>
-<p>文章发布自：[Flink Timer 与 TimerService 源码分析与详解](<a href="https://it.cha138.com/ios/show-36808.html#2.1">https://it.cha138.com/ios/show-36808.html#2.1</a> 注册 Timer)</p>
-<p>写的十分好，推荐阅读，除此之外推荐阅读：</p>
-<p><a href="https://it.cha138.com/mysql/show-110719.html">Flink Timer 机制原理，源码整理</a></p>
-<p><a href="https://it.cha138.com/shida/show-452473.html">Flink的定时器EventTime和ProcessTime</a></p>
-<p><a href="https://blog.csdn.net/weixin_43923463/article/details/128043877">Flink使用CoProcessFunction完成实时对账、基于时间的双流join_flink实时对账</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -603,22 +603,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Netcup注册</title>
-    <url>/posts/20241025090101-28cb169b.html</url>
-    <content><![CDATA[<p>Netcup可以注册后缀为de的域名一年1.32欧元，续费一样相当划算</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090250956.png" alt="image-20241025090250956"></p>
-<p>另外Netcup有0.84欧元/月的VPS套餐，每个账户只允许申请一台。</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090506316.png" alt="image-20241025090506316"></p>
-<p>探针如下：</p>
-<p><a href="https://nezha.zyh1.cc/"><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090705371.png" alt="image-20241025090705371"></a></p>
-<p>1.家宽直连，最好在下午4点到早上6点去试，这样能快一点，德国人在上班。用这个链接去买，感谢justwe佬的分享，应该不是aff</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1o：https://www.netcup.de/bestellen/produkt.php?produkt=3422</span><br><span class="line">2o：https://www.netcup.de/bestellen/produkt.php?produkt=3423</span><br><span class="line">4o：https://www.netcup.de/bestellen/produkt.php?produkt=3424</span><br></pre></td></tr></table></figure>
-
-<p>2.一直往下点就行，不行就翻译一下，选择注册帐号，填入你的真实信息，地址不能有“，”全英文，地址选中国，公司可以不填<br>3.会发一封邮件说工作人员正在审核，问你要不要付款，你可以取消之类的，如果你用家宽的话等5分钟左右会收到两封连在一起的邮件，一封给了你帐号密码，另一封让你去验证身份，你打开验证身份即可，注意一定要在第一次就选择预付款，不要选验证身份<br>4.去<a href="https://www.nodeseek.com/jump?to=https://www.servercontrolpanel.de/SCP/Home">https://www.servercontrolpanel.de/SCP/Home</a> 登录，会发二步验证到你的邮箱，去billing付款，信用卡或者paypal，等机器开通，done！</p>
-<p>全程顺利的话半小时解决，我等机器开通等了1个小时，现在只要付钱就能过了，方便多了</p>
-]]></content>
-  </entry>
-  <entry>
     <title>Mockjs 造数据写入Mysql</title>
     <url>/posts/20240520150531-19375093.html</url>
     <content><![CDATA[<p>Mock.js 是一个用于生成随机数据和拦截 Ajax 请求的库，常用于前端开发中对接口进行模拟。通过 Mock.js，可以快速生成各种类型的随机数据，包括但不限于文本、数字、日期、布尔值等，从而方便地进行数据模拟和测试。除了数据生成外，Mock.js 也可以拦截前端发送的 Ajax 请求，返回预先设定的模拟数据，使前端开发人员能够在没有后端支持的情况下进行接口调试及开发。</p>
@@ -648,6 +632,22 @@
 
 <h3 id="3-编写main"><a href="#3-编写main" class="headerlink" title="3. 编写main"></a>3. 编写main</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> mockutil = <span class="built_in">require</span>(<span class="string">&#x27;./util/mockutil.js&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> dbutil = <span class="built_in">require</span>(<span class="string">&#x27;./util/dbutil.js&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">aoc_flight_info_dw</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> sql = <span class="string">&#x27;INSERT INTO tqddb.aoc_flight_info_dw (id, flight_date, flight_no, dep_airport, arr_airport, transfer_number, etd, eta, exist_vip, previous_delay, estimate_delay_time, std, sta, flight_type, d_or_i, ac_type, ac_reg, warn_level, create_time, update_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);&#x27;</span></span><br><span class="line">    dbutil.<span class="title function_">insert</span>(sql, mockutil.<span class="property">aoc_flight_info_dw</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">aoc_passenger_info_dw</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> sql = <span class="string">&#x27;INSERT INTO tqddb.aoc_passenger_info_dw (id, aoc_flight_id, passenger_name, vip_type, vip_line, create_time, update_time) VALUES (?,?,?,?,?,?,?);&#x27;</span></span><br><span class="line">    dbutil.<span class="title function_">insert</span>(sql, mockutil.<span class="property">aoc_passenger_info_dw</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">//aoc_flight_info_dw();</span></span><br><span class="line">    <span class="title function_">aoc_passenger_info_dw</span>()</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">main</span>();</span><br></pre></td></tr></table></figure>
 
+]]></content>
+  </entry>
+  <entry>
+    <title>Netcup注册</title>
+    <url>/posts/20241025090101-28cb169b.html</url>
+    <content><![CDATA[<p>Netcup可以注册后缀为de的域名一年1.32欧元，续费一样相当划算</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090250956.png" alt="image-20241025090250956"></p>
+<p>另外Netcup有0.84欧元/月的VPS套餐，每个账户只允许申请一台。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090506316.png" alt="image-20241025090506316"></p>
+<p>探针如下：</p>
+<p><a href="https://nezha.zyh1.cc/"><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090705371.png" alt="image-20241025090705371"></a></p>
+<p>1.家宽直连，最好在下午4点到早上6点去试，这样能快一点，德国人在上班。用这个链接去买，感谢justwe佬的分享，应该不是aff</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1o：https://www.netcup.de/bestellen/produkt.php?produkt=3422</span><br><span class="line">2o：https://www.netcup.de/bestellen/produkt.php?produkt=3423</span><br><span class="line">4o：https://www.netcup.de/bestellen/produkt.php?produkt=3424</span><br></pre></td></tr></table></figure>
+
+<p>2.一直往下点就行，不行就翻译一下，选择注册帐号，填入你的真实信息，地址不能有“，”全英文，地址选中国，公司可以不填<br>3.会发一封邮件说工作人员正在审核，问你要不要付款，你可以取消之类的，如果你用家宽的话等5分钟左右会收到两封连在一起的邮件，一封给了你帐号密码，另一封让你去验证身份，你打开验证身份即可，注意一定要在第一次就选择预付款，不要选验证身份<br>4.去<a href="https://www.nodeseek.com/jump?to=https://www.servercontrolpanel.de/SCP/Home">https://www.servercontrolpanel.de/SCP/Home</a> 登录，会发二步验证到你的邮箱，去billing付款，信用卡或者paypal，等机器开通，done！</p>
+<p>全程顺利的话半小时解决，我等机器开通等了1个小时，现在只要付钱就能过了，方便多了</p>
 ]]></content>
   </entry>
   <entry>
@@ -718,11 +718,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#x6e;&#110;&#113;&#x6a;&#98;&#x61;&#110;&#53;&#x32;&#x31;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#111;&#109;">&#99;&#x6e;&#110;&#113;&#x6a;&#98;&#x61;&#110;&#53;&#x32;&#x31;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#111;&#109;</a></td>
+<td><a href="mailto:&#99;&#x6e;&#110;&#113;&#x6a;&#98;&#x61;&#x6e;&#x35;&#50;&#x31;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#99;&#x6e;&#110;&#113;&#x6a;&#98;&#x61;&#x6e;&#x35;&#50;&#x31;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></td>
 <td>hoey94</td>
 </tr>
 <tr>
-<td><a href="mailto:&#x33;&#x35;&#x31;&#56;&#x36;&#x35;&#53;&#55;&#x36;&#64;&#x71;&#113;&#46;&#x63;&#111;&#109;">&#x33;&#x35;&#x31;&#56;&#x36;&#x35;&#53;&#55;&#x36;&#64;&#x71;&#113;&#46;&#x63;&#111;&#109;</a></td>
+<td><a href="mailto:&#x33;&#x35;&#x31;&#56;&#54;&#53;&#x35;&#55;&#54;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;">&#x33;&#x35;&#x31;&#56;&#54;&#53;&#x35;&#55;&#54;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>hoey1994</td>
 </tr>
 </tbody></table>
@@ -737,11 +737,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#x6e;&#x6e;&#113;&#106;&#x62;&#x61;&#110;&#x35;&#50;&#49;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;">&#99;&#x6e;&#x6e;&#113;&#106;&#x62;&#x61;&#110;&#x35;&#50;&#49;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#99;&#110;&#110;&#x71;&#x6a;&#98;&#x61;&#110;&#x35;&#x32;&#49;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#x63;&#111;&#x6d;">&#99;&#110;&#110;&#x71;&#x6a;&#98;&#x61;&#110;&#x35;&#x32;&#49;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#x63;&#111;&#x6d;</a></td>
 <td>Test</td>
 </tr>
 <tr>
-<td><a href="mailto:&#x33;&#x35;&#49;&#56;&#54;&#x35;&#x35;&#55;&#54;&#64;&#x71;&#113;&#46;&#99;&#111;&#x6d;">&#x33;&#x35;&#49;&#56;&#54;&#x35;&#x35;&#55;&#54;&#64;&#x71;&#113;&#46;&#99;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#x33;&#x35;&#49;&#x38;&#x36;&#53;&#53;&#55;&#54;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#x6d;">&#x33;&#x35;&#49;&#x38;&#x36;&#53;&#53;&#55;&#54;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#x6d;</a></td>
 <td>test</td>
 </tr>
 </tbody></table>
@@ -790,8 +790,8 @@
 
 
 
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#110;&#x6e;&#x71;&#x6a;&#x62;&#97;&#x6e;&#53;&#50;&#49;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#x63;&#110;&#x6e;&#x71;&#x6a;&#x62;&#97;&#x6e;&#53;&#50;&#49;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#x33;&#x35;&#x31;&#56;&#x36;&#53;&#53;&#55;&#x36;&#64;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;">&#x33;&#x35;&#x31;&#56;&#x36;&#53;&#53;&#55;&#x36;&#64;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;</a>(hoey1994)下创建test项目</p>
+<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#99;&#x6e;&#x6e;&#113;&#x6a;&#98;&#x61;&#110;&#x35;&#50;&#x31;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#99;&#x6e;&#x6e;&#113;&#x6a;&#98;&#x61;&#110;&#x35;&#50;&#x31;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a>(hoey94)下创建Test项目</p>
+<p>在账号<a href="mailto:&#x33;&#53;&#49;&#x38;&#x36;&#53;&#53;&#55;&#x36;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#x6d;">&#x33;&#53;&#49;&#x38;&#x36;&#53;&#53;&#55;&#x36;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#x6d;</a>(hoey1994)下创建test项目</p>
 <p>使用下面命令分别克隆到本地</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
 
@@ -913,13 +913,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>mac下的开发包管理工具-sdk</title>
-    <url>/posts/20230716095858-f1de28db.html</url>
-    <content><![CDATA[<p>SDK可以帮助我们维护mac下的程序包，比如想安装jdk1.8、又想安装jdk11，比如想安装maven等等，它都可以通过指令进行安装和管理。下面是一些常用的指令：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">curl -s &quot;https://get.sdkman.io&quot; | bash</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置path</span></span><br><span class="line">source &quot;$HOME/.sdkman/bin/sdkman-init.sh&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看sdk版本</span></span><br><span class="line">sdk version</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看安装maven安装情况</span></span><br><span class="line">sdk list maven</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装maven 3.6.4</span></span><br><span class="line">sdk install maven  3.6.3</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">maven被安装到的目录</span></span><br><span class="line">cd ~/.sdkman/candidates</span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
     <title>win python环境</title>
     <url>/posts/20241119090857-32189fba.html</url>
     <content><![CDATA[<p><img src="https://img.yihao.de/1731979897739.png" alt="image-20241119093134116"></p>
@@ -942,6 +935,13 @@
 ]]></content>
   </entry>
   <entry>
+    <title>mac下的开发包管理工具-sdk</title>
+    <url>/posts/20230716095858-f1de28db.html</url>
+    <content><![CDATA[<p>SDK可以帮助我们维护mac下的程序包，比如想安装jdk1.8、又想安装jdk11，比如想安装maven等等，它都可以通过指令进行安装和管理。下面是一些常用的指令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">curl -s &quot;https://get.sdkman.io&quot; | bash</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置path</span></span><br><span class="line">source &quot;$HOME/.sdkman/bin/sdkman-init.sh&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看sdk版本</span></span><br><span class="line">sdk version</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看安装maven安装情况</span></span><br><span class="line">sdk list maven</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装maven 3.6.4</span></span><br><span class="line">sdk install maven  3.6.3</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">maven被安装到的目录</span></span><br><span class="line">cd ~/.sdkman/candidates</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
     <title>中转线路的应用</title>
     <url>/posts/20240417164207-f8343c34.html</url>
     <content><![CDATA[<p>中转机指的是一个中间服务器，将用户的请求转发到目标服务器上。在使用VPS的时候，也常常会通过中转机进行访问。例如，用户在国内使用VPS搭建了一个网站，但由于网络限制等问题，国外用户无法直接访问该网站。这时，用户可以在国外租用一台VPS作为中转机，然后将中转机和国内的VPS连接起来，通过中转机实现访问。在此过程中，用户的请求会先到达中转机，再由中转机将请求转发到国内的VPS上，最后再将响应返回给用户。中转机也可以增加一些额外的安全性和隐私保护措施，保护用户的数据和隐私。</p>
@@ -961,13 +961,6 @@
 <p>默认情况下 V2Ray 脚本会随机生成一个端口，如果你需要自定义端口请使用 <code>v2ray add door 需要自定义的端口</code></p>
 <h2 id="3-测试"><a href="#3-测试" class="headerlink" title="3.测试"></a>3.测试</h2><p>把 B 机器给出的配置里面的地址和端口，改成 A 机器的 IP 和端口即可</p>
 <p>就是 B 机器的配置，假设你用 v2rayN 通过 URL 导入了配置，把配置的地址和端口改成 A 机器的 IP 和 Dokodemo-door 端口。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>喜当爹</title>
-    <url>/posts/20241027142701-bb4ea6a4.html</url>
-    <content><![CDATA[<p><img src="https://img.yihao.de/1730010431322.png" alt="image-20241027142706017"></p>
-<p>意不意外、惊不惊喜，就是这么快。</p>
 ]]></content>
   </entry>
   <entry>
@@ -1082,7 +1075,7 @@
 
 
 
-<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#x64;&#109;&#105;&#x6e;&#64;&#101;&#x78;&#97;&#x6d;&#112;&#108;&#x65;&#46;&#99;&#x6f;&#109;">&#97;&#x64;&#109;&#105;&#x6e;&#64;&#101;&#x78;&#97;&#x6d;&#112;&#108;&#x65;&#46;&#99;&#x6f;&#109;</a>/changeme，登录后修改</p>
+<h2 id="结合Cloudflare-配置NPM"><a href="#结合Cloudflare-配置NPM" class="headerlink" title="结合Cloudflare 配置NPM"></a>结合Cloudflare 配置NPM</h2><p>NPM默认账号密码: <a href="mailto:&#97;&#x64;&#109;&#105;&#110;&#64;&#101;&#x78;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#x6d;">&#97;&#x64;&#109;&#105;&#110;&#64;&#101;&#x78;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a>/changeme，登录后修改</p>
 <p>登录Cloudflare，到自己的域名中添加A记录，指向VPS服务器（我的VPS是110.123.11.1，域名是hoey.tk）</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504222932398.png" alt="image-20230504222932398"></p>
 <p>在NPM中添加对应的反向代理配置，并打开SSL，（下图是以nas这条记录为例，描述NPM的配置）</p>
@@ -1093,6 +1086,13 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>配置完成以后，就可以使用nas.hoey.tk访问nas服务了，当用户访问nas.hoey.tk时，在网络中它的链路应该如下图所示：</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230504214857962.png" alt="image-20230504214857962"></p>
 <p>以上</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>喜当爹</title>
+    <url>/posts/20241027142701-bb4ea6a4.html</url>
+    <content><![CDATA[<p><img src="https://img.yihao.de/1730010431322.png" alt="image-20241027142706017"></p>
+<p>意不意外、惊不惊喜，就是这么快。</p>
 ]]></content>
   </entry>
   <entry>
@@ -1149,37 +1149,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>构建你的短链接</title>
-    <url>/posts/20241115103626-5d207e39.html</url>
-    <content><![CDATA[<p>对短链服务架构研究一番后，小年就突然兴起，为何不自己动手做一个？</p>
-<p>要实现一个简单易用的短链服务其实并不复杂，但是考虑到时间和维护成本，如果用Java、Go 来实现的话，可能会比较重、繁琐。</p>
-<p>正巧小年最近在学习 React 和 Nextjs ，加上 Vercel 支持免费部署，刚好学以致用，尝试一点不一样的技术栈。</p>
-<p>当然，重点是：<strong>免费！</strong></p>
-<p>按照小年的教程，只需要 10 分钟时间就可以免费部署一个自己的短链服务。</p>
-<h2 id="Step-1：Github-Fork-项目"><a href="#Step-1：Github-Fork-项目" class="headerlink" title="Step 1：Github Fork 项目"></a>Step 1：Github Fork 项目</h2><p>打开小年的 Github Repository：<strong>short-link</strong>，fork 到自己的仓库</p>
-<h2 id="Setp-2：注册-Vercel"><a href="#Setp-2：注册-Vercel" class="headerlink" title="Setp 2：注册 Vercel"></a>Setp 2：注册 Vercel</h2><p>登录 Vercel 官网注册账号，可以通过github账号关联登录。</p>
-<h2 id="Setp-3：创建项目"><a href="#Setp-3：创建项目" class="headerlink" title="Setp 3：创建项目"></a>Setp 3：创建项目</h2><p>1、创建账号后，进入个人主页 Overview，创建项目</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/15/6736b066df5ba.png" alt="image.png"></p>
-<p>2、选中 Github Fork 的项目 <strong>short-link</strong><br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0783d8a0.png" alt="image.png"></p>
-<p>3、这里默认选中 Next.js，点击 Deploy<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b08101d0b.png" alt="image.png"></p>
-<h2 id="Step-4：配置数据库"><a href="#Step-4：配置数据库" class="headerlink" title="Step 4：配置数据库"></a>Step 4：配置数据库</h2><p>项目第一次部署后，虽然页面可以访问，但其实功能还不能正常运行，还需要配置Storage。</p>
-<p>进到 Storage 创建数据库，类型选择 KV。</p>
-<p>然后进入新创建的项目，进入 Storage ，关联刚刚新创建的数据库即可。<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b08bb62d5.png" alt="image.png"></p>
-<h2 id="Step-5：重新部署"><a href="#Step-5：重新部署" class="headerlink" title="Step 5：重新部署"></a>Step 5：重新部署</h2><p>进入项目的部署标签页下，重新部署后，就可以直接使用了。<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0994a34a.png" alt="image.png"></p>
-<p>整个过程大概10min，就可以部署一套属于自己的短链服务。</p>
-<p>vercel会为每个project自动生成一个域名，访问域名就能看到最终的效果页面啦~<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0a188d4c.png" alt="image.png"></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>拉链表</title>
-    <url>/posts/20230221094327-2e5ad32b.html</url>
-    <content><![CDATA[<p>拉链表思路图：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094438645.png" alt="image-20230221094438645"></p>
-<p>使用HiveSQL增量完成拉链表加工思路：</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094348740.png" alt="image-20230221094348740"></p>
-]]></content>
-  </entry>
-  <entry>
     <title>手机端使用GPT的方法</title>
     <url>/posts/20240308001148-fe432aac.html</url>
     <content><![CDATA[<ol>
@@ -1204,6 +1173,51 @@
 <p>之后和它对话即可。</p>
 <p>你也可以在频道里面 @ChatGPT，像下面这样</p>
 <p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240308011304177.png" alt="image-20240308011304177"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>扩展空间</title>
+    <url>/posts/20241126170410-undefined.html</url>
+    <content><![CDATA[<p>直接下单下单后</p>
+<p>复制以下链接到夸克(手机APP)打开</p>
+<p><a href="https://b.quark.cn/apps/c3qMkYerj/routes/sK4B44Dfc?uc_param_str=dsdnfrpfbivesscpgimibtbmnijblauputogpintnwktprchmt&amp;uc_biz_str=S:custom%7CC:titlebar_hover_2">https://b.quark.cn/apps/c3qMkYerj/routes/sK4B44Dfc?uc_param_str=dsdnfrpfbivesscpgimibtbmnijblauputogpintnwktprchmt&amp;uc_biz_str=S%3Acustom%7CC%3Atitlebar_hover_2</a></p>
+<p><img src="https://img.yihao.de/1732611975559.png" alt="image-20241126170612129"></p>
+<p>夸克打开后出现如下界面</p>
+<p><img src="https://img.yihao.de/1732612022822.png" alt="image-20241126170657893"></p>
+<p>复制ID发送到咸鱼窗口，并确认绑定（不绑定审核不成功)，出现如下界面即可。</p>
+<p><img src="https://img.yihao.de/1732612075366.png" alt="image-20241126170752658"></p>
+<p>将夸克绑定的手机号也发送到咸鱼窗口。提交申请，等待审核通过即可。一般1~2个工作日</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>拉链表</title>
+    <url>/posts/20230221094327-2e5ad32b.html</url>
+    <content><![CDATA[<p>拉链表思路图：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094438645.png" alt="image-20230221094438645"></p>
+<p>使用HiveSQL增量完成拉链表加工思路：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230221094348740.png" alt="image-20230221094348740"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>构建你的短链接</title>
+    <url>/posts/20241115103626-5d207e39.html</url>
+    <content><![CDATA[<p>对短链服务架构研究一番后，小年就突然兴起，为何不自己动手做一个？</p>
+<p>要实现一个简单易用的短链服务其实并不复杂，但是考虑到时间和维护成本，如果用Java、Go 来实现的话，可能会比较重、繁琐。</p>
+<p>正巧小年最近在学习 React 和 Nextjs ，加上 Vercel 支持免费部署，刚好学以致用，尝试一点不一样的技术栈。</p>
+<p>当然，重点是：<strong>免费！</strong></p>
+<p>按照小年的教程，只需要 10 分钟时间就可以免费部署一个自己的短链服务。</p>
+<h2 id="Step-1：Github-Fork-项目"><a href="#Step-1：Github-Fork-项目" class="headerlink" title="Step 1：Github Fork 项目"></a>Step 1：Github Fork 项目</h2><p>打开小年的 Github Repository：<strong>short-link</strong>，fork 到自己的仓库</p>
+<h2 id="Setp-2：注册-Vercel"><a href="#Setp-2：注册-Vercel" class="headerlink" title="Setp 2：注册 Vercel"></a>Setp 2：注册 Vercel</h2><p>登录 Vercel 官网注册账号，可以通过github账号关联登录。</p>
+<h2 id="Setp-3：创建项目"><a href="#Setp-3：创建项目" class="headerlink" title="Setp 3：创建项目"></a>Setp 3：创建项目</h2><p>1、创建账号后，进入个人主页 Overview，创建项目</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/15/6736b066df5ba.png" alt="image.png"></p>
+<p>2、选中 Github Fork 的项目 <strong>short-link</strong><br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0783d8a0.png" alt="image.png"></p>
+<p>3、这里默认选中 Next.js，点击 Deploy<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b08101d0b.png" alt="image.png"></p>
+<h2 id="Step-4：配置数据库"><a href="#Step-4：配置数据库" class="headerlink" title="Step 4：配置数据库"></a>Step 4：配置数据库</h2><p>项目第一次部署后，虽然页面可以访问，但其实功能还不能正常运行，还需要配置Storage。</p>
+<p>进到 Storage 创建数据库，类型选择 KV。</p>
+<p>然后进入新创建的项目，进入 Storage ，关联刚刚新创建的数据库即可。<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b08bb62d5.png" alt="image.png"></p>
+<h2 id="Step-5：重新部署"><a href="#Step-5：重新部署" class="headerlink" title="Step 5：重新部署"></a>Step 5：重新部署</h2><p>进入项目的部署标签页下，重新部署后，就可以直接使用了。<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0994a34a.png" alt="image.png"></p>
+<p>整个过程大概10min，就可以部署一套属于自己的短链服务。</p>
+<p>vercel会为每个project自动生成一个域名，访问域名就能看到最终的效果页面啦~<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0a188d4c.png" alt="image.png"></p>
 ]]></content>
   </entry>
   <entry>
