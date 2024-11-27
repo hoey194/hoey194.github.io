@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="n86IUFnBFOxfeqHBuzwyDN9z4IxNVMohQEh6b6rUtYo" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.所有指标没有标注单位的都是个位,如资金项单位都是元,股本单位都是股。2.所有的空值数据显示为0,以方便客户加减运算,非金融类指标在指标名称后有标注。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566">
+<meta property="og:type" content="article">
+<meta property="og:title" content="财务字段含义对照表">
+<meta property="og:url" content="http://example.com/posts/20241127092328-d9ff4a2b.html">
+<meta property="og:site_name" content="Hoey笔记">
+<meta property="og:description" content="1.所有指标没有标注单位的都是个位,如资金项单位都是元,股本单位都是股。2.所有的空值数据显示为0,以方便客户加减运算,非金融类指标在指标名称后有标注。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-27T01:23:28.000Z">
+<meta property="article:modified_time" content="2024-11-27T05:24:37.955Z">
+<meta property="article:author" content="Hoey">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/posts/20241127092328-d9ff4a2b.html"/>
+
+
+
+
+
+  <title>财务字段含义对照表 | Hoey笔记</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?43f2ad51dd03ad146d67cc622d4e11e2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hoey笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">和有趣的人做尽有趣的事</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a target="_blank" href="http://hoey.tk" rel="section noopener">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Sitemap
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<style>
+  #VOCECHAT_WIDGET {
+    bottom: 85px !important;
+    right: 25px !important;
+  }
+</style>
+
+<script
+  data-host-id="1"
+  data-auto-reg="true"
+  data-login-token=""
+  data-close-width="35"
+  data-close-height="35"
+  data-open-width="380"
+  data-open-height="680"
+  data-position="right"
+  data-welcome="请问有什么事？"
+  src="https://talk.zyh1.cc/widget.js"
+  async
+></script>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241127092328-d9ff4a2b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">财务字段含义对照表</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-11-27T09:23:28+08:00">
+                2024-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>1.所有指标没有标注单位的都是个位,如资金项单位都是元,股本单位都是股。<br>2.所有的空值数据显示为0,以方便客户加减运算,非金融类指标在指标名称后有标注。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br></pre></td><td class="code"><pre><span class="line">-------------每股指标-----------------------------</span><br><span class="line">1--基本每股收益</span><br><span class="line">2--扣除非经常性损益每股收益</span><br><span class="line">3--每股未分配利润</span><br><span class="line">4--每股净资产</span><br><span class="line">5--每股资本公积金</span><br><span class="line">6--净资产收益率</span><br><span class="line">7--每股经营现金流量</span><br><span class="line">-------------资产负债表----------------------------</span><br><span class="line">8.--货币资金</span><br><span class="line">9.--交易性金融资产</span><br><span class="line">10.--应收票据</span><br><span class="line">11.--应收账款</span><br><span class="line">12.--预付款项</span><br><span class="line">13.--其他应收款</span><br><span class="line">14.--应收关联公司款</span><br><span class="line">15.--应收利息</span><br><span class="line">16.--应收股利</span><br><span class="line">17.--存货</span><br><span class="line">18.--其中：消耗性生物资产</span><br><span class="line">19.--一年内到期的非流动资产</span><br><span class="line">20.--其他流动资产</span><br><span class="line">21.--流动资产合计</span><br><span class="line">22.--可供出售金融资产</span><br><span class="line">23.--持有至到期投资</span><br><span class="line">24.--长期应收款</span><br><span class="line">25.--长期股权投资</span><br><span class="line">26.--投资性房地产</span><br><span class="line">27.--固定资产</span><br><span class="line">28.--在建工程</span><br><span class="line">29.--工程物资</span><br><span class="line">30.--固定资产清理</span><br><span class="line">31.--生产性生物资产</span><br><span class="line">32.--油气资产</span><br><span class="line">33.--无形资产</span><br><span class="line">34.--开发支出</span><br><span class="line">35.--商誉</span><br><span class="line">36.--长期待摊费用</span><br><span class="line">37.--递延所得税资产</span><br><span class="line">38.--其他非流动资产</span><br><span class="line">39.--非流动资产合计</span><br><span class="line">40.--资产总计</span><br><span class="line">41.--短期借款</span><br><span class="line">42.--交易性金融负债</span><br><span class="line">43.--应付票据</span><br><span class="line">44.--应付账款</span><br><span class="line">45.--预收款项</span><br><span class="line">46.--应付职工薪酬</span><br><span class="line">47.--应交税费</span><br><span class="line">48.--应付利息</span><br><span class="line">49.--应付股利</span><br><span class="line">50.--其他应付款</span><br><span class="line">51.--应付关联公司款</span><br><span class="line">52.--一年内到期的非流动负债</span><br><span class="line">53.--其他流动负债</span><br><span class="line">54.--流动负债合计</span><br><span class="line">55.--长期借款</span><br><span class="line">56.--应付债券</span><br><span class="line">57.--长期应付款</span><br><span class="line">58.--专项应付款</span><br><span class="line">59.--预计负债</span><br><span class="line">60.--递延所得税负债</span><br><span class="line">61.--其他非流动负债</span><br><span class="line">62.--非流动负债合计</span><br><span class="line">63.--负债合计</span><br><span class="line">64.--实收资本（或股本）</span><br><span class="line">65.--资本公积</span><br><span class="line">66.--盈余公积</span><br><span class="line">67.--减：库存股</span><br><span class="line">68.--未分配利润</span><br><span class="line">69.--少数股东权益</span><br><span class="line">70.--外币报表折算价差</span><br><span class="line">71.--非正常经营项目收益调整</span><br><span class="line">72.--所有者权益（或股东权益）合计</span><br><span class="line">73.--负债和所有者（或股东权益）合计</span><br><span class="line">-------------利润表-----------------------------</span><br><span class="line">74.--其中：营业收入</span><br><span class="line">75.--其中：营业成本</span><br><span class="line">76.--营业税金及附加</span><br><span class="line">77.--销售费用</span><br><span class="line">78.--管理费用</span><br><span class="line">79.--勘探费用</span><br><span class="line">80.--财务费用</span><br><span class="line">81.--资产减值损失</span><br><span class="line">82.--加：公允价值变动净收益</span><br><span class="line">83.--投资收益</span><br><span class="line">84.--其中：对联营企业和合营企业的投资收益</span><br><span class="line">85.--影响营业利润的其他科目</span><br><span class="line">86.--三、营业利润</span><br><span class="line">87.--加：补贴收入</span><br><span class="line">88.--营业外收入</span><br><span class="line">89.--减：营业外支出</span><br><span class="line">90.--其中：非流动资产处置净损失</span><br><span class="line">91.--加：影响利润总额的其他科目</span><br><span class="line">92.--四、利润总额</span><br><span class="line">93.--减：所得税</span><br><span class="line">94.--加：影响净利润的其他科目</span><br><span class="line">95.--五、净利润</span><br><span class="line">96.--归属于母公司所有者的净利润</span><br><span class="line">97.--少数股东损益</span><br><span class="line">------------------现金流量表---------------------</span><br><span class="line">98.--销售商品、提供劳务收到的现金</span><br><span class="line">99.--收到的税费返还</span><br><span class="line">100.--收到其他与经营活动有关的现金</span><br><span class="line">101.--经营活动现金流入小计</span><br><span class="line">102.--购买商品、接受劳务支付的现金</span><br><span class="line">103.--支付给职工以及为职工支付的现金</span><br><span class="line">104.--支付的各项税费</span><br><span class="line">105.--支付其他与经营活动有关的现金</span><br><span class="line">106.--经营活动现金流出小计</span><br><span class="line">107.--经营活动产生的现金流量净额</span><br><span class="line">108.--收回投资收到的现金</span><br><span class="line">109.--取得投资收益收到的现金</span><br><span class="line">110.--处置固定资产、无形资产和其他长期资产收回的现金净额</span><br><span class="line">111.--处置子公司及其他营业单位收到的现金净额</span><br><span class="line">112.--收到其他与投资活动有关的现金</span><br><span class="line">113.--投资活动现金流入小计</span><br><span class="line">114.--购建固定资产、无形资产和其他长期资产支付的现金</span><br><span class="line">115.--投资支付的现金</span><br><span class="line">116.--取得子公司及其他营业单位支付的现金净额</span><br><span class="line">117.--支付其他与投资活动有关的现金</span><br><span class="line">118.--投资活动现金流出小计</span><br><span class="line">119.--投资活动产生的现金流量净额</span><br><span class="line">120.--吸收投资收到的现金</span><br><span class="line">121.--取得借款收到的现金</span><br><span class="line">122.--收到其他与筹资活动有关的现金</span><br><span class="line">123.--筹资活动现金流入小计</span><br><span class="line">124.--偿还债务支付的现金</span><br><span class="line">125.--分配股利、利润或偿付利息支付的现金</span><br><span class="line">126.--支付其他与筹资活动有关的现金</span><br><span class="line">127.--筹资活动现金流出小计</span><br><span class="line">128.--筹资活动产生的现金流量净额</span><br><span class="line">129.--四、汇率变动对现金的影响</span><br><span class="line">130.--四(2)、其他原因对现金的影响</span><br><span class="line">131.--五、现金及现金等价物净增加额</span><br><span class="line">132.--期初现金及现金等价物余额</span><br><span class="line">133.--期末现金及现金等价物余额</span><br><span class="line">134.--净利润</span><br><span class="line">135.--加：资产减值准备</span><br><span class="line">136.--固定资产折旧、油气资产折耗、生产性生物资产折旧</span><br><span class="line">137.--无形资产摊销</span><br><span class="line">138.--长期待摊费用摊销</span><br><span class="line">139.--处置固定资产、无形资产和其他长期资产的损失</span><br><span class="line">140.--固定资产报废损失</span><br><span class="line">141.--公允价值变动损失</span><br><span class="line">142.--财务费用</span><br><span class="line">143.--投资损失</span><br><span class="line">144.--递延所得税资产减少</span><br><span class="line">145.--递延所得税负债增加</span><br><span class="line">146.--存货的减少</span><br><span class="line">147.--经营性应收项目的减少</span><br><span class="line">148.--经营性应付项目的增加</span><br><span class="line">149.--其他</span><br><span class="line">150.--经营活动产生的现金流量净额2</span><br><span class="line">151.--债务转为资本</span><br><span class="line">152.--一年内到期的可转换公司债券</span><br><span class="line">153.--融资租入固定资产</span><br><span class="line">154.--现金的期末余额</span><br><span class="line">155.--减：现金的期初余额</span><br><span class="line">156.--加：现金等价物的期末余额</span><br><span class="line">157.--减：现金等价物的期初余额</span><br><span class="line">158.--现金及现金等价物净增加额</span><br><span class="line">---------------------偿债能力分析------------------------</span><br><span class="line">159.--流动比率(非金融类指标)</span><br><span class="line">160.--速动比率(非金融类指标)</span><br><span class="line">161.--现金比率(%)(非金融类指标)</span><br><span class="line">162.--利息保障倍数(非金融类指标)</span><br><span class="line">163.--非流动负债比率(%)(非金融类指标)</span><br><span class="line">164.--流动负债比率(%)(非金融类指标)</span><br><span class="line">165.--现金到期债务比率(%)(非金融类指标)</span><br><span class="line">166.--有形资产净值债务率(%)</span><br><span class="line">167.--权益乘数(%)</span><br><span class="line">168.--股东的权益/负债合计(%)</span><br><span class="line">169.--有形资产/负债合计(%)</span><br><span class="line">170.--经营活动产生的现金流量净额/负债合计(%)(非金融类指标)</span><br><span class="line">171.--EBITDA/负债合计(%)(非金融类指标)</span><br><span class="line">---------------------经营效率分析------------------------</span><br><span class="line">172.--应收帐款周转率(非金融类指标)</span><br><span class="line">173.--存货周转率(非金融类指标)</span><br><span class="line">174.--运营资金周转率(非金融类指标)</span><br><span class="line">175.--总资产周转率(非金融类指标)</span><br><span class="line">176.--固定资产周转率(非金融类指标)</span><br><span class="line">177.--应收帐款周转天数(非金融类指标)</span><br><span class="line">178.--存货周转天数(非金融类指标)</span><br><span class="line">179.--流动资产周转率(非金融类指标)</span><br><span class="line">180.--流动资产周转天数(非金融类指标)</span><br><span class="line">181.--总资产周转天数(非金融类指标)</span><br><span class="line">182.--股东权益周转率(非金融类指标)</span><br><span class="line">---------------------发展能力分析------------------------</span><br><span class="line">183.--营业收入增长率(%)</span><br><span class="line">184.--净利润增长率(%)</span><br><span class="line">185.--净资产增长率(%)</span><br><span class="line">186.--固定资产增长率(%)</span><br><span class="line">187.--总资产增长率(%)</span><br><span class="line">188.--投资收益增长率(%)</span><br><span class="line">189.--营业利润增长率(%)</span><br><span class="line">190.--扣非每股收益同比(%)</span><br><span class="line">191.--扣非净利润同比(%)</span><br><span class="line">192.--暂无</span><br><span class="line">---------------------获利能力分析------------------------</span><br><span class="line">193.--成本费用利润率(%)</span><br><span class="line">194.--营业利润率(非金融类指标)</span><br><span class="line">195.--营业税金率(非金融类指标)</span><br><span class="line">196.--营业成本率(非金融类指标)</span><br><span class="line">197.--净资产收益率</span><br><span class="line">198.--投资收益率</span><br><span class="line">199.--销售净利率(%)</span><br><span class="line">200.--总资产报酬率</span><br><span class="line">201.--净利润率(非金融类指标)</span><br><span class="line">202.--销售毛利率(%)(非金融类指标)</span><br><span class="line">203.--三费比重(非金融类指标)</span><br><span class="line">204.--管理费用率(非金融类指标)</span><br><span class="line">205.--财务费用率(非金融类指标)</span><br><span class="line">206.--扣除非经常性损益后的净利润</span><br><span class="line">207.--息税前利润(EBIT)</span><br><span class="line">208.--息税折旧摊销前利润(EBITDA)</span><br><span class="line">209.--EBITDA/营业总收入(%)(非金融类指标)</span><br><span class="line">---------------------资本结构分析---------------------</span><br><span class="line">210.--资产负债率(%)</span><br><span class="line">211.--流动资产比率(非金融类指标)</span><br><span class="line">212.--货币资金比率(非金融类指标)</span><br><span class="line">213.--存货比率(非金融类指标)</span><br><span class="line">214.--固定资产比率</span><br><span class="line">215.--负债结构比(非金融类指标)</span><br><span class="line">216.--归属于母公司股东权益/全部投入资本(%)</span><br><span class="line">217.--股东的权益/带息债务(%)</span><br><span class="line">218.--有形资产/净债务(%)</span><br><span class="line">---------------------现金流量分析---------------------</span><br><span class="line">219.--每股经营性现金流(元)</span><br><span class="line">220.--营业收入现金含量(%)(非金融类指标)</span><br><span class="line">221.--经营活动产生的现金流量净额/经营活动净收益(%)</span><br><span class="line">222.--销售商品提供劳务收到的现金/营业收入(%)</span><br><span class="line">223.--经营活动产生的现金流量净额/营业收入</span><br><span class="line">224.--资本支出/折旧和摊销</span><br><span class="line">225.--每股现金流量净额(元)</span><br><span class="line">226.--经营净现金比率（短期债务）(非金融类指标)</span><br><span class="line">227.--经营净现金比率（全部债务）</span><br><span class="line">228.--经营活动现金净流量与净利润比率</span><br><span class="line">229.--全部资产现金回收率</span><br><span class="line">---------------------单季度财务指标---------------------</span><br><span class="line">230.--营业收入</span><br><span class="line">231.--营业利润</span><br><span class="line">232.--归属于母公司所有者的净利润</span><br><span class="line">233.--扣除非经常性损益后的净利润</span><br><span class="line">234.--经营活动产生的现金流量净额</span><br><span class="line">235.--投资活动产生的现金流量净额</span><br><span class="line">236.--筹资活动产生的现金流量净额</span><br><span class="line">237.--现金及现金等价物净增加额</span><br><span class="line">---------------------股本股东---------------------</span><br><span class="line">238.--总股本</span><br><span class="line">239.--已上市流通A股</span><br><span class="line">240.--已上市流通B股</span><br><span class="line">241.--已上市流通H股</span><br><span class="line">242.--股东人数(户)</span><br><span class="line">243.--第一大股东的持股数量</span><br><span class="line">244.--十大流通股东持股数量合计(股)</span><br><span class="line">245.--十大股东持股数量合计(股)</span><br><span class="line">---------------------机构持股---------------------</span><br><span class="line">246.--机构总量（家）</span><br><span class="line">247.--机构持股总量(股)</span><br><span class="line">248.--QFII机构数</span><br><span class="line">249.--QFII持股量</span><br><span class="line">250.--券商机构数</span><br><span class="line">251.--券商持股量</span><br><span class="line">252.--保险机构数</span><br><span class="line">253.--保险持股量</span><br><span class="line">254.--基金机构数</span><br><span class="line">255.--基金持股量</span><br><span class="line">256.--社保机构数</span><br><span class="line">257.--社保持股量</span><br><span class="line">258.--私募机构数</span><br><span class="line">259.--私募持股量</span><br><span class="line">260.--财务公司机构数</span><br><span class="line">261.--财务公司持股量</span><br><span class="line">262.--年金机构数</span><br><span class="line">263.--年金持股量</span><br><span class="line">---------------------新增指标---------------------</span><br><span class="line">264.--十大流通股东中持有A股合计(股) [注：季度报告中，若股东同时持有非流通A股性质的股份(如同时持有流通A股和流通B股），指标264取的是包含同时持有非流通A股性质的流通股数]</span><br><span class="line">265.--第一大流通股东持股量(股)</span><br><span class="line">266.--自由流通股(股)[注：1.自由流通股=已流通A股-十大流通股东5%以上的A股；2.季度报告中，若股东同时持有非流通A股性质的股份(如同时持有流通A股和流通H股），5%以上的持股取的是不包含同时持有非流通A股性质的流通股数，结果可能偏大； 3.指标按报告期展示，新股在上市日的下个报告期才有数据]</span><br><span class="line">267.--受限流通A股(股)</span><br><span class="line">268.--一般风险准备(金融类)</span><br><span class="line">269.--其他综合收益(利润表)</span><br><span class="line">270.--综合收益总额(利润表)</span><br><span class="line">271.--归属于母公司股东权益(资产负债表)</span><br><span class="line">272.--银行机构数(家)(机构持股)</span><br><span class="line">273.--银行持股量(股)(机构持股)</span><br><span class="line">274.--一般法人机构数(家)(机构持股)</span><br><span class="line">275.--一般法人持股量(股)(机构持股)</span><br><span class="line">276.--近一年净利润(元)</span><br><span class="line">277.--信托机构数(家)(机构持股)</span><br><span class="line">278.--信托持股量(股)(机构持股)</span><br><span class="line">279.--特殊法人机构数(家)(机构持股)</span><br><span class="line">280.--特殊法人持股量(股)(机构持股)</span><br><span class="line">281.--加权净资产收益率(每股指标)</span><br><span class="line">282.--扣非每股收益(单季度财务指标)</span><br><span class="line">283.--最近一年营业收入（万元）</span><br><span class="line">284.--国家队持股数量（万股)[注：本指标统计包含汇金公司、证金公司、外汇管理局旗下投资平台、国家队基金、国开、养老金以及中科汇通等国家队机构持股数量]</span><br><span class="line">285.--业绩预告-本期净利润同比增幅下限%[注：指标285至294展示未来一个报告期的数据。例，3月31日至6月29日这段时间内展示的是中报的数据；如果最新的财务报告后面有多个报告期的业绩预告/快报，只能展示最新的财务报告后面的一个报告期的业绩预告/快报]</span><br><span class="line">286.--业绩预告-本期净利润同比增幅上限%</span><br><span class="line">287.--业绩快报-归母净利润</span><br><span class="line">288.--业绩快报-扣非净利润</span><br><span class="line">289.--业绩快报-总资产</span><br><span class="line">290.--业绩快报-净资产</span><br><span class="line">291.--业绩快报-每股收益</span><br><span class="line">292.--业绩快报-摊薄净资产收益率</span><br><span class="line">293.--业绩快报-加权净资产收益率</span><br><span class="line">294.--业绩快报-每股净资产</span><br><span class="line">295.--应付票据及应付账款(资产负债表)</span><br><span class="line">296.--应收票据及应收账款(资产负债表)</span><br><span class="line">297.--递延收益(资产负债表-非流动负债)</span><br><span class="line">298.--其他综合收益(资产负债表)</span><br><span class="line">299.--其他权益工具(资产负债表)</span><br><span class="line">300.--其他收益(利润表)</span><br><span class="line">301.--资产处置收益(利润表)</span><br><span class="line">302.--持续经营净利润(利润表)</span><br><span class="line">303.--终止经营净利润(利润表)</span><br><span class="line">304.--研发费用(利润表)</span><br><span class="line">305.--其中:利息费用(利润表-财务费用)</span><br><span class="line">306.--其中:利息收入(利润表-财务费用)</span><br><span class="line">307.--近一年经营活动现金流净额</span><br><span class="line">308.--近一年归母净利润（万元）</span><br><span class="line">309.--近一年扣非净利润（万元）</span><br><span class="line">310.--近一年现金净流量（万元）</span><br><span class="line">311.--基本每股收益（单季度）</span><br><span class="line">312.--营业总收入(单季度)(万元)</span><br><span class="line">313.--业绩预告公告日期 [注：本指标展示未来一个报告期的数据。例,3月31日至6月29日这段时间内展示的是中报的数据；如果最新的财务报告后面有多个报告期的业绩预告/快报，只能展示最新的财务报告后面的一个报告期的业绩预告/快报的数据；公告日期格式为YYMMDD，例：190101代表2019年1月1日]</span><br><span class="line">314.--财报公告日期 [注：日期格式为YYMMDD,例：190101代表2019年1月1日]</span><br><span class="line">315.--业绩快报公告日期 [注：本指标展示未来一个报告期的数据。例,3月31日至6月29日这段时间内展示的是中报的数据；如果最新的财务报告后面有多个报告期的业绩预告/快报，只能展示最新的财务报告后面的一个报告期的业绩预告/快报的数据；公告日期格式为YYMMDD，例：190101代表2019年1月1日]</span><br><span class="line">316.--近一年投资活动现金流净额(万元)</span><br><span class="line">317.--业绩预告-本期净利润下限(万元)[注：指标317至318展示未来一个报告期的数据。例，3月31日至6月29日这段时间内展示的是中报的数据；如果最新的财务报告后面有多个报告期的业绩预告/快报，只能展示最新的财务报告后面的一个报告期的业绩预告/快报]</span><br><span class="line">318.--业绩预告-本期净利润上限(万元)</span><br><span class="line">319.--营业总收入TTM(万元)</span><br><span class="line">320.--员工总数(人)</span><br><span class="line">321.--每股企业自由现金流</span><br><span class="line">322.--每股股东自由现金流</span><br><span class="line"></span><br><span class="line">---------------------资产负债表新增指标---------------------</span><br><span class="line">401.--专项储备(万元)</span><br><span class="line">402.--结算备付金(万元)</span><br><span class="line">403.--拆出资金(万元)</span><br><span class="line">404.--发放贷款及垫款(万元)(流动资产科目)</span><br><span class="line">405.--衍生金融资产(万元)</span><br><span class="line">406.--应收保费(万元)</span><br><span class="line">407.--应收分保账款(万元)</span><br><span class="line">408.--应收分保合同准备金(万元)</span><br><span class="line">409.--买入返售金融资产(万元)</span><br><span class="line">410.--划分为持有待售的资产(万元)</span><br><span class="line">411.--发放贷款及垫款(万元)(非流动资产科目)</span><br><span class="line">412.--向中央银行借款(万元)</span><br><span class="line">413.--吸收存款及同业存放(万元)</span><br><span class="line">414.--拆入资金(万元)</span><br><span class="line">415.--衍生金融负债(万元)</span><br><span class="line">416.--卖出回购金融资产款(万元)</span><br><span class="line">417.--应付手续费及佣金(万元)</span><br><span class="line">418.--应付分保账款(万元)</span><br><span class="line">419.--保险合同准备金(万元)</span><br><span class="line">420.--代理买卖证券款(万元)</span><br><span class="line">421.--代理承销证券款(万元)</span><br><span class="line">422.--划分为持有待售的负债(万元)</span><br><span class="line">423.--预计负债(万元)</span><br><span class="line">424.--递延收益(万元)（流动负债科目，公告此科目的股票较少，大部分公司没有此数据）</span><br><span class="line">425.--其中:优先股(万元)(非流动负债科目)</span><br><span class="line">426.--永续债(万元)(非流动负债科目)</span><br><span class="line">427.--长期应付职工薪酬(万元)</span><br><span class="line">428.--其中:优先股(万元)(所有者权益科目)</span><br><span class="line">429.--永续债(万元)(所有者权益科目)</span><br><span class="line">430.--债权投资(万元)</span><br><span class="line">431.--其他债权投资(万元)</span><br><span class="line">432.--其他权益工具投资(万元)</span><br><span class="line">433.--其他非流动金融资产(万元)</span><br><span class="line">434.--合同负债(万元)</span><br><span class="line">435.--合同资产(万元)</span><br><span class="line">436.--其他资产(万元)</span><br><span class="line">437.--应收款项融资(万元)</span><br><span class="line">438.--使用权资产(万元)</span><br><span class="line">439.--租赁负债(万元)</span><br><span class="line"></span><br><span class="line">---------------------利润表新增指标---------------------</span><br><span class="line">501.--稀释每股收益(元)</span><br><span class="line">502.--营业总收入(万元)</span><br><span class="line">503.--汇兑收益(万元)</span><br><span class="line">504.--其中:归属于母公司综合收益(万元)</span><br><span class="line">505.--其中:归属于少数股东综合收益(万元)</span><br><span class="line">506.--利息收入(万元)</span><br><span class="line">507.--已赚保费(万元)</span><br><span class="line">508.--手续费及佣金收入(万元)</span><br><span class="line">509.--利息支出(万元)</span><br><span class="line">510.--手续费及佣金支出(万元)</span><br><span class="line">511.--退保金(万元)</span><br><span class="line">512.--赔付支出净额(万元)</span><br><span class="line">513.--提取保险合同准备金净额(万元)</span><br><span class="line">514.--保单红利支出(万元)</span><br><span class="line">515.--分保费用(万元)</span><br><span class="line">516.--其中:非流动资产处置利得(万元)</span><br><span class="line">517.--信用减值损失(万元)</span><br><span class="line">518.--净敞口套期收益(万元)</span><br><span class="line">519.--营业总成本(万元)</span><br><span class="line">520.--信用减值损失(万元、2019格式)</span><br><span class="line">521.--资产减值损失(万元、2019格式)</span><br><span class="line"></span><br><span class="line">---------------------现金流量表新增指标---------------------</span><br><span class="line">561.--加:其他原因对现金的影响2(万元)(现金的期末余额科目)</span><br><span class="line">562.--客户存款和同业存放款项净增加额(万元)</span><br><span class="line">563.--向中央银行借款净增加额(万元)</span><br><span class="line">564.--向其他金融机构拆入资金净增加额(万元)</span><br><span class="line">565.--收到原保险合同保费取得的现金(万元)</span><br><span class="line">566.--收到再保险业务现金净额(万元)</span><br><span class="line">567.--保户储金及投资款净增加额(万元)</span><br><span class="line">568.--处置以公允价值计量且其变动计入当期损益的金融资产净增加额(万元)</span><br><span class="line">569.--收取利息、手续费及佣金的现金(万元)</span><br><span class="line">570.--拆入资金净增加额(万元)</span><br><span class="line">571.--回购业务资金净增加额(万元)</span><br><span class="line">572.--客户贷款及垫款净增加额(万元)</span><br><span class="line">573.--存放中央银行和同业款项净增加额(万元)</span><br><span class="line">574.--支付原保险合同赔付款项的现金(万元)</span><br><span class="line">575.--支付利息、手续费及佣金的现金(万元)</span><br><span class="line">576.--支付保单红利的现金(万元)</span><br><span class="line">577.--其中:子公司吸收少数股东投资收到的现金(万元)</span><br><span class="line">578.--其中:子公司支付给少数股东的股利、利润(万元)</span><br><span class="line">579.--投资性房地产的折旧及摊销(万元)</span><br><span class="line">580.--信用减值损失(万元)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/20241119090857-32189fba.html" rel="next" title="win python环境">
+                <i class="fa fa-chevron-left"></i> win python环境
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/20241127132327-8763d53e.html" rel="prev" title="炒股从入门到放弃-术语大全(一)">
+                炒股从入门到放弃-术语大全(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="hoey194/note"
+        data-repo-id="R_kgDOImfwSg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOImfwSs4CikdG"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hoey</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span id="timeDate"></span>
+<span id="times"></span>
+
+
+
+<script>
+  var now = new Date();
+  function createtime() {
+    var grt= new Date("01/01/2022 12:00:00");//此处修改你的建站时间或者网站上线时间
+    now.setTime(now.getTime()+250);
+    days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+    hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+    if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+    mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+    seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+    snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+    document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+    document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+  }
+  setInterval("createtime()",250);
+</script>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
