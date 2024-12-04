@@ -303,6 +303,451 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240415174551-ebe1c553.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240415174551-ebe1c553.html" itemprop="url">DSM7中Docker MacVLAN的使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-04-15T17:45:51+08:00">
+                2024-04-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="一、-介绍："><a href="#一、-介绍：" class="headerlink" title="一、 介绍："></a>一、 介绍：</h1><p>MACVLAN是一种网络虚拟化技术，它允许用户将多个虚拟的MAC地址映射到不同的容器或虚拟机上，从而使它们能够在同一物理网络上运行，同时保持相互隔离。具体来说，MACVLAN允许用户创建一组虚拟的接口（类似于真实网络接口），每个接口都拥有独立的MAC地址，并且能够与物理网络中的其他设备进行通信。</p>
+<p>通过使用MACVLAN，用户可以实现容器或虚拟机之间的独立网络通信，同时利用主机物理网络的优势，比如更高的带宽和更低的延迟。此外，MACVLAN还可以帮助用户更好地管理网络资源，提高网络性能和安全性。</p>
+<p>简单来说就是使用macvlan网络模式的docker容器，可以看作是局域网内的一个独立设备，它会有一个独立的内网IP。每个macvlan下的docker容器，都有自己一套完整的端口可用，不会互相冲突。</p>
+<h1 id="二、DSM配置"><a href="#二、DSM配置" class="headerlink" title="二、DSM配置"></a>二、DSM配置</h1><p>控制面板-网络-网络界面-管理-Open vSwitch 设置</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415174943584.png" alt="image-20240415174943584"></p>
+<p>打开Open vSwitch</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175008953.png" alt="image-20240415175008953"></p>
+<p>Open vSwitch就是虚拟交换机。可以简单这样理解，docker容器接入这台交换机，就可以连上你的路由器，相当于一台手机or平板or盒子接入你家网络。</p>
+<p>确认打开Open vSwitch开关以后，我们进入SSH控制台。</p>
+<p>输入</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175124404.png" alt="image-20240415175124404"></p>
+<p>图中列出了NAS的所有网卡，其中有一个ovs_eth0的网口，对应NAS物理网口信息。这个网口就是开启了Open vSwitch以后的联网网口。如果你的联网网口是其他口（eth*），这里的ovs_eth*也可能不一样，自行注意。等会创建macvlan网络需要使用这个端口，一定记好，不要搞错。</p>
+<p>下一步输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network ls</span><br></pre></td></tr></table></figure>
+
+<p>查看docker的网络详情</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175236036.png" alt="image-20240415175236036"></p>
+<p>目前默认只有三种网络模式</p>
+<p>bridge、host、none三种网络模式是什么原理作用，大家自行百度即可。</p>
+<p>如果已经有driver为macvlan的docker网络，可以执行 docker network rm name 来进行删除，name为macvlan网络实际名称，即图上的NAME栏参数。</p>
+<p>确认docker网络中没有macvlan网络，我们再进行下一步。</p>
+<p>创建自定义macvlan网络。</p>
+<p>创建命令很简单，和创建docker容器类似。</p>
+<p>我这里内网网段是  11.0.0.0/24  ，主路由网关  11.0.0.1 ，旁路由网关  11.0.0.2  。</p>
+<p>我的目的是让qB和TR不经过旁路由网关，直接走主路由网关，所以要把macvlan的网关设置成  11.0.0.1  。</p>
+<p>创建macvlan网络命令如下</p>
+<p>仅ipv4</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network create -d macvlan --subnet=11.0.0.0/24 --gateway=11.0.0.1 -o parent=ovs_eth0 name</span><br></pre></td></tr></table></figure>
+
+<p>ipv4&amp;ipv6双栈</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network create -d macvlan --subnet=11.0.0.0/24 --gateway=10.0.0.1 --ipv6 --subnet=2008::/60 --gateway=2008::1  -o parent=ovs_eth0 name</span><br></pre></td></tr></table></figure>
+
+<p>简单解释一下</p>
+<p>docker network create -d macvlan #指定创建的网络类型是macvlan</p>
+<p>–subnet=11.0.0.0/24 #macvlan的ipv4网段，这里写你的内网网段即可。</p>
+<p>–gateway=11.0.0.1 #macvlan的ipv4网关，这里写您需要容器走的网关。</p>
+<p>–ipv6 #启用ipv6支持</p>
+<p>–subnet=2408::/60 #macvlan的ipv6前缀</p>
+<p>–gateway=2408::1 #macvlan的ipv6网关</p>
+<p>-o parent=ovs_eth0 #桥接网络走的是ovs_eth0接口，如果你的接口不是这个，请自行更改。</p>
+<p>name #macvlan网络的名称</p>
+<p>参数怎么填大家按照自己实际需求情况来</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175421688.png" alt="image-20240415175421688"></p>
+<p>我这里仅供参考</p>
+<p>上图的创建命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network create -d macvlan --subnet=11.0.0.0/24 --gateway=11.0.0.1 --ipv6 --subnet=2408:825c:900:xxxx::/60 --gateway=2408:825c:900:xxxx::1  -o parent=ovs_eth0 GGGGG</span><br></pre></td></tr></table></figure>
+
+<p>创建了一个名为GGGGG（名字随意，你喜欢就可以）的ipv4&amp;ipv6双栈macvlan网络。</p>
+<p>创建完成以后可以再次输入 <code>docker network ls</code> 检查是否创建成功（如上图）。</p>
+<p>也可以打开docker的webui，检查网络信息。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175451364.png" alt="image-20240415175451364"></p>
+<p>macvlan网络创建成功以后，我们就可以使用它来创建具体容器了。</p>
+<p>比如我这里要创建三个使用macvlan的qB</p>
+<p>命令如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name=qB-down1 --net=GGGGG --ip=11.0.0.151 -v /volume1/docker/qB/config1:/config --privileged=<span class="literal">true</span> --restart=always linuxserver/qbittorrent:latest</span><br><span class="line"></span><br><span class="line">docker run -d --name=qB-down2 --net=GGGGG --ip=11.0.0.152 -v /volume1/docker/qB/config2:/config --privileged=<span class="literal">true</span> --restart=always linuxserver/qbittorrent:latest</span><br><span class="line"></span><br><span class="line">docker run -d --name=qB-down3 --net=GGGGG --ip=11.0.0.153 -v /volume1/docker/qB/config3:/config --privileged=<span class="literal">true</span> --restart=always linuxserver/qbittorrent:latest</span><br></pre></td></tr></table></figure>
+
+<p>重点提一下</p>
+<p>–net=GGGGG #为容器使用名为GGGGG的docker网络模式</p>
+<p>–ip=11.0.0.xxx #指定容器IP</p>
+<p>其余部分跟普通创建容器一致。</p>
+<p>创建其他容器只要 –net 配置为macvlan网络名称即可，大家自行举一反三。</p>
+<p>创建成功以后可以看到macvlan网络模式下有三个容器。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175521503.png" alt="image-20240415175521503"></p>
+<p>我们进入容器内检查网络情况。</p>
+<p>我这里选择进入qB-down1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it qB-down1 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>进入容器后输入  ifconfig  查看网络情况，输入  ip route show  查看网关。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175553960.png" alt="image-20240415175553960"></p>
+<p>可以发现容器网关已经是我需要的主路由网关  11.0.0.1  ，并且获取到了ipv6。</p>
+<p>下面测试一下网络是否正常</p>
+<p>先为qB固定传输端口为22222并配置好端口转发</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175616684.png" alt="image-20240415175616684"></p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175628805.png" alt="image-20240415175628805"></p>
+<p>尝试下载一个种子。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175654017.png" alt="image-20240415175654017"></p>
+<p>ipv6 ipv4都可以正常链接</p>
+<p>直接看站点信息</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175714031.png" alt="image-20240415175714031"></p>
+<p>ipv6、ipv4均正常</p>
+<h1 id="三、与宿主机互通"><a href="#三、与宿主机互通" class="headerlink" title="三、与宿主机互通"></a>三、与宿主机互通</h1><p>一般在macvlan模式下同网段的其他机器可以和容器互通，但宿主不能和容器互通，这是在macvlan模式设计的时候为了安全而禁止了宿主机和容器直接通信。”援引Rehtt大佬的话。</p>
+<p>打个比方就是你用host模式创建的iyuu，默认情况下是访问不了ping不通macvlan模式下的qB客户端的，反之也一样</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175807162.png" alt="image-20240415175807162"></p>
+<p>尝试宿主机直接ping容器qB-down1的IP ，无法ping通。</p>
+<p>不过我们还有曲线救国的办法</p>
+<p>具体直接看Rehtt大佬的教程，里面有详细原理方法介绍。<a target="_blank" rel="noopener" href="https://rehtt.com/index.php/archives/236/">https://rehtt.com/index.php/archives/236/</a></p>
+<p>如果想要实现互通，有个曲线救国的方法，就是macvlan与macvlan之间可以互通，只需要在宿主机再创建一个macvlan网络，然后修改路由，让数据经过这个macvlan达到互通的目的。”同样援引Rehtt大佬的话。</p>
+<p>命令也很简单</p>
+<p>以我前面的配置环境举例就是以下几条命令即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip link add TTTTT link ovs_eth0 type macvlan mode bridge</span><br><span class="line">ip addr add 11.0.0.160 dev TTTTT</span><br><span class="line">ip link set TTTTT up</span><br><span class="line">ip route add 11.0.0.151 dev TTTTT</span><br><span class="line">ip route add 11.0.0.152 dev TTTTT</span><br><span class="line">ip route add 11.0.0.153 dev TTTTT</span><br></pre></td></tr></table></figure>
+
+<p>以下为简单解释</p>
+<p>ip link add TTTTT link ovs_eth0 type macvlan mode bridge #创建一个名为TTTTT的macvlan接口，名字随意你可以设置为你喜欢的名字。ovs_eth0和之前一样，需要写为开启了Open vSwitch以后的联网网口。</p>
+<p>ip addr add 11.0.0.160 dev TTTTT #设置TTTTT接口的IP为11.0.0.160，需要和你之前设置的第一个macvlan（GGGGG）同网段。</p>
+<p>ip link set TTTTT up #启动TTTTT接口。</p>
+<p>ip route add 11.0.0.151 dev TTTTT #让IP11.0.0.151（qB-down1）到宿主机的路由经过TTTTT接口。</p>
+<p>ip route add 11.0.0.152 dev TTTTT #让IP11.0.0.152（qB-down2）到宿主机的路由经过TTTTT接口。</p>
+<p>ip route add 11.0.0.153 dev TTTTT #让IP11.0.0.153（qB-down3）到宿主机的路由经过TTTTT接口。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415175949063.png" alt="image-20240415175949063"></p>
+<p>创建完成后输入 ip addr 可以发现新建的TTTTT接口已经生效。</p>
+<p>尝试在宿主机ping容器IP</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415180007613.png" alt="image-20240415180007613"></p>
+<p>均可ping通，说明配置已经生效。</p>
+<p>到这里就完成了整套macvlan配置，可以正常使用没有问题了</p>
+<h1 id="四、-开机启动"><a href="#四、-开机启动" class="headerlink" title="四、 开机启动"></a>四、 开机启动</h1><p>那就是上面macvlan网络模式下容器与宿主机互通的相关配置，默认情况下重启后会重置。</p>
+<p>每次重启后就要重新执行一遍</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip link add TTTTT link ovs_eth0 type macvlan mode bridge</span><br><span class="line">ip addr add 11.0.0.160 dev TTTTT</span><br><span class="line">ip link set TTTTT up</span><br><span class="line">ip route add 11.0.0.151 dev TTTTT</span><br><span class="line">ip route add 11.0.0.152 dev TTTTT</span><br><span class="line">ip route add 11.0.0.153 dev TTTTT</span><br></pre></td></tr></table></figure>
+
+<p>手动输入，作为一个懒人，这能忍？</p>
+<p>所以最后就是配置开机启动自动配置。</p>
+<p>因为群晖7.0变动比较大，不能简单地用系统自带的开机执行脚本方法实现。</p>
+<p>我们需要把命令配置为systemd服务，通过systemd来实现开机启动自动配置。</p>
+<p>我们先创建一个新的systemd服务，取名 macvlan.service</p>
+<p>进入SSH执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/lib/systemd/system/macvlan.service</span><br></pre></td></tr></table></figure>
+
+<p>按i键，进入编辑模式，输入以下内容。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">Unit</span>]</span><br><span class="line"><span class="string">Description=Macvlan</span> <span class="string">shim</span> <span class="string">to</span> <span class="string">allow</span> <span class="string">docker</span> <span class="string">to</span> <span class="string">route</span> <span class="string">to</span> <span class="string">host</span></span><br><span class="line"><span class="comment"># After=pkgctl-Docker.service</span></span><br><span class="line"><span class="comment"># BindsTo=pkgctl-Docker.service</span></span><br><span class="line"><span class="string">ReloadPropagatedFrom=pkgctl-Docker.service</span></span><br><span class="line"><span class="string">PartOf=pkgctl-Docker.service</span></span><br><span class="line"></span><br><span class="line">[<span class="string">Service</span>]</span><br><span class="line"><span class="string">Type=oneshot</span></span><br><span class="line"><span class="string">ExecStart=/bin/bash</span> <span class="string">/usr/local/bin/macvlan_start.sh</span></span><br><span class="line"><span class="string">ExecStop=/bin/bash</span> <span class="string">/usr/local/bin/macvlan_stop.sh</span></span><br><span class="line"><span class="string">RemainAfterExit=yes</span></span><br><span class="line"><span class="string">Restart=no</span></span><br><span class="line"></span><br><span class="line">[<span class="string">Install</span>]</span><br><span class="line"><span class="string">WantedBy=pkgctl-Docker.service</span></span><br></pre></td></tr></table></figure>
+
+<p>然后按  esc  键入  :wq  保存修改</p>
+<p>然后我们要配置两个bash脚本。</p>
+<p>也就是要对应macvlan.service服务配置内容中，start服务和stop服务两个脚本的路径。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415180209536.png" alt="image-20240415180209536"></p>
+<p>先配置start服务执行脚本</p>
+<p>执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/bin/macvlan_start.sh</span><br></pre></td></tr></table></figure>
+
+<p>同样按i进入编辑模式，输入需要开机执行的命令，也就是我们的macvlan与宿主机互通需要的命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip link add TTTTT link ovs_eth0 type macvlan mode bridge</span><br><span class="line">ip addr add 11.0.0.160 dev TTTTT</span><br><span class="line">ip link set TTTTT up</span><br><span class="line">ip route add 11.0.0.151 dev TTTTT</span><br><span class="line">ip route add 11.0.0.152 dev TTTTT</span><br><span class="line">ip route add 11.0.0.153 dev TTTTT</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415180247287.png" alt="image-20240415180247287"></p>
+<p>确定无误后，按 Esc 键入 :wq 保存脚本。</p>
+<p>接下来配置stop脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/bin/macvlan_stop.sh</span><br></pre></td></tr></table></figure>
+
+<p>输入对应的停止服务命令，如下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip route del 10.0.0.151 dev TTTTT || true</span><br><span class="line">ip route del 10.0.0.152 dev TTTTT || true</span><br><span class="line">ip route del 10.0.0.153 dev TTTTT || true</span><br><span class="line">ip link set TTTTT down || true</span><br><span class="line">ip addr del 11.0.0.160 dev TTTTT || true</span><br><span class="line">ip link del TTTTT || true</span><br></pre></td></tr></table></figure>
+
+<p>同样操作，保存脚本。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240415180342650.png" alt="image-20240415180342650"></p>
+<p>这样就配置好了启动和停止脚本。</p>
+<p>以后只要macvlan.service在运行中，就会检测docker服务运行状态。当docker服务启动完成后，macvlan.service服务会执行start脚本。当docker服务关闭后，macvlan.service服务会执行stop脚本。</p>
+<p>然后我们重新加载一下systemd服务</p>
+<p>执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl <span class="built_in">enable</span> macvlan</span><br></pre></td></tr></table></figure>
+
+<p>这样macvlan.service服务已经在systemd服务列表中了。</p>
+<p>如果想取消</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl disable macvlan</span><br></pre></td></tr></table></figure>
+
+<p>其他的命令介绍</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start macvlan # 启动</span><br><span class="line">systemctl stop macvlan # 停止</span><br><span class="line">systemctl status macvlan # 查看状态</span><br></pre></td></tr></table></figure>
+
+
+
+<p>不迷路，转载<a target="_blank" rel="noopener" href="https://post.smzdm.com/p/awkv40k4/">NAS相关 篇十二：群晖DSM7下，docker中macvlan网络模式配置简单教程 实现macvlan与host网络互通，及互通服务自启动_NAS存储_什么值得买 (smzdm.com)</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240409004545-824befd4.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20240409004545-824befd4.html" itemprop="url">英国手机卡 giffgaff 2023 激活与使用指南</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-04-09T00:45:45+08:00">
+                2024-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>简介</strong></p>
+<p>giffgaff 成立于 2009 年 11 月 25 日，是一家总部位于英国伦敦的移动虚拟网络运营商，为 O2 全资子公司，因此 giffgaff 使用 O2 的网络，享有 O2 相同的 99% 网络覆盖率，且可访问英国 193 个城镇的 5G 网络。相比于 O2，giffgaff 提供每月 6 英镑 1GB 的低成本手机移动网络服务。</p>
+<p>本文将带您了解以下内容：</p>
+<ul>
+<li><strong>可选套餐 (goodybag)</strong></li>
+<li><strong>漫游资费</strong></li>
+<li><strong>注意事项</strong></li>
+<li><strong>激活流程</strong></li>
+<li><strong>如何关闭语音信箱</strong></li>
+</ul>
+<p><strong>可选套餐 (goodybag)</strong></p>
+<p>giffgaff 提供两种类型的套餐可供选择，Golden goodybag 必须绑定自动扣费方式且设置自动续费才可购买，相较于普通套餐包，在同样的价格下它提供了更多的数据流量。需要注意的是，套餐包所包含的流量<strong>仅限英国境内以及欧盟国家境内漫游时有限制地使用</strong>。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409004657067.png" alt="image-20240409004657067"></p>
+<p><strong>漫游资费</strong></p>
+<p>可以前往 <a target="_blank" rel="noopener" href="https://www.giffgaff.com/roaming-charges">https://www.giffgaff.com/roaming-charges</a> 进行查询，以下为截至发稿时中国大陆地区的漫游资费。20p 即 20 pence，等于 GBP 0.2。由于微信公众平台不允许插入外站链接，本文中所有的网址均需要您手动复制至浏览器打开，后文中不再进行重复赘述。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409004726408.png" alt="image-20240409004726408"></p>
+<p><strong>注意事项</strong></p>
+<p>一、以下操作均会造成扣费：</p>
+<ol>
+<li><p><strong>短信、通话、上网</strong>。资费见上文。</p>
+</li>
+<li><p><strong>手动拒接任何来电</strong>。由于 giffgaff 默认开通了语音信箱功能，拒接来电后将会自动接入语音信箱产生费用，如需要避免，请参见后文</p>
+<p>手动关闭来电转接功能。</p>
+</li>
+<li><p><strong>激活 FaceTime 与 iMessage 服务</strong>。如不需要 iOS 提供的 FaceTime 与 iMessage 服务，请在系统弹出以下对话框时点击取消按钮。</p>
+</li>
+</ol>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409004829440.png" alt="image-20240409004829440"></p>
+<p>二、激活后的号卡需要每 180 天内进行一次消费以进行保号，若长时间未消费，会收到下图所示的警告邮件，请按邮件提示进行操作，不予理会将被销号：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409004850746.png" alt="image-20240409004850746"></p>
+<p><strong>激活流程</strong></p>
+<p>一、将 SIM 卡插入手机，入网后稍等片刻，会收到一条来自 43432 的短信，点击短信中的链接进入激活页面。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409004917454.png" alt="image-20240409004917454"></p>
+<p>二、如在上一步中未收到短信，请手动打开 <a target="_blank" rel="noopener" href="https://www.giffgaff.com/activate">https://www.giffgaff.com/activate</a> ，并输入卡片上的激活码进行激活。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409004941080.png" alt="image-20240409004941080"></p>
+<p>三、选择适合自己的套餐，前文中我们已经了解过了套餐的区别，如果暂时没有使用需求，可以将页面拉至最下方，选择 <strong>Pay as you go</strong> ，激活后可以正常接收短信。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409004958605.png" alt="image-20240409004958605"></p>
+<p>四、首次充值需要至少充值 10 英镑，仅支持使用 VISA / MasterCard 的借记卡或信用卡进行付款（如没有指定银行卡，可以选择淘宝购买充值卡密，点击 <strong>Or redeem a top-up voucher</strong> 进行激活）。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409005016804.png" alt="image-20240409005016804"></p>
+<p>五、使用卡密充值：需要购买如图所示同类商品，10 英镑即可。<strong>使用银行卡激活****请跳过本段直接看第六步</strong>。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409005033932.png" alt="image-20240409005033932"></p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409005046061.png" alt="image-20240409005046061"></p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409005101811.png" alt="image-20240409005101811"></p>
+<p>六、使用银行卡充值：部分银行付款时需要进行 3DS 验证，加载较慢需要耐心等待。<strong>使用充值卡密激活****请跳过本段直接看第七步</strong>。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409005127496.png" alt="image-20240409005127496"></p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409005136899.png" alt="image-20240409005136899"></p>
+<p>七、付款成功后，页面上将出现 giffgaff 分配给您的电话号码。如页面中出现与图示红框内容相同的文字提示，则会收到赠送的 5 英镑余额。至此，您已完成了整个激活流程。</p>
+<p><strong>如何关闭语音信箱</strong></p>
+<p>参考 <a target="_blank" rel="noopener" href="https://www.giffgaff.com/help/articles/how-do-i-turn-voicemail-on-or-off">https://www.giffgaff.com/help/articles/how-do-i-turn-voicemail-on-or-off</a> ，在手机拨号盘输入 <strong>##002#</strong> 并拨打，即可关闭语音信箱。</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409005230111.png" alt="image-20240409005230111"></p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240409005241930.png" alt="image-20240409005241930"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240326183345-bcf32449.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1499,287 +1944,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20231108111119-4023ca29.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20231108111119-4023ca29.html" itemprop="url">Marquez元数据管理体验</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-11-08T11:11:19+08:00">
-                2023-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Marquez"><a href="#Marquez" class="headerlink" title="Marquez"></a>Marquez</h3><p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231109105214566.png" alt="image-20231109105214566"></p>
-<p><strong>开源地址</strong>：<a target="_blank" rel="noopener" href="https://github.com/MarquezProject/marquez">https://github.com/MarquezProject/marquez</a> </p>
-<p><strong>Marquez的优点：</strong></p>
-<ul>
-<li>界面美观，操作细节设计比较棒</li>
-<li>部署简单，代码简洁</li>
-<li>依靠底层OpenLineage协议，结构较好</li>
-</ul>
-<p><strong>Marquez的不足：</strong></p>
-<ul>
-<li>聚焦数据资产/血缘的可视化，数据资产管理的一些功能，需要较多开发工作</li>
-</ul>
-<p><strong>相关介绍</strong>：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/OMm6QEk9-1bFdYKuimdxCw">https://mp.weixin.qq.com/s/OMm6QEk9-1bFdYKuimdxCw</a></p>
-<h2 id="安装及体验"><a href="#安装及体验" class="headerlink" title="安装及体验"></a>安装及体验</h2><ol>
-<li>克隆项目</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github-hoey94:hoey94/marquez.git</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>到项目根目录运行docker</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DOCKER_BUILDKIT=1 ./docker/up.sh --seed</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108111436255.png" alt="image-20231108111436255"></p>
-<ol start="3">
-<li>访问页面</li>
-</ol>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20231108113044028.png" alt="image-20231108113044028"></p>
-<ol start="4">
-<li>简单实用</li>
-</ol>
-<p>创建namespace</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://localhost:5000/api/v1/lineage \</span><br><span class="line">-H &#x27;Content-Type: application/json&#x27; \</span><br><span class="line">-d &#x27;&#123;</span><br><span class="line">      &quot;eventType&quot;: &quot;START&quot;,</span><br><span class="line">      &quot;eventTime&quot;: &quot;2020-12-28T19:52:00.001+10:00&quot;,</span><br><span class="line">      &quot;run&quot;: &#123;</span><br><span class="line">        &quot;runId&quot;: &quot;d46e465b-d358-4d32-83d4-df660ff614dd&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;job&quot;: &#123;</span><br><span class="line">        &quot;namespace&quot;: &quot;my-namespace&quot;,</span><br><span class="line">        &quot;name&quot;: &quot;my-job&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;inputs&quot;: [&#123;</span><br><span class="line">        &quot;namespace&quot;: &quot;my-namespace&quot;,</span><br><span class="line">        &quot;name&quot;: &quot;my-input&quot;</span><br><span class="line">      &#125;],  </span><br><span class="line">      &quot;producer&quot;: &quot;https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client&quot;</span><br><span class="line">    &#125;&#x27;</span><br></pre></td></tr></table></figure>
-
-<p>创建input和output</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://localhost:5000/api/v1/lineage \</span><br><span class="line">-H &#x27;Content-Type: application/json&#x27; \</span><br><span class="line">-d &#x27;&#123;</span><br><span class="line">      &quot;eventType&quot;: &quot;COMPLETE&quot;,</span><br><span class="line">      &quot;eventTime&quot;: &quot;2020-12-28T20:52:00.001+10:00&quot;,</span><br><span class="line">      &quot;run&quot;: &#123;</span><br><span class="line">        &quot;runId&quot;: &quot;d46e465b-d358-4d32-83d4-df660ff614dd&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;job&quot;: &#123;</span><br><span class="line">        &quot;namespace&quot;: &quot;my-namespace&quot;,</span><br><span class="line">        &quot;name&quot;: &quot;my-job&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;outputs&quot;: [&#123;</span><br><span class="line">        &quot;namespace&quot;: &quot;my-namespace&quot;,</span><br><span class="line">        &quot;name&quot;: &quot;my-output&quot;,</span><br><span class="line">        &quot;facets&quot;: &#123;</span><br><span class="line">          &quot;schema&quot;: &#123;</span><br><span class="line">            &quot;_producer&quot;: &quot;https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client&quot;,</span><br><span class="line">            &quot;_schemaURL&quot;: &quot;https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/spec/OpenLineage.json#/definitions/SchemaDatasetFacet&quot;,</span><br><span class="line">            &quot;fields&quot;: [</span><br><span class="line">              &#123; &quot;name&quot;: &quot;a&quot;, &quot;type&quot;: &quot;VARCHAR&quot;&#125;,</span><br><span class="line">              &#123; &quot;name&quot;: &quot;b&quot;, &quot;type&quot;: &quot;VARCHAR&quot;&#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;],     </span><br><span class="line">      &quot;producer&quot;: &quot;https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client&quot;</span><br><span class="line">    &#125;&#x27;</span><br></pre></td></tr></table></figure>
-
-<p>更多细节可以参考一下下面文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43947468/article/details/129593234">https://blog.csdn.net/weixin_43947468/article/details/129593234</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20231108093604-8614bb4c.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20231108093604-8614bb4c.html" itemprop="url">ES操作模版</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-11-08T09:36:04+08:00">
-                2023-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>下面是一些ES日常操作，记录下来方便查询</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br></pre></td><td class="code"><pre><span class="line">#查看集群的健康情况</span><br><span class="line">GET /_cat/health?v</span><br><span class="line"></span><br><span class="line">#查看节点的情况</span><br><span class="line">GET /_cat/nodes?v</span><br><span class="line"></span><br><span class="line">#查询各个索引状态</span><br><span class="line">GET /_cat/indices?v</span><br><span class="line"></span><br><span class="line">#创建索引</span><br><span class="line">PUT /movie_index</span><br><span class="line"></span><br><span class="line">#查看某一个索引的分片情况</span><br><span class="line">GET /_cat/shards/movie_index?v</span><br><span class="line"></span><br><span class="line">#删除索引</span><br><span class="line">DELETE /movie_index</span><br><span class="line"></span><br><span class="line">#创建文档</span><br><span class="line">PUT /movie_index/movie/1</span><br><span class="line">&#123; &quot;id&quot;:100,</span><br><span class="line">  &quot;name&quot;:&quot;operation red sea&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:8.5,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">  &#123;&quot;id&quot;:1,&quot;name&quot;:&quot;zhang yi&quot;&#125;,</span><br><span class="line">  &#123;&quot;id&quot;:2,&quot;name&quot;:&quot;hai qing&quot;&#125;,</span><br><span class="line">  &#123;&quot;id&quot;:3,&quot;name&quot;:&quot;zhang han yu&quot;&#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movie_index/movie/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:200,</span><br><span class="line">  &quot;name&quot;:&quot;operation meigong river&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:8.0,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">&#123;&quot;id&quot;:3,&quot;name&quot;:&quot;zhang han yu&quot;&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movie_index/movie/3</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:300,</span><br><span class="line">  &quot;name&quot;:&quot;incident red sea&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:5.0,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">&#123;&quot;id&quot;:4,&quot;name&quot;:&quot;zhang san feng&quot;&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#查询某一个索引中的全部文档</span><br><span class="line">GET /movie_index/_search</span><br><span class="line"></span><br><span class="line">#根据id查询某一个文档</span><br><span class="line">GET /movie_index/movie/3</span><br><span class="line"></span><br><span class="line">#根据文档id，删除某一个文档</span><br><span class="line">DELETE /movie_index/movie/3</span><br><span class="line"></span><br><span class="line">POST /_forcemerge</span><br><span class="line"></span><br><span class="line">#put 对已经存在的文档进行替换(幂等性)</span><br><span class="line">PUT /movie_index/movie/3</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:300,</span><br><span class="line">  &quot;name&quot;:&quot;incident red sea&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:5.0,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">&#123;&quot;id&quot;:4,&quot;name&quot;:&quot;zhang cuishan&quot;&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#post 进行新增操作，无法保证幂等性</span><br><span class="line">#根据主键保证幂等性</span><br><span class="line">POST /movie_index/movie/</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:300,</span><br><span class="line">  &quot;name&quot;:&quot;incident red sea&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:5.0,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">&#123;&quot;id&quot;:4,&quot;name&quot;:&quot;zhang cuishan111&quot;&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /movie_index/_search</span><br><span class="line"></span><br><span class="line">GET /movie_index/movie/1</span><br><span class="line"></span><br><span class="line">POST /movie_index/movie/1/_update</span><br><span class="line">&#123;</span><br><span class="line">  &quot;doc&quot;:  &#123; &quot;name&quot;: &quot;新的字段值&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST /movie_index/_update_by_query</span><br><span class="line">&#123;</span><br><span class="line">	&quot;query&quot;: &#123;</span><br><span class="line">	  &quot;match&quot;:&#123;</span><br><span class="line">	    &quot;actorList.id&quot;:1</span><br><span class="line">	  &#125;  </span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;script&quot;: &#123;</span><br><span class="line">	  &quot;lang&quot;: &quot;painless&quot;,</span><br><span class="line">	  &quot;source&quot;:&quot;for(int i=0;i&lt;ctx._source.actorList.length;i++)&#123;if(ctx._source.actorList[i].id==3)&#123;ctx._source.actorList[i].name=&#x27;tttt&#x27;&#125;&#125;&quot;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /movie_index/_search</span><br><span class="line"></span><br><span class="line">POST /movie_index/_delete_by_query</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#批量添加两个document</span><br><span class="line">POST /movie_index/movie/_bulk</span><br><span class="line">&#123;&quot;index&quot;:&#123;&quot;_id&quot;:66&#125;&#125;</span><br><span class="line">&#123;&quot;id&quot;:300,&quot;name&quot;:&quot;incident red sea&quot;,&quot;doubanScore&quot;:5.0,&quot;actorList&quot;:[&#123;&quot;id&quot;:4,&quot;name&quot;:&quot;zhang cuishan&quot;&#125;]&#125;</span><br><span class="line">&#123;&quot;index&quot;:&#123;&quot;_id&quot;:88&#125;&#125;</span><br><span class="line">&#123;&quot;id&quot;:300,&quot;name&quot;:&quot;incident red sea&quot;,&quot;doubanScore&quot;:5.0,&quot;actorList&quot;:[&#123;&quot;id&quot;:4,&quot;name&quot;:&quot;zhang cuishan&quot;&#125;]&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST /movie_index/movie/_bulk</span><br><span class="line">&#123;&quot;update&quot;:&#123;&quot;_id&quot;:&quot;66&quot;&#125;&#125;</span><br><span class="line">&#123;&quot;doc&quot;: &#123; &quot;name&quot;: &quot;wudangshanshang&quot; &#125; &#125;</span><br><span class="line">&#123;&quot;delete&quot;:&#123;&quot;_id&quot;:&quot;88&quot;&#125;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#------------------查询操作--------------------</span><br><span class="line">#查询出当前索引中的全部数据</span><br><span class="line">GET /movie_index/_search</span><br><span class="line"></span><br><span class="line">GET /movie_index/_search?q=_id:66</span><br><span class="line"></span><br><span class="line">#查询全部</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#根据电影的名称进行查询</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;operation red sea&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /movie_index</span><br><span class="line"></span><br><span class="line">#按分词进行查询</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;actorList.name&quot;: &quot;zhang han yu&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#按短语查询  相当于like </span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;actorList.name&quot;: &quot;zhang han yu&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#不分词 通过精准匹配进行查询  term精准匹配</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;term&quot;: &#123;</span><br><span class="line">       &quot;actorList.name.keyword&quot;:&quot;zhang han yu&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#容错匹配</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;fuzzy&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;radd&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#先匹配 再过滤</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;red&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, </span><br><span class="line">  &quot;post_filter&quot;: &#123;</span><br><span class="line">    &quot;term&quot;: &#123;</span><br><span class="line">      &quot;actorList.id&quot;: &quot;3&quot;</span><br><span class="line">    &#125;  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#匹配和过滤同时</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;name&quot;: &quot;red&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ], </span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;term&quot;: &#123;</span><br><span class="line">          &quot;actorList.id&quot;: &quot;3&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#范围过滤  ，将豆瓣评分在6到9的文档查询出来</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;range&quot;: &#123;</span><br><span class="line">      &quot;doubanScore&quot;: &#123;</span><br><span class="line">        &quot;gte&quot;: 6,</span><br><span class="line">        &quot;lte&quot;: 9</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#按照豆瓣评分降序排序</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;red&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, </span><br><span class="line">  &quot;sort&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;doubanScore&quot;: &#123;</span><br><span class="line">        &quot;order&quot;: &quot;asc&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#分页查询</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;from&quot;: 0,</span><br><span class="line">  &quot;size&quot;: 2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#查询指定字段</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_source&quot;: [&quot;name&quot;, &quot;doubanScore&quot;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#高亮显示</span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;red&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;: &#123;</span><br><span class="line">    &quot;fields&quot;:  &#123;&quot;name&quot;:&#123;&#125; &#125;,</span><br><span class="line">    &quot;pre_tags&quot;: &quot;&lt;a&gt;&quot;,</span><br><span class="line">    &quot;post_tags&quot;: &quot;&lt;/a&gt;&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#需求1：取出每个演员共参演了多少部电影</span><br><span class="line">#aggs 聚合</span><br><span class="line">#term  精准匹配</span><br><span class="line">#terms 聚合操作，相当于groupBy  </span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;myAggs&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;actorList.name.keyword&quot;,</span><br><span class="line">        &quot;size&quot;: 10</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#需求2：每个演员参演电影的平均分是多少，并按评分排序</span><br><span class="line"></span><br><span class="line">GET /movie_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;groupByName&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;actorList.name.keyword&quot;,</span><br><span class="line">        &quot;size&quot;: 10,</span><br><span class="line">        &quot;order&quot;: &#123;</span><br><span class="line">          &quot;avg_score&quot;: &quot;asc&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;avg_score&quot;: &#123;</span><br><span class="line">          &quot;avg&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;doubanScore&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#分词</span><br><span class="line">#英文默认分词规则</span><br><span class="line">GET /_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;text&quot;: &quot;hello world&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#中文默认分词规则</span><br><span class="line">GET /_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;text&quot;: &quot;蓝瘦香菇&quot;,</span><br><span class="line">  &quot;analyzer&quot;: &quot;ik_smart&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;text&quot;: &quot;蓝瘦香菇&quot;,</span><br><span class="line">  &quot;analyzer&quot;: &quot;ik_max_word&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /movie_index</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#自动定义mapping</span><br><span class="line">PUT /movie_chn_1/movie/1</span><br><span class="line">&#123; &quot;id&quot;:1,</span><br><span class="line">  &quot;name&quot;:&quot;红海行动&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:8.5,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">  &#123;&quot;id&quot;:1,&quot;name&quot;:&quot;张译&quot;&#125;,</span><br><span class="line">  &#123;&quot;id&quot;:2,&quot;name&quot;:&quot;海清&quot;&#125;,</span><br><span class="line">  &#123;&quot;id&quot;:3,&quot;name&quot;:&quot;张涵予&quot;&#125;</span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br><span class="line">PUT /movie_chn_1/movie/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:2,</span><br><span class="line">  &quot;name&quot;:&quot;湄公河行动&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:8.0,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">&#123;&quot;id&quot;:3,&quot;name&quot;:&quot;张涵予&quot;&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movie_chn_1/movie/3</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:3,</span><br><span class="line">  &quot;name&quot;:&quot;红海事件&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:5.0,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">&#123;&quot;id&quot;:4,&quot;name&quot;:&quot;张三丰&quot;&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /movie_chn_1/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;海行&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /movie_chn_1/_mapping</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#自定义mapping</span><br><span class="line">DELETE movie_chn_2</span><br><span class="line"></span><br><span class="line">PUT movie_chn_2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;movie&quot;:&#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;id&quot;:&#123;</span><br><span class="line">          &quot;type&quot;: &quot;long&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;name&quot;:&#123;</span><br><span class="line">          &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;doubanScore&quot;:&#123;</span><br><span class="line">          &quot;type&quot;: &quot;double&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;actorList&quot;:&#123;</span><br><span class="line">          &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;id&quot;:&#123;</span><br><span class="line">              &quot;type&quot;:&quot;long&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;name&quot;:&#123;</span><br><span class="line">              &quot;type&quot;:&quot;keyword&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PUT /movie_chn_2/movie/1</span><br><span class="line">&#123; &quot;id&quot;:1,</span><br><span class="line">  &quot;name&quot;:&quot;红海行动&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:8.5,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">  &#123;&quot;id&quot;:1,&quot;name&quot;:&quot;张译&quot;&#125;,</span><br><span class="line">  &#123;&quot;id&quot;:2,&quot;name&quot;:&quot;海清&quot;&#125;,</span><br><span class="line">  &#123;&quot;id&quot;:3,&quot;name&quot;:&quot;张涵予&quot;&#125;</span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br><span class="line">PUT /movie_chn_2/movie/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:2,</span><br><span class="line">  &quot;name&quot;:&quot;湄公河行动&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:8.0,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">&#123;&quot;id&quot;:3,&quot;name&quot;:&quot;张涵予&quot;&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movie_chn_2/movie/3</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:3,</span><br><span class="line">  &quot;name&quot;:&quot;红海事件&quot;,</span><br><span class="line">  &quot;doubanScore&quot;:5.0,</span><br><span class="line">  &quot;actorList&quot;:[  </span><br><span class="line">&#123;&quot;id&quot;:4,&quot;name&quot;:&quot;张三丰&quot;&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /movie_chn_2/_mapping</span><br><span class="line"></span><br><span class="line">GET /movie_chn_2/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;海行&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST /_reindex</span><br><span class="line">&#123;</span><br><span class="line">  &quot;source&quot;: &#123;&#125;</span><br><span class="line">  , &quot;dest&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#创建索引  并指定别名</span><br><span class="line">PUT movie_chn_3</span><br><span class="line">&#123;</span><br><span class="line">  &quot;aliases&quot;: &#123;</span><br><span class="line">      &quot;movie_chn_3_aliase&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;movie&quot;:&#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;id&quot;:&#123;</span><br><span class="line">          &quot;type&quot;: &quot;long&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;name&quot;:&#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;, </span><br><span class="line">          &quot;analyzer&quot;: &quot;ik_smart&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;doubanScore&quot;:&#123;</span><br><span class="line">          &quot;type&quot;: &quot;double&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;actorList&quot;:&#123;</span><br><span class="line">          &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;id&quot;:&#123;</span><br><span class="line">              &quot;type&quot;:&quot;long&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;name&quot;:&#123;</span><br><span class="line">              &quot;type&quot;:&quot;keyword&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /_cat/indices</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /_cat/aliases</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST /_aliases</span><br><span class="line">&#123;</span><br><span class="line">  &quot;actions&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;add&quot;: &#123;</span><br><span class="line">        &quot;index&quot;: &quot;movie_chn_3&quot;,</span><br><span class="line">        &quot;alias&quot;: &quot;movie_chn_3_a2&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /movie_chn_3/_search</span><br><span class="line"></span><br><span class="line">GET /movie_chn_3_a2/_search</span><br><span class="line"></span><br><span class="line">GET /_cat/aliases</span><br><span class="line"></span><br><span class="line">POST /_aliases</span><br><span class="line">&#123;</span><br><span class="line">  &quot;actions&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;remove&quot;: &#123;&quot;index&quot;: &quot;movie_chn_3&quot;,&quot;alias&quot;: &quot;movie_chn_3_a2&quot;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /movie_chn_1/_search</span><br><span class="line"></span><br><span class="line">GET /movie_chn_2/_search</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST  _aliases</span><br><span class="line">&#123;</span><br><span class="line">    &quot;actions&quot;: [</span><br><span class="line">        &#123; &quot;add&quot;:    &#123; &quot;index&quot;: &quot;movie_chn_1&quot;, &quot;alias&quot;: &quot;movie_chn_query&quot; &#125;&#125;,</span><br><span class="line">        &#123; &quot;add&quot;:    &#123; &quot;index&quot;: &quot;movie_chn_2&quot;, &quot;alias&quot;: &quot;movie_chn_query&quot; &#125;&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /movie_chn_query/_search</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST  _aliases</span><br><span class="line">&#123;</span><br><span class="line">    &quot;actions&quot;: [</span><br><span class="line">        &#123; </span><br><span class="line">          &quot;add&quot;:    </span><br><span class="line">          &#123; </span><br><span class="line">            &quot;index&quot;: &quot;movie_chn_1&quot;, </span><br><span class="line">            &quot;alias&quot;: &quot;movie_chn_1_sub_query&quot;,</span><br><span class="line">            &quot;filter&quot;: &#123;</span><br><span class="line">                &quot;term&quot;: &#123;  &quot;actorList.id&quot;: &quot;4&quot;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /movie_chn_1_sub_query/_search</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST /_aliases</span><br><span class="line">&#123;</span><br><span class="line">    &quot;actions&quot;: [</span><br><span class="line">        &#123; &quot;remove&quot;: &#123; &quot;index&quot;: &quot;movie_chn_1&quot;, &quot;alias&quot;: &quot;movie_chn_query&quot; &#125;&#125;,</span><br><span class="line">        &#123; &quot;remove&quot;: &#123; &quot;index&quot;: &quot;movie_chn_2&quot;, &quot;alias&quot;: &quot;movie_chn_query&quot; &#125;&#125;,</span><br><span class="line">        &#123; &quot;add&quot;:    &#123; &quot;index&quot;: &quot;movie_chn_3&quot;, &quot;alias&quot;: &quot;movie_chn_query&quot; &#125;&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#创建模板</span><br><span class="line">PUT _template/template_movie0523</span><br><span class="line">&#123;</span><br><span class="line">  &quot;index_patterns&quot;: [&quot;movie_test*&quot;],                  </span><br><span class="line">  &quot;settings&quot;: &#123;                                               </span><br><span class="line">    &quot;number_of_shards&quot;: 1</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;aliases&quot; : &#123; </span><br><span class="line">    &quot;&#123;index&#125;-query&quot;: &#123;&#125;,</span><br><span class="line">    &quot;movie_test-query&quot;:&#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mappings&quot;: &#123;                                          </span><br><span class="line">    &quot;_doc&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;id&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;movie_name&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;analyzer&quot;: &quot;ik_smart&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST movie_test_202010/_doc</span><br><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:&quot;333&quot;,</span><br><span class="line">  &quot;name&quot;:&quot;zhang3&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /movie_test_202010-query/_mapping</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /_cat/templates</span><br><span class="line"></span><br><span class="line">GET /_template/template_movie*</span><br></pre></td></tr></table></figure>
-
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1846,7 +2010,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
