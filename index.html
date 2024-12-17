@@ -303,6 +303,212 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241217173020-4242deda.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20241217173020-4242deda.html" itemprop="url">自建邮局</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-12-17T17:30:20+08:00">
+                2024-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-安装1panel"><a href="#1-安装1panel" class="headerlink" title="1. 安装1panel"></a>1. 安装1panel</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sSL https://resource.fit2cloud.com/1panel/package/quick_start.sh -o quick_start.sh &amp;&amp; bash quick_start.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-进入1panel操作页面"><a href="#2-进入1panel操作页面" class="headerlink" title="2. 进入1panel操作页面"></a>2. 进入1panel操作页面</h2><p>按顺序：首页的左侧栏有个“应用商店”，进去搜索：maddy<br>随后安装，如图所示：<br><img src="https://img.yihao.de/1731680079461.png" alt="image.png"></p>
+<p><img src="https://img.yihao.de/1731680095409.png" alt="image.png"></p>
+<p>记得一定要打开：端口外部访问。如图：  </p>
+<p><img src="https://img.yihao.de/1731680110235.png" alt="image.png"></p>
+<h2 id="3-申请证书并推送至本地目录"><a href="#3-申请证书并推送至本地目录" class="headerlink" title="3. 申请证书并推送至本地目录"></a>3. 申请证书并推送至本地目录</h2><p>按序找：1panel操作页面的左侧栏，从上往下第三个，点开后扩展：证书，进去。<br>配置好你的acme账户与dns账户<br><img src="http://lsky.xxxh.de/uploads/66a8ca6711f1e.jpeg" alt="IMG_1623.jpeg"></p>
+<h4 id="3-1-acme账户"><a href="#3-1-acme账户" class="headerlink" title="3.1 acme账户"></a>3.1 acme账户</h4><p><img src="https://img.yihao.de/1731680379716.png" alt="image.png"><br>邮箱随便填一个点确认</p>
+<h4 id="3-2NDS账户"><a href="#3-2NDS账户" class="headerlink" title="3.2NDS账户"></a>3.2NDS账户</h4><p>我使用的是阿里云<br><img src="https://img.yihao.de/1731680436011.png" alt="image.png"></p>
+<p>以上准备工作完成后，点申请证书<br>主域名填：<a target="_blank" rel="noopener" href="https://www.nodeseek.com/jump?to=http://mail.lancet.icu">mail.lancet.icu</a>（举例子）<br>如图所示填好推送的证书路径<br><img src="http://lsky.xxxh.de/uploads/66a8cba91e245.jpeg" alt="IMG_1625.jpeg"></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="keyword">var</span><span class="operator">/</span>lib<span class="operator">/</span>docker<span class="operator">/</span>volumes<span class="operator">/</span>maddydata<span class="operator">/</span>_data<span class="operator">/</span>tls</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-以上均完成后，检查容器运行正常，获取DKIM值"><a href="#4-以上均完成后，检查容器运行正常，获取DKIM值" class="headerlink" title="4. 以上均完成后，检查容器运行正常，获取DKIM值"></a>4. 以上均完成后，检查容器运行正常，获取DKIM值</h2><p>当容器正常运行后，在/var/lib/docker/volumes/maddydata/_data/dkim_keys路径下会有个像这样的lancet.icu_default.dns的文件。<br>打开文件，全选复制里面的所有内容，留作备用</p>
+<h2 id="5-DNS解析，用cloudflare举例，按表格填写"><a href="#5-DNS解析，用cloudflare举例，按表格填写" class="headerlink" title="5. DNS解析，用cloudflare举例，按表格填写"></a>5. DNS解析，用cloudflare举例，按表格填写</h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>default._domainkey</td>
+<td>TXT</td>
+<td>第四步中lancet.icu_default.dns文件中的内容</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>A</td>
+<td>服务器IP</td>
+</tr>
+<tr>
+<td>@</td>
+<td>A</td>
+<td>服务器IP</td>
+</tr>
+<tr>
+<td>@</td>
+<td>MX</td>
+<td>mail.lancet.icu</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>TXT</td>
+<td>v=spf1 mx ~all</td>
+</tr>
+<tr>
+<td>@</td>
+<td>TXT</td>
+<td>v=spf1 mx ~all</td>
+</tr>
+<tr>
+<td>_dmarc</td>
+<td>TXT</td>
+<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#97;&#x64;&#x6d;&#x69;&#x6e;&#x40;&#108;&#97;&#110;&#99;&#101;&#x74;&#46;&#x69;&#x63;&#x75;">&#97;&#x64;&#x6d;&#x69;&#x6e;&#x40;&#108;&#97;&#110;&#99;&#101;&#x74;&#46;&#x69;&#x63;&#x75;</a></td>
+</tr>
+<tr>
+<td>_mta-sts</td>
+<td>TXT</td>
+<td>v=STSv1; id=1</td>
+</tr>
+<tr>
+<td>_smtp._tls</td>
+<td>TXT</td>
+<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#x61;&#x64;&#109;&#105;&#110;&#64;&#108;&#97;&#110;&#99;&#x65;&#x74;&#x2e;&#105;&#x63;&#x75;">&#x61;&#x64;&#109;&#105;&#110;&#64;&#108;&#97;&#110;&#99;&#x65;&#x74;&#x2e;&#105;&#x63;&#x75;</a></td>
+</tr>
+</tbody></table>
+<h2 id="6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："><a href="#6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：" class="headerlink" title="6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："></a>6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：</h2><p>创建登录账户，运行此命令后会让设置密码</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy creds <span class="keyword">create</span> x<span class="variable">@lancet</span>.icu</span><br></pre></td></tr></table></figure>
+
+<p>创建存储账户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap<span class="operator">-</span>acct <span class="keyword">create</span> x<span class="variable">@lancet</span>.icu</span><br></pre></td></tr></table></figure>
+
+<p>可以查看账户列表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">maddy creds list</span><br><span class="line"></span><br><span class="line">maddy imap-acct list</span><br></pre></td></tr></table></figure>
+
+<p>查看账户下的邮箱分类</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-mboxes list x<span class="keyword">@lancet</span>.icu</span><br></pre></td></tr></table></figure>
+
+<p>查看账户下邮件内容</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-mboxes dump x<span class="keyword">@lancet</span>.icu <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#120;&#64;&#x6c;&#97;&#x6e;&#x63;&#101;&#116;&#x2e;&#105;&#99;&#117;">&#120;&#64;&#x6c;&#97;&#x6e;&#x63;&#101;&#116;&#x2e;&#105;&#99;&#117;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-msgs list x<span class="keyword">@lancet</span>.icu INBOX</span><br></pre></td></tr></table></figure>
+
+<p>会有如图所示的记录：<br><img src="https://img.yihao.de/1731680546525.png" alt="image.png"></p>
+<h2 id="8-绑定到客户端使用"><a href="#8-绑定到客户端使用" class="headerlink" title="8. 绑定到客户端使用"></a>8. 绑定到客户端使用</h2><p>我这里使用的是macos自带的邮箱</p>
+<p><img src="https://img.yihao.de/1731680597650.png" alt="image.png"><br><img src="https://img.yihao.de/1731680661473.png" alt="image.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241204152304-f950755.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -385,6 +591,7 @@
 
 <h1 id="EXS安装OpwnWRT"><a href="#EXS安装OpwnWRT" class="headerlink" title="EXS安装OpwnWRT"></a>EXS安装OpwnWRT</h1><p>参考以前的文章[[OpenWRT镜像制作]]</p>
 <h1 id="mihomo的一些配置"><a href="#mihomo的一些配置" class="headerlink" title="mihomo的一些配置"></a>mihomo的一些配置</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">proxies:</span><br><span class="line">- name: &quot;vless&quot;</span><br><span class="line">  type: vless</span><br><span class="line">  server: 替换你的服务</span><br><span class="line">  port: 替换你的端口</span><br><span class="line">  udp: true</span><br><span class="line">  uuid: 替换你的UUID</span><br><span class="line">  flow: xtls-rprx-vision</span><br><span class="line">  packet-encoding: xudp</span><br><span class="line"></span><br><span class="line">  tls: true</span><br><span class="line">  servername: 替换你的SNI</span><br><span class="line">  client-fingerprint: chrome</span><br><span class="line">  skip-cert-verify: true</span><br><span class="line">  reality-opts:</span><br><span class="line">    public-key: 替换你的公钥</span><br><span class="line">    short-id: 替换你的short-id</span><br><span class="line"></span><br><span class="line">  network: tcp</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 
           
         
@@ -1589,127 +1796,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241027142701-bb4ea6a4.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20241027142701-bb4ea6a4.html" itemprop="url">喜当爹</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-27T14:27:01+08:00">
-                2024-10-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="https://img.yihao.de/1730010431322.png" alt="image-20241027142706017"></p>
-<p>意不意外、惊不惊喜，就是这么快。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1776,7 +1862,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
