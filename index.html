@@ -303,6 +303,260 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250116142101-b1d4a72d.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20250116142101-b1d4a72d.html" itemprop="url">Hikyuu量化交易二</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-16T14:21:01+08:00">
+                2025-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>续上篇文章，第二个小例子</p>
+<h1 id="一、策略分析"><a href="#一、策略分析" class="headerlink" title="一、策略分析"></a>一、策略分析</h1><h2 id="原始描述"><a href="#原始描述" class="headerlink" title="原始描述"></a>原始描述</h2><p>建仓条件：expma周线exp1跟exp2金叉向上使用使用 B=50% 的资金买入股票，建仓成功后，卖出条件才能起作用</p>
+<p>卖出条件S1：expma日线exp1和exp2死叉向下时卖出持仓股 S=50%</p>
+<p>买入条件B1：expma日线exp1和exp2金叉向上时买入股票数为S（卖出条件S1卖出股数）</p>
+<p>S1和B1就这样循环</p>
+<p>清仓条件为：expma周线exp1和exp2死叉时</p>
+<h2 id="策略分析"><a href="#策略分析" class="headerlink" title="策略分析"></a>策略分析</h2><p>市场环境：无</p>
+<p>系统有效性：周线EMA1（快线）和EMA2（慢线）金叉向上直到两者死叉，系统有效时建立初始仓位</p>
+<p>信号指示器：</p>
+<ul>
+<li>买入：日线EMA1（快线）和EMA2（慢线）金叉向上</li>
+<li>卖出：日线EMA1（快线）和EMA2（慢线）死叉向下</li>
+</ul>
+<p>止损/止盈：无</p>
+<p>资金管理：</p>
+<ul>
+<li>初次建仓：使用50%的资金</li>
+<li>买入：初次建仓时持股数的50%</li>
+<li>卖出：初次建仓时持股数的50%</li>
+</ul>
+<p>盈利目标：无</p>
+<h1 id="二、实现系统部件"><a href="#二、实现系统部件" class="headerlink" title="二、实现系统部件"></a>二、实现系统部件</h1><h2 id="自定义系统有效性策略"><a href="#自定义系统有效性策略" class="headerlink" title="自定义系统有效性策略"></a>自定义系统有效性策略</h2><p>In [2]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def getNextWeekDateList(week):</span><br><span class="line">    from datetime import timedelta</span><br><span class="line">    py_week = week.datetime()</span><br><span class="line">    next_week_start = py_week + timedelta(days = 7 - py_week.weekday())</span><br><span class="line">    next_week_end = next_week_start + timedelta(days=5)</span><br><span class="line">    return get_date_range(Datetime(next_week_start), Datetime(next_week_end))</span><br><span class="line">#ds = getNextWeekDateList(Datetime(201801010000))</span><br><span class="line">#for d in ds:</span><br><span class="line">#    print(d)</span><br></pre></td></tr></table></figure>
+
+<p>In [3]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">def DEMO_CN(self):</span><br><span class="line">    &quot;&quot;&quot; DIF &gt; DEA 时，系统有效</span><br><span class="line">    参数：</span><br><span class="line">    fast_n：周线dif窗口</span><br><span class="line">    slow_n: 周线dea窗口</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    k = self.to</span><br><span class="line">    if (len(k) &lt;= 10):</span><br><span class="line">        return</span><br><span class="line">    </span><br><span class="line">    #-----------------------------</span><br><span class="line">    # 周线        </span><br><span class="line">    #-----------------------------</span><br><span class="line">    week_q = Query(k[0].datetime, k[-1].datetime, ktype=Query.WEEK)</span><br><span class="line">    week_k = k.get_stock().get_kdata(week_q)</span><br><span class="line">    </span><br><span class="line">    n1 = self.get_param(&quot;week_macd_n1&quot;)</span><br><span class="line">    n2 = self.get_param(&quot;week_macd_n2&quot;)</span><br><span class="line">    n3 = self.get_param(&quot;week_macd_n3&quot;)</span><br><span class="line">    m = MACD(CLOSE(week_k), n1, n2, n3)</span><br><span class="line">    fast = m.get_result(0)</span><br><span class="line">    slow = m.get_result(1)</span><br><span class="line"></span><br><span class="line">    x = fast &gt; slow</span><br><span class="line">    for i in range(x.discard, len(x)-1):</span><br><span class="line">        if (x[i] &gt;= 1.0):</span><br><span class="line">            #需要被扩展到日线（必须是后一周）</span><br><span class="line">            date_list = getNextWeekDateList(week_k[i].datetime)</span><br><span class="line">            for d in date_list:</span><br><span class="line">                self._add_valid(d)</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义信号指示器"><a href="#自定义信号指示器" class="headerlink" title="自定义信号指示器"></a>自定义信号指示器</h2><p>In [4]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#这个例子不需要，已经有内建的SG_Cross函数可直接使用</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义资金管理策略"><a href="#自定义资金管理策略" class="headerlink" title="自定义资金管理策略"></a>自定义资金管理策略</h2><p>In [5]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">class DEMO_MM(MoneyManagerBase):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    初次建仓：使用50%的资金</span><br><span class="line">    买入：初次建仓时持股数的50%</span><br><span class="line">    卖出：初次建仓时持股数的50%</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super(DEMO_MM, self).__init__(&quot;MACD_MM&quot;)</span><br><span class="line">        self.set_param(&quot;init_position&quot;, 0.5) #自定义初始仓位参数，占用资金百分比</span><br><span class="line">        self.next_buy_num = 0</span><br><span class="line">        </span><br><span class="line">    def _reset(self):</span><br><span class="line">        self.next_buy_num = 0</span><br><span class="line">        #pass</span><br><span class="line">        </span><br><span class="line">    def _clone(self):</span><br><span class="line">        mm = DEMO_MM()</span><br><span class="line">        mm.next_buy_num = self.next_buy_num</span><br><span class="line">        #return DEMO_MM()</span><br><span class="line">    </span><br><span class="line">    def _get_buy_num(self, datetime, stk, price, risk, part_from):</span><br><span class="line">        tm = self.tm</span><br><span class="line">        cash = tm.current_cash</span><br><span class="line">        </span><br><span class="line">        #如果信号来源于系统有效条件，建立初始仓位</span><br><span class="line">        if part_from == System.Part.CONDITION:</span><br><span class="line">            #return int((cash * 0.5 // price // stk.atom) * stk.atom)  #MoneyManagerBase其实已经保证了买入是最小交易数的整数</span><br><span class="line">            self.next_buy_num = 0 #清理掉上一周期建仓期间滚动买卖的股票数</span><br><span class="line">            return int(cash * self.get_param(&quot;init_position&quot;) // price)</span><br><span class="line">        </span><br><span class="line">        #非初次建仓，买入同等数量</span><br><span class="line">        return self.next_buy_num</span><br><span class="line">    </span><br><span class="line">    def _getSellNumber(self, datetime, stk, price, risk, part_from):</span><br><span class="line">        tm = self.tm</span><br><span class="line">        position = tm.get_position(datetime, stk)</span><br><span class="line">        current_num = int(position.number * 0.5)</span><br><span class="line">        </span><br><span class="line">        #记录第一次卖出时的股票数，以便下次以同等数量买入</span><br><span class="line">        if self.next_buy_num == 0:</span><br><span class="line">            self.next_buy_num = current_num </span><br><span class="line">            </span><br><span class="line">        return current_num #返回类型必须是整数</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、构建并运行系统"><a href="#三、构建并运行系统" class="headerlink" title="三、构建并运行系统"></a>三、构建并运行系统</h1><h2 id="修改设定公共参数"><a href="#修改设定公共参数" class="headerlink" title="修改设定公共参数"></a>修改设定公共参数</h2><p>每个系统部件以及TradeManager都有自己的公共参数会影响系统运行，具体可以查看帮助及试验。</p>
+<p>比如：这个例子当前使用系统有效条件进行初始建仓，那么必须设置系统公共参数cn_open_position为True。否则，没有建立初始仓位的话，后续没有卖出，不会有任何交易。</p>
+<p>In [6]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#System参数</span><br><span class="line">#delay=True #(bool) : 是否延迟到下一个bar开盘时进行交易</span><br><span class="line">#delay_use_current_price=True #(bool) : 延迟操作的情况下，是使用当前交易时bar的价格计算新的止损价/止赢价/目标价还是使用上次计算的结果</span><br><span class="line">#max_delay_count=3 #(int) : 连续延迟交易请求的限制次数</span><br><span class="line">#tp_monotonic=True #(bool) : 止赢单调递增</span><br><span class="line">#tp_delay_n=3 #(int) : 止盈延迟开始的天数，即止盈策略判断从实际交易几天后开始生效</span><br><span class="line">#ignore_sell_sg=False #(bool) : 忽略卖出信号，只使用止损/止赢等其他方式卖出</span><br><span class="line">#ev_open_position=False #(bool): 是否使用市场环境判定进行初始建仓</span><br><span class="line"></span><br><span class="line">cn_open_position=True #(bool): 是否使用系统有效性条件进行初始建仓</span><br><span class="line"></span><br><span class="line">#MoneyManager公共参数</span><br><span class="line">#auto-checkin=False #(bool) : 当账户现金不足以买入资金管理策略指示的买入数量时，自动向账户中补充存入（checkin）足够的现金。</span><br><span class="line">#max-stock=20000 #(int) : 最大持有的证券种类数量（即持有几只股票，而非各个股票的持仓数）</span><br><span class="line">#disable_ev_force_clean_position=False #(bool) : 禁用市场环境失效时强制清仓</span><br><span class="line">#disable_cn_force_clean_position=False #(bool) : 禁用系统有效条件失效时强制清仓</span><br></pre></td></tr></table></figure>
+
+<h2 id="设定私有参数及待测试标的"><a href="#设定私有参数及待测试标的" class="headerlink" title="设定私有参数及待测试标的"></a>设定私有参数及待测试标的</h2><p>In [7]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#账户参数</span><br><span class="line">init_cash = 500000 #账户初始资金</span><br><span class="line">init_date = &#x27;1990-1-1&#x27; #账户建立日期</span><br><span class="line"></span><br><span class="line">#信号指示器参数</span><br><span class="line">week_n1 = 12</span><br><span class="line">week_n2 = 26</span><br><span class="line">week_n3 = 9</span><br><span class="line"></span><br><span class="line">#选定标的，及测试区间</span><br><span class="line">stk = sm[&#x27;sz000002&#x27;]</span><br><span class="line"></span><br><span class="line">#如果是同一级别K线，可以使用索引号，使用了不同级别的K线数据，建议还是使用日期作为参数</span><br><span class="line">#另外，数据量太大的话，matplotlib绘图会比较慢</span><br><span class="line">start_date = Datetime(&#x27;2016-01-01&#x27;)  </span><br><span class="line">end_date = Datetime()</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建系统实例"><a href="#构建系统实例" class="headerlink" title="构建系统实例"></a>构建系统实例</h2><p>In [8]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#创建模拟交易账户进行回测，初始资金30万</span><br><span class="line">my_tm = crtTM(date=Datetime(init_date), init_cash = init_cash)</span><br><span class="line"></span><br><span class="line">#创建系统实例</span><br><span class="line">my_sys = SYS_Simple()</span><br><span class="line"></span><br><span class="line">my_sys.set_param(&quot;cn_open_position&quot;, cn_open_position)</span><br><span class="line"></span><br><span class="line">my_sys.tm = my_tm</span><br><span class="line">my_cn = crtCN(DEMO_CN, </span><br><span class="line">              &#123;&#x27;week_macd_n1&#x27;: week_n1, &#x27;week_macd_n2&#x27;: week_n2, &#x27;week_macd_n3&#x27;: week_n3&#125;, </span><br><span class="line">                &#x27;DEMO_CN&#x27;)  </span><br><span class="line">my_sys.cn = my_cn</span><br><span class="line">my_sys.sg = SG_Cross(EMA(C, n=week_n1), EMA(C, n=week_n2))</span><br><span class="line">my_mm = DEMO_MM()</span><br><span class="line">my_sys.mm = my_mm</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行系统"><a href="#运行系统" class="headerlink" title="运行系统"></a>运行系统</h2><p>In [9]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">q = Query(start_date, end_date, ktype=Query.DAY)</span><br><span class="line">my_sys.run(stk, q)</span><br><span class="line"></span><br><span class="line">#将交易记录及持仓情况，保存在临时目录，可用Excel查看</span><br><span class="line">#临时目录一般设置在数据所在目录下的 tmp 子目录</span><br><span class="line">#如果打开了excel记录，再次运行系统前，记得先关闭excel文件，否则新的结果没法保存</span><br><span class="line">my_tm.tocsv(sm.tmpdir())</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、查看资金曲线及绩效统计"><a href="#四、查看资金曲线及绩效统计" class="headerlink" title="四、查看资金曲线及绩效统计"></a>四、查看资金曲线及绩效统计</h1><p>In [10]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#绘制资金收益曲线</span><br><span class="line">x = my_tm.get_profit_curve(stk.get_datetime_list(q), Query.DAY)</span><br><span class="line">#x = my_tm.getFundsCurve(stk.getDatetimeList(q), KQuery.DAY) #资金净值曲线</span><br><span class="line">PRICELIST(x).plot()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a58a9ee68.png" alt="image-20250116142158838"></p>
+<p>In [11]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">#回测统计</span><br><span class="line">per = Performance()</span><br><span class="line">print(per.report(my_tm, Datetime.now()))</span><br><span class="line">帐户初始金额: 500000.00</span><br><span class="line">累计投入本金: 500000.00</span><br><span class="line">累计投入资产: 0.00</span><br><span class="line">累计借入现金: 0.00</span><br><span class="line">累计借入资产: 0.00</span><br><span class="line">累计红利: 35609.57</span><br><span class="line">现金余额: 512542.57</span><br><span class="line">未平仓头寸净值: 0.00</span><br><span class="line">当前总资产: 512542.57</span><br><span class="line">已平仓交易总成本: 0.00</span><br><span class="line">已平仓净利润总额: 12542.57</span><br><span class="line">单笔交易最大占用现金比例%: 49.99</span><br><span class="line">交易平均占用现金比例%: 49.85</span><br><span class="line">已平仓帐户收益率%: 2.51</span><br><span class="line">帐户年复合收益率%: 0.32</span><br><span class="line">帐户平均年收益率%: 0.33</span><br><span class="line">赢利交易赢利总额: 226235.57</span><br><span class="line">亏损交易亏损总额: -213693.00</span><br><span class="line">已平仓交易总数: 14.00</span><br><span class="line">赢利交易数: 7.00</span><br><span class="line">亏损交易数: 7.00</span><br><span class="line">赢利交易比例%: 50.00</span><br><span class="line">赢利期望值: 895.90</span><br><span class="line">赢利交易平均赢利: 32319.37</span><br><span class="line">亏损交易平均亏损: -30527.57</span><br><span class="line">平均赢利/平均亏损比例: 1.06</span><br><span class="line">净赢利/亏损比例: 1.06</span><br><span class="line">最大单笔赢利: 140710.57</span><br><span class="line">最大单笔盈利百分比%: 56.58</span><br><span class="line">最大单笔亏损: -54740.00</span><br><span class="line">最大单笔亏损百分比%: -18.85</span><br><span class="line">赢利交易平均持仓时间: 39.86</span><br><span class="line">赢利交易最大持仓时间: 105.00</span><br><span class="line">亏损交易平均持仓时间: 74.86</span><br><span class="line">亏损交易最大持仓时间: 161.00</span><br><span class="line">空仓总时间: 2012.00</span><br><span class="line">空仓时间/总时间%: 71.00</span><br><span class="line">平均空仓时间: 143.00</span><br><span class="line">最长空仓时间: 431.00</span><br><span class="line">最大连续赢利笔数: 2.00</span><br><span class="line">最大连续亏损笔数: 3.00</span><br><span class="line">最大连续赢利金额: 142426.57</span><br><span class="line">最大连续亏损金额: -105390.00</span><br><span class="line">R乘数期望值: 0.01</span><br><span class="line">交易机会频率/年: 1.82</span><br><span class="line">年度期望R乘数: 0.02</span><br><span class="line">赢利交易平均R乘数: 0.12</span><br><span class="line">亏损交易平均R乘数: -0.10</span><br><span class="line">最大单笔赢利R乘数: 0.57</span><br><span class="line">最大单笔亏损R乘数: -0.19</span><br><span class="line">最大连续赢利R乘数: 0.29</span><br><span class="line">最大连续亏损R乘数: -0.19</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、或许想看下图形"><a href="#五、或许想看下图形" class="headerlink" title="五、或许想看下图形"></a>五、或许想看下图形</h1><p>In [12]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_sys.performance()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a57aa89ee.png" alt="image-20250116142141416"></p>
+<h1 id="六、或许想看看所有股票的情况"><a href="#六、或许想看看所有股票的情况" class="headerlink" title="六、或许想看看所有股票的情况"></a>六、或许想看看所有股票的情况</h1><p>In [13]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">def calTotal(blk, q):</span><br><span class="line">    per = Performance()</span><br><span class="line">    s_name = []</span><br><span class="line">    s_code = []</span><br><span class="line">    x = []</span><br><span class="line">    for stk in blk:</span><br><span class="line">        my_sys.run(stk, q)</span><br><span class="line">        per.statistics(my_tm, Datetime.now())</span><br><span class="line">        s_name.append(stk.name)</span><br><span class="line">        s_code.append(stk.market_code)</span><br><span class="line">        x.append(per[&quot;当前总资产&quot;])</span><br><span class="line">    return pd.DataFrame(&#123;&#x27;代码&#x27;: s_code, &#x27;股票&#x27;: s_name, &#x27;当前总资产&#x27;: x&#125;)</span><br><span class="line"></span><br><span class="line">%time data = calTotal(blocka, q)</span><br><span class="line">CPU times: total: 4.98 s</span><br><span class="line">Wall time: 29.2 s</span><br></pre></td></tr></table></figure>
+
+<p>In [14]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#保存到CSV文件</span><br><span class="line">#data.to_csv(sm.tmpdir() + &#x27;/统计.csv&#x27;)</span><br><span class="line">data[:10]</span><br></pre></td></tr></table></figure>
+
+<p>Out[14]:</p>
+<table>
+<thead>
+<tr>
+<th align="right"></th>
+<th align="right">代码</th>
+<th align="right">股票</th>
+<th align="right">当前总资产</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">0</td>
+<td align="right">SH600605</td>
+<td align="right">汇通能源</td>
+<td align="right">778089.17</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td align="right">SH600606</td>
+<td align="right">绿地控股</td>
+<td align="right">459330.60</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="right">SH603272</td>
+<td align="right">联翔股份</td>
+<td align="right">480224.00</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">SH600354</td>
+<td align="right">敦煌种业</td>
+<td align="right">575339.00</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="right">SZ300359</td>
+<td align="right">全通教育</td>
+<td align="right">441039.85</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td align="right">SZ000725</td>
+<td align="right">京东方Ａ</td>
+<td align="right">465180.59</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="right">BJ838163</td>
+<td align="right">方大新材</td>
+<td align="right">519824.00</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td align="right">SZ300358</td>
+<td align="right">楚天科技</td>
+<td align="right">496350.30</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td align="right">SH600355</td>
+<td align="right">精伦电子</td>
+<td align="right">390633.00</td>
+</tr>
+<tr>
+<td align="right">9</td>
+<td align="right">SH603273</td>
+<td align="right">天元智能</td>
+<td align="right">543317.00</td>
+</tr>
+</tbody></table>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250116140848-fc120b9c.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -680,7 +934,7 @@
 <tr>
 <td>_dmarc</td>
 <td>TXT</td>
-<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#97;&#x64;&#x6d;&#x69;&#x6e;&#64;&#108;&#97;&#x6e;&#99;&#101;&#116;&#46;&#x69;&#99;&#117;">&#97;&#x64;&#x6d;&#x69;&#x6e;&#64;&#108;&#97;&#x6e;&#99;&#101;&#116;&#46;&#x69;&#99;&#117;</a></td>
+<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#97;&#x64;&#109;&#x69;&#x6e;&#x40;&#108;&#x61;&#110;&#99;&#101;&#116;&#46;&#x69;&#99;&#117;">&#97;&#x64;&#109;&#x69;&#x6e;&#x40;&#108;&#x61;&#110;&#99;&#101;&#116;&#46;&#x69;&#99;&#117;</a></td>
 </tr>
 <tr>
 <td>_mta-sts</td>
@@ -690,7 +944,7 @@
 <tr>
 <td>_smtp._tls</td>
 <td>TXT</td>
-<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#97;&#100;&#109;&#x69;&#x6e;&#x40;&#x6c;&#97;&#110;&#99;&#101;&#x74;&#x2e;&#x69;&#x63;&#x75;">&#97;&#100;&#109;&#x69;&#x6e;&#x40;&#x6c;&#97;&#110;&#99;&#101;&#x74;&#x2e;&#x69;&#x63;&#x75;</a></td>
+<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#97;&#x64;&#x6d;&#x69;&#110;&#x40;&#x6c;&#97;&#x6e;&#99;&#101;&#116;&#x2e;&#105;&#99;&#x75;">&#97;&#x64;&#x6d;&#x69;&#110;&#x40;&#x6c;&#97;&#x6e;&#99;&#101;&#116;&#x2e;&#105;&#99;&#x75;</a></td>
 </tr>
 </tbody></table>
 <h2 id="6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："><a href="#6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：" class="headerlink" title="6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："></a>6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：</h2><p>创建登录账户，运行此命令后会让设置密码</p>
@@ -707,7 +961,7 @@
 
 <p>查看账户下邮件内容</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-mboxes dump x<span class="keyword">@lancet</span>.icu <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#x78;&#64;&#108;&#97;&#x6e;&#99;&#101;&#116;&#x2e;&#105;&#99;&#117;">&#x78;&#64;&#108;&#97;&#x6e;&#99;&#101;&#116;&#x2e;&#105;&#99;&#117;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
+<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#120;&#64;&#108;&#x61;&#110;&#x63;&#x65;&#x74;&#46;&#x69;&#99;&#117;">&#120;&#64;&#108;&#x61;&#110;&#x63;&#x65;&#x74;&#46;&#x69;&#99;&#117;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-msgs list x<span class="keyword">@lancet</span>.icu INBOX</span><br></pre></td></tr></table></figure>
 
 <p>会有如图所示的记录：<br><img src="https://img.yihao.de/1731680546525.png" alt="image.png"></p>
@@ -1742,179 +1996,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241102231748-c09e9d17.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20241102231748-c09e9d17.html" itemprop="url">自定义图床OneDrive(二)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-11-02T23:17:48+08:00">
-                2024-11-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>需求: E5保活+OneDrive(简称od)图床，由于篇幅太长，套域名就不写了。</p>
-<h3 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备:"></a>前置准备:</h3><ol>
-<li>Debain12 &amp; docker环境</li>
-<li>Windows (用来申请rclone访问OD Token)</li>
-</ol>
-<h3 id="安装rclone"><a href="#安装rclone" class="headerlink" title="安装rclone"></a>安装rclone</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo -v ; curl https://rclone.org/install.sh | sudo bash</span><br><span class="line"># 安装rclone依赖</span><br><span class="line">apt install fuse3</span><br></pre></td></tr></table></figure>
-
-<h3 id="申请AZ客户端ID和密钥"><a href="#申请AZ客户端ID和密钥" class="headerlink" title="申请AZ客户端ID和密钥"></a>申请AZ客户端ID和密钥</h3><p>rclone和od对接，需要”客户端ID”和”客户端密钥”这个到面板上申请一个。</p>
-<p>访问<a target="_blank" rel="noopener" href="https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps">Azure API管理面板</a>登陆</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/672645e572608.png" alt="image-20241102233146492"></p>
-<p>点击“新注册”注册一个应用程序。</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/67264600a86ef.png" alt="image-20241102233214397"></p>
-<p>输入名称，勾选权限后注册应用。</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/6726461a859b7.png" alt="image-20241102233240133"></p>
-<p>注册成功后将跳转到管理页面，记下图中所示的“应用程序(客户端) ID”，供将来挂载使用。</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/6726463341089.png" alt="image-20241102233304789"></p>
-<p>此时点击“证书与密码”→“新客户端密码”，填写说明和截至期限后，添加密码。</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/6726467e037f2.png" alt="image-20241102233419464"></p>
-<p>​    添加密码后，我们记录密码值，供将来挂载使用。<strong>注意这里一定要将密码记录下来，因为它只显示一次。</strong></p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/672646922d28f.png" alt="image-20241102233439907"></p>
-<p>​    接下来，点击“API权限”，为我们的api获取权限。Files中的权限全部勾选。</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/672646b1e9319.png" alt="image-20241102233511198"></p>
-<p>至此，我们已经申请好了onedrive的api，目前我们已经得到了<strong>客户端ID</strong>以及<strong>客户端密钥</strong>。</p>
-<h3 id="rclone配置OD"><a href="#rclone配置OD" class="headerlink" title="rclone配置OD"></a>rclone配置OD</h3><p>到Windows下载<a href="rclone.org/downloads">rclone</a>，执行下面的命令获取token</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># windows系统下按win+R调出运行，输入“cmd”</span><br><span class="line">rclone.exe authorize &quot;onedrive&quot; &quot;客户端ID&quot; &quot;客户端密钥&quot;</span><br></pre></td></tr></table></figure>
-
-<p>![image-20241102234244003](/Users/hoey/Library/Application Support/typora-user-images/image-20241102234244003.png)</p>
-<p>把toekn存下来，后面要用，接下来来配置rclone 并挂在onedrive到本地/mnt/onedrive/</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 配rclone注册远程连接</span><br><span class="line">rclone config</span><br><span class="line">n </span><br><span class="line">onedrive</span><br><span class="line">35  Microsoft OneDrive</span><br><span class="line">客户端ID</span><br><span class="line">客户端密钥</span><br><span class="line">1  Microsoft Cloud Global</span><br><span class="line">n No (default) 不进行高级配置</span><br><span class="line">n No 不使用自动配置</span><br><span class="line">配置上面从windows存储的token</span><br><span class="line">1 OneDrive Personal or Business</span><br><span class="line">y</span><br><span class="line">y</span><br></pre></td></tr></table></figure>
-
-<p>最终成功结果，如果你哪一步跟不上可以参考这个文档<a target="_blank" rel="noopener" href="https://blog.csdn.net/diqiudq/article/details/122754919">申请onedrive api并使用rclone将其挂载为本地磁盘_rclone onedrive-CSDN博客</a>参考上半部分就行。</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/672649101ed19.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /mnt/onedrive/</span><br><span class="line">vim /etc/systemd/system/rclone.service</span><br><span class="line"></span><br><span class="line"># 里面的5G需要根据磁盘的大小设置，但是不能超过剩余磁盘空间</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=rclone</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=root</span><br><span class="line">ExecStart=/usr/bin/rclone mount onedrive:/ /mnt/onedrive/ --allow-other --allow-non-empty --vfs-cache-mode writes --vfs-cache-max-size 5G --transfers 3</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl start rclone</span><br><span class="line">sudo systemctl enable rclone</span><br><span class="line">sudo systemctl status rclone</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="lsky"><a href="#lsky" class="headerlink" title="lsky"></a>lsky</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/docker/lsky-pro/lsky</span><br><span class="line">cd /opt/docker/lsky-pro </span><br><span class="line"></span><br><span class="line">vim docker-compose.yml</span><br><span class="line"># 18088 &amp; 18089可以自定义</span><br><span class="line">services:</span><br><span class="line">  lsky-pro:</span><br><span class="line">    image: hisatri/lsky:latest</span><br><span class="line">    container_name: lsky-pro</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;18088:8088&quot;</span><br><span class="line">      - &quot;18089:8089&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - $PWD/lsky:/var/www/html</span><br><span class="line">      - /mnt/onedrive:/onedrive</span><br><span class="line">    environment:</span><br><span class="line">      - HTTPS_PORT=8088</span><br><span class="line">      - WEB_PORT=8089</span><br><span class="line"></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
-
-
-
-<p>访问localhost:18089</p>
-<p>数据库选择sqllite，存储目录留空不填写，自己设置个邮箱和密码。</p>
-<p>角色组</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/67264b91b86c1.png" alt="image-20241102235558735"></p>
-<p>存储策略</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/67264bad24bc7.png" alt="image-20241102235626568"></p>
-<h3 id="picgo"><a href="#picgo" class="headerlink" title="picgo"></a>picgo</h3><p>插件-&gt;lankong</p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/67264c1e163da.png" alt="image-20241102235818645"></p>
-<p>设置</p>
-<p>![image-20241102235848350](/Users/hoey/Library/Application Support/typora-user-images/image-20241102235848350.png)</p>
-<h3 id="Auth-token的获取方法："><a href="#Auth-token的获取方法：" class="headerlink" title="Auth token的获取方法："></a>Auth token的获取方法：</h3><p>照着这个放一个post请求就可以了。</p>
-<p><a target="_blank" rel="noopener" href="http://pic.yihao.de/api/v1/tokens?email=&amp;password=">http://pic.yihao.de/api/v1/tokens?email=&amp;password=</a></p>
-<p><img src="https://pic.yihao.de/pic/2024/11/02/67264c75c3f83.png"></p>
-<p><img src="https://pic.yihao.de/pic/2024/11/03/672657d799d1d.png" alt="image-20241103004820420"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1981,7 +2062,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

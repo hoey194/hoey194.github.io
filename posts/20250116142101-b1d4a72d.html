@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="n86IUFnBFOxfeqHBuzwyDN9z4IxNVMohQEh6b6rUtYo" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="续上篇文章，第二个小例子 一、策略分析原始描述建仓条件：expma周线exp1跟exp2金叉向上使用使用 B&#x3D;50% 的资金买入股票，建仓成功后，卖出条件才能起作用 卖出条件S1：expma日线exp1和exp2死叉向下时卖出持仓股 S&#x3D;50% 买入条件B1：expma日线exp1和exp2金叉向上时买入股票数为S（卖出条件S1卖出股数） S1和B1就这样循环 清仓条件为：expma周线exp1和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hikyuu量化交易二">
+<meta property="og:url" content="http://example.com/posts/20250116142101-b1d4a72d.html">
+<meta property="og:site_name" content="Hoey笔记">
+<meta property="og:description" content="续上篇文章，第二个小例子 一、策略分析原始描述建仓条件：expma周线exp1跟exp2金叉向上使用使用 B&#x3D;50% 的资金买入股票，建仓成功后，卖出条件才能起作用 卖出条件S1：expma日线exp1和exp2死叉向下时卖出持仓股 S&#x3D;50% 买入条件B1：expma日线exp1和exp2金叉向上时买入股票数为S（卖出条件S1卖出股数） S1和B1就这样循环 清仓条件为：expma周线exp1和">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.yihao.de/pic/2025/01/16/6788a58a9ee68.png">
+<meta property="og:image" content="https://pic.yihao.de/pic/2025/01/16/6788a57aa89ee.png">
+<meta property="article:published_time" content="2025-01-16T06:21:01.000Z">
+<meta property="article:modified_time" content="2025-01-16T06:22:50.901Z">
+<meta property="article:author" content="Hoey">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.yihao.de/pic/2025/01/16/6788a58a9ee68.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/posts/20250116142101-b1d4a72d.html"/>
+
+
+
+
+
+  <title>Hikyuu量化交易二 | Hoey笔记</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?43f2ad51dd03ad146d67cc622d4e11e2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hoey笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">和有趣的人做尽有趣的事</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a target="_blank" href="http://hoey.tk" rel="section noopener">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Sitemap
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<style>
+  #VOCECHAT_WIDGET {
+    bottom: 85px !important;
+    right: 25px !important;
+  }
+</style>
+
+<script
+  data-host-id="1"
+  data-auto-reg="true"
+  data-login-token=""
+  data-close-width="35"
+  data-close-height="35"
+  data-open-width="380"
+  data-open-height="680"
+  data-position="right"
+  data-welcome="请问有什么事？"
+  src="https://talk.zyh1.cc/widget.js"
+  async
+></script>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250116142101-b1d4a72d.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hikyuu量化交易二</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-16T14:21:01+08:00">
+                2025-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>续上篇文章，第二个小例子</p>
+<h1 id="一、策略分析"><a href="#一、策略分析" class="headerlink" title="一、策略分析"></a>一、策略分析</h1><h2 id="原始描述"><a href="#原始描述" class="headerlink" title="原始描述"></a>原始描述</h2><p>建仓条件：expma周线exp1跟exp2金叉向上使用使用 B=50% 的资金买入股票，建仓成功后，卖出条件才能起作用</p>
+<p>卖出条件S1：expma日线exp1和exp2死叉向下时卖出持仓股 S=50%</p>
+<p>买入条件B1：expma日线exp1和exp2金叉向上时买入股票数为S（卖出条件S1卖出股数）</p>
+<p>S1和B1就这样循环</p>
+<p>清仓条件为：expma周线exp1和exp2死叉时</p>
+<h2 id="策略分析"><a href="#策略分析" class="headerlink" title="策略分析"></a>策略分析</h2><p>市场环境：无</p>
+<p>系统有效性：周线EMA1（快线）和EMA2（慢线）金叉向上直到两者死叉，系统有效时建立初始仓位</p>
+<p>信号指示器：</p>
+<ul>
+<li>买入：日线EMA1（快线）和EMA2（慢线）金叉向上</li>
+<li>卖出：日线EMA1（快线）和EMA2（慢线）死叉向下</li>
+</ul>
+<p>止损/止盈：无</p>
+<p>资金管理：</p>
+<ul>
+<li>初次建仓：使用50%的资金</li>
+<li>买入：初次建仓时持股数的50%</li>
+<li>卖出：初次建仓时持股数的50%</li>
+</ul>
+<p>盈利目标：无</p>
+<h1 id="二、实现系统部件"><a href="#二、实现系统部件" class="headerlink" title="二、实现系统部件"></a>二、实现系统部件</h1><h2 id="自定义系统有效性策略"><a href="#自定义系统有效性策略" class="headerlink" title="自定义系统有效性策略"></a>自定义系统有效性策略</h2><p>In [2]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def getNextWeekDateList(week):</span><br><span class="line">    from datetime import timedelta</span><br><span class="line">    py_week = week.datetime()</span><br><span class="line">    next_week_start = py_week + timedelta(days = 7 - py_week.weekday())</span><br><span class="line">    next_week_end = next_week_start + timedelta(days=5)</span><br><span class="line">    return get_date_range(Datetime(next_week_start), Datetime(next_week_end))</span><br><span class="line">#ds = getNextWeekDateList(Datetime(201801010000))</span><br><span class="line">#for d in ds:</span><br><span class="line">#    print(d)</span><br></pre></td></tr></table></figure>
+
+<p>In [3]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">def DEMO_CN(self):</span><br><span class="line">    &quot;&quot;&quot; DIF &gt; DEA 时，系统有效</span><br><span class="line">    参数：</span><br><span class="line">    fast_n：周线dif窗口</span><br><span class="line">    slow_n: 周线dea窗口</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    k = self.to</span><br><span class="line">    if (len(k) &lt;= 10):</span><br><span class="line">        return</span><br><span class="line">    </span><br><span class="line">    #-----------------------------</span><br><span class="line">    # 周线        </span><br><span class="line">    #-----------------------------</span><br><span class="line">    week_q = Query(k[0].datetime, k[-1].datetime, ktype=Query.WEEK)</span><br><span class="line">    week_k = k.get_stock().get_kdata(week_q)</span><br><span class="line">    </span><br><span class="line">    n1 = self.get_param(&quot;week_macd_n1&quot;)</span><br><span class="line">    n2 = self.get_param(&quot;week_macd_n2&quot;)</span><br><span class="line">    n3 = self.get_param(&quot;week_macd_n3&quot;)</span><br><span class="line">    m = MACD(CLOSE(week_k), n1, n2, n3)</span><br><span class="line">    fast = m.get_result(0)</span><br><span class="line">    slow = m.get_result(1)</span><br><span class="line"></span><br><span class="line">    x = fast &gt; slow</span><br><span class="line">    for i in range(x.discard, len(x)-1):</span><br><span class="line">        if (x[i] &gt;= 1.0):</span><br><span class="line">            #需要被扩展到日线（必须是后一周）</span><br><span class="line">            date_list = getNextWeekDateList(week_k[i].datetime)</span><br><span class="line">            for d in date_list:</span><br><span class="line">                self._add_valid(d)</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义信号指示器"><a href="#自定义信号指示器" class="headerlink" title="自定义信号指示器"></a>自定义信号指示器</h2><p>In [4]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#这个例子不需要，已经有内建的SG_Cross函数可直接使用</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义资金管理策略"><a href="#自定义资金管理策略" class="headerlink" title="自定义资金管理策略"></a>自定义资金管理策略</h2><p>In [5]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">class DEMO_MM(MoneyManagerBase):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    初次建仓：使用50%的资金</span><br><span class="line">    买入：初次建仓时持股数的50%</span><br><span class="line">    卖出：初次建仓时持股数的50%</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super(DEMO_MM, self).__init__(&quot;MACD_MM&quot;)</span><br><span class="line">        self.set_param(&quot;init_position&quot;, 0.5) #自定义初始仓位参数，占用资金百分比</span><br><span class="line">        self.next_buy_num = 0</span><br><span class="line">        </span><br><span class="line">    def _reset(self):</span><br><span class="line">        self.next_buy_num = 0</span><br><span class="line">        #pass</span><br><span class="line">        </span><br><span class="line">    def _clone(self):</span><br><span class="line">        mm = DEMO_MM()</span><br><span class="line">        mm.next_buy_num = self.next_buy_num</span><br><span class="line">        #return DEMO_MM()</span><br><span class="line">    </span><br><span class="line">    def _get_buy_num(self, datetime, stk, price, risk, part_from):</span><br><span class="line">        tm = self.tm</span><br><span class="line">        cash = tm.current_cash</span><br><span class="line">        </span><br><span class="line">        #如果信号来源于系统有效条件，建立初始仓位</span><br><span class="line">        if part_from == System.Part.CONDITION:</span><br><span class="line">            #return int((cash * 0.5 // price // stk.atom) * stk.atom)  #MoneyManagerBase其实已经保证了买入是最小交易数的整数</span><br><span class="line">            self.next_buy_num = 0 #清理掉上一周期建仓期间滚动买卖的股票数</span><br><span class="line">            return int(cash * self.get_param(&quot;init_position&quot;) // price)</span><br><span class="line">        </span><br><span class="line">        #非初次建仓，买入同等数量</span><br><span class="line">        return self.next_buy_num</span><br><span class="line">    </span><br><span class="line">    def _getSellNumber(self, datetime, stk, price, risk, part_from):</span><br><span class="line">        tm = self.tm</span><br><span class="line">        position = tm.get_position(datetime, stk)</span><br><span class="line">        current_num = int(position.number * 0.5)</span><br><span class="line">        </span><br><span class="line">        #记录第一次卖出时的股票数，以便下次以同等数量买入</span><br><span class="line">        if self.next_buy_num == 0:</span><br><span class="line">            self.next_buy_num = current_num </span><br><span class="line">            </span><br><span class="line">        return current_num #返回类型必须是整数</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、构建并运行系统"><a href="#三、构建并运行系统" class="headerlink" title="三、构建并运行系统"></a>三、构建并运行系统</h1><h2 id="修改设定公共参数"><a href="#修改设定公共参数" class="headerlink" title="修改设定公共参数"></a>修改设定公共参数</h2><p>每个系统部件以及TradeManager都有自己的公共参数会影响系统运行，具体可以查看帮助及试验。</p>
+<p>比如：这个例子当前使用系统有效条件进行初始建仓，那么必须设置系统公共参数cn_open_position为True。否则，没有建立初始仓位的话，后续没有卖出，不会有任何交易。</p>
+<p>In [6]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#System参数</span><br><span class="line">#delay=True #(bool) : 是否延迟到下一个bar开盘时进行交易</span><br><span class="line">#delay_use_current_price=True #(bool) : 延迟操作的情况下，是使用当前交易时bar的价格计算新的止损价/止赢价/目标价还是使用上次计算的结果</span><br><span class="line">#max_delay_count=3 #(int) : 连续延迟交易请求的限制次数</span><br><span class="line">#tp_monotonic=True #(bool) : 止赢单调递增</span><br><span class="line">#tp_delay_n=3 #(int) : 止盈延迟开始的天数，即止盈策略判断从实际交易几天后开始生效</span><br><span class="line">#ignore_sell_sg=False #(bool) : 忽略卖出信号，只使用止损/止赢等其他方式卖出</span><br><span class="line">#ev_open_position=False #(bool): 是否使用市场环境判定进行初始建仓</span><br><span class="line"></span><br><span class="line">cn_open_position=True #(bool): 是否使用系统有效性条件进行初始建仓</span><br><span class="line"></span><br><span class="line">#MoneyManager公共参数</span><br><span class="line">#auto-checkin=False #(bool) : 当账户现金不足以买入资金管理策略指示的买入数量时，自动向账户中补充存入（checkin）足够的现金。</span><br><span class="line">#max-stock=20000 #(int) : 最大持有的证券种类数量（即持有几只股票，而非各个股票的持仓数）</span><br><span class="line">#disable_ev_force_clean_position=False #(bool) : 禁用市场环境失效时强制清仓</span><br><span class="line">#disable_cn_force_clean_position=False #(bool) : 禁用系统有效条件失效时强制清仓</span><br></pre></td></tr></table></figure>
+
+<h2 id="设定私有参数及待测试标的"><a href="#设定私有参数及待测试标的" class="headerlink" title="设定私有参数及待测试标的"></a>设定私有参数及待测试标的</h2><p>In [7]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#账户参数</span><br><span class="line">init_cash = 500000 #账户初始资金</span><br><span class="line">init_date = &#x27;1990-1-1&#x27; #账户建立日期</span><br><span class="line"></span><br><span class="line">#信号指示器参数</span><br><span class="line">week_n1 = 12</span><br><span class="line">week_n2 = 26</span><br><span class="line">week_n3 = 9</span><br><span class="line"></span><br><span class="line">#选定标的，及测试区间</span><br><span class="line">stk = sm[&#x27;sz000002&#x27;]</span><br><span class="line"></span><br><span class="line">#如果是同一级别K线，可以使用索引号，使用了不同级别的K线数据，建议还是使用日期作为参数</span><br><span class="line">#另外，数据量太大的话，matplotlib绘图会比较慢</span><br><span class="line">start_date = Datetime(&#x27;2016-01-01&#x27;)  </span><br><span class="line">end_date = Datetime()</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建系统实例"><a href="#构建系统实例" class="headerlink" title="构建系统实例"></a>构建系统实例</h2><p>In [8]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#创建模拟交易账户进行回测，初始资金30万</span><br><span class="line">my_tm = crtTM(date=Datetime(init_date), init_cash = init_cash)</span><br><span class="line"></span><br><span class="line">#创建系统实例</span><br><span class="line">my_sys = SYS_Simple()</span><br><span class="line"></span><br><span class="line">my_sys.set_param(&quot;cn_open_position&quot;, cn_open_position)</span><br><span class="line"></span><br><span class="line">my_sys.tm = my_tm</span><br><span class="line">my_cn = crtCN(DEMO_CN, </span><br><span class="line">              &#123;&#x27;week_macd_n1&#x27;: week_n1, &#x27;week_macd_n2&#x27;: week_n2, &#x27;week_macd_n3&#x27;: week_n3&#125;, </span><br><span class="line">                &#x27;DEMO_CN&#x27;)  </span><br><span class="line">my_sys.cn = my_cn</span><br><span class="line">my_sys.sg = SG_Cross(EMA(C, n=week_n1), EMA(C, n=week_n2))</span><br><span class="line">my_mm = DEMO_MM()</span><br><span class="line">my_sys.mm = my_mm</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行系统"><a href="#运行系统" class="headerlink" title="运行系统"></a>运行系统</h2><p>In [9]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">q = Query(start_date, end_date, ktype=Query.DAY)</span><br><span class="line">my_sys.run(stk, q)</span><br><span class="line"></span><br><span class="line">#将交易记录及持仓情况，保存在临时目录，可用Excel查看</span><br><span class="line">#临时目录一般设置在数据所在目录下的 tmp 子目录</span><br><span class="line">#如果打开了excel记录，再次运行系统前，记得先关闭excel文件，否则新的结果没法保存</span><br><span class="line">my_tm.tocsv(sm.tmpdir())</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、查看资金曲线及绩效统计"><a href="#四、查看资金曲线及绩效统计" class="headerlink" title="四、查看资金曲线及绩效统计"></a>四、查看资金曲线及绩效统计</h1><p>In [10]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#绘制资金收益曲线</span><br><span class="line">x = my_tm.get_profit_curve(stk.get_datetime_list(q), Query.DAY)</span><br><span class="line">#x = my_tm.getFundsCurve(stk.getDatetimeList(q), KQuery.DAY) #资金净值曲线</span><br><span class="line">PRICELIST(x).plot()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a58a9ee68.png" alt="image-20250116142158838"></p>
+<p>In [11]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">#回测统计</span><br><span class="line">per = Performance()</span><br><span class="line">print(per.report(my_tm, Datetime.now()))</span><br><span class="line">帐户初始金额: 500000.00</span><br><span class="line">累计投入本金: 500000.00</span><br><span class="line">累计投入资产: 0.00</span><br><span class="line">累计借入现金: 0.00</span><br><span class="line">累计借入资产: 0.00</span><br><span class="line">累计红利: 35609.57</span><br><span class="line">现金余额: 512542.57</span><br><span class="line">未平仓头寸净值: 0.00</span><br><span class="line">当前总资产: 512542.57</span><br><span class="line">已平仓交易总成本: 0.00</span><br><span class="line">已平仓净利润总额: 12542.57</span><br><span class="line">单笔交易最大占用现金比例%: 49.99</span><br><span class="line">交易平均占用现金比例%: 49.85</span><br><span class="line">已平仓帐户收益率%: 2.51</span><br><span class="line">帐户年复合收益率%: 0.32</span><br><span class="line">帐户平均年收益率%: 0.33</span><br><span class="line">赢利交易赢利总额: 226235.57</span><br><span class="line">亏损交易亏损总额: -213693.00</span><br><span class="line">已平仓交易总数: 14.00</span><br><span class="line">赢利交易数: 7.00</span><br><span class="line">亏损交易数: 7.00</span><br><span class="line">赢利交易比例%: 50.00</span><br><span class="line">赢利期望值: 895.90</span><br><span class="line">赢利交易平均赢利: 32319.37</span><br><span class="line">亏损交易平均亏损: -30527.57</span><br><span class="line">平均赢利/平均亏损比例: 1.06</span><br><span class="line">净赢利/亏损比例: 1.06</span><br><span class="line">最大单笔赢利: 140710.57</span><br><span class="line">最大单笔盈利百分比%: 56.58</span><br><span class="line">最大单笔亏损: -54740.00</span><br><span class="line">最大单笔亏损百分比%: -18.85</span><br><span class="line">赢利交易平均持仓时间: 39.86</span><br><span class="line">赢利交易最大持仓时间: 105.00</span><br><span class="line">亏损交易平均持仓时间: 74.86</span><br><span class="line">亏损交易最大持仓时间: 161.00</span><br><span class="line">空仓总时间: 2012.00</span><br><span class="line">空仓时间/总时间%: 71.00</span><br><span class="line">平均空仓时间: 143.00</span><br><span class="line">最长空仓时间: 431.00</span><br><span class="line">最大连续赢利笔数: 2.00</span><br><span class="line">最大连续亏损笔数: 3.00</span><br><span class="line">最大连续赢利金额: 142426.57</span><br><span class="line">最大连续亏损金额: -105390.00</span><br><span class="line">R乘数期望值: 0.01</span><br><span class="line">交易机会频率/年: 1.82</span><br><span class="line">年度期望R乘数: 0.02</span><br><span class="line">赢利交易平均R乘数: 0.12</span><br><span class="line">亏损交易平均R乘数: -0.10</span><br><span class="line">最大单笔赢利R乘数: 0.57</span><br><span class="line">最大单笔亏损R乘数: -0.19</span><br><span class="line">最大连续赢利R乘数: 0.29</span><br><span class="line">最大连续亏损R乘数: -0.19</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、或许想看下图形"><a href="#五、或许想看下图形" class="headerlink" title="五、或许想看下图形"></a>五、或许想看下图形</h1><p>In [12]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_sys.performance()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a57aa89ee.png" alt="image-20250116142141416"></p>
+<h1 id="六、或许想看看所有股票的情况"><a href="#六、或许想看看所有股票的情况" class="headerlink" title="六、或许想看看所有股票的情况"></a>六、或许想看看所有股票的情况</h1><p>In [13]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">def calTotal(blk, q):</span><br><span class="line">    per = Performance()</span><br><span class="line">    s_name = []</span><br><span class="line">    s_code = []</span><br><span class="line">    x = []</span><br><span class="line">    for stk in blk:</span><br><span class="line">        my_sys.run(stk, q)</span><br><span class="line">        per.statistics(my_tm, Datetime.now())</span><br><span class="line">        s_name.append(stk.name)</span><br><span class="line">        s_code.append(stk.market_code)</span><br><span class="line">        x.append(per[&quot;当前总资产&quot;])</span><br><span class="line">    return pd.DataFrame(&#123;&#x27;代码&#x27;: s_code, &#x27;股票&#x27;: s_name, &#x27;当前总资产&#x27;: x&#125;)</span><br><span class="line"></span><br><span class="line">%time data = calTotal(blocka, q)</span><br><span class="line">CPU times: total: 4.98 s</span><br><span class="line">Wall time: 29.2 s</span><br></pre></td></tr></table></figure>
+
+<p>In [14]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#保存到CSV文件</span><br><span class="line">#data.to_csv(sm.tmpdir() + &#x27;/统计.csv&#x27;)</span><br><span class="line">data[:10]</span><br></pre></td></tr></table></figure>
+
+<p>Out[14]:</p>
+<table>
+<thead>
+<tr>
+<th align="right"></th>
+<th align="right">代码</th>
+<th align="right">股票</th>
+<th align="right">当前总资产</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">0</td>
+<td align="right">SH600605</td>
+<td align="right">汇通能源</td>
+<td align="right">778089.17</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td align="right">SH600606</td>
+<td align="right">绿地控股</td>
+<td align="right">459330.60</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="right">SH603272</td>
+<td align="right">联翔股份</td>
+<td align="right">480224.00</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">SH600354</td>
+<td align="right">敦煌种业</td>
+<td align="right">575339.00</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="right">SZ300359</td>
+<td align="right">全通教育</td>
+<td align="right">441039.85</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td align="right">SZ000725</td>
+<td align="right">京东方Ａ</td>
+<td align="right">465180.59</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="right">BJ838163</td>
+<td align="right">方大新材</td>
+<td align="right">519824.00</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td align="right">SZ300358</td>
+<td align="right">楚天科技</td>
+<td align="right">496350.30</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td align="right">SH600355</td>
+<td align="right">精伦电子</td>
+<td align="right">390633.00</td>
+</tr>
+<tr>
+<td align="right">9</td>
+<td align="right">SH603273</td>
+<td align="right">天元智能</td>
+<td align="right">543317.00</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/20250116140848-fc120b9c.html" rel="next" title="Hikyuu - Quant Framework">
+                <i class="fa fa-chevron-left"></i> Hikyuu - Quant Framework
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="hoey194/note"
+        data-repo-id="R_kgDOImfwSg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOImfwSs4CikdG"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AD%96%E7%95%A5%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">一、策略分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">原始描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">策略分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E7%BB%9F%E9%83%A8%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">二、实现系统部件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B3%BB%E7%BB%9F%E6%9C%89%E6%95%88%E6%80%A7%E7%AD%96%E7%95%A5"><span class="nav-number">2.1.</span> <span class="nav-text">自定义系统有效性策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BF%A1%E5%8F%B7%E6%8C%87%E7%A4%BA%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">自定义信号指示器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B5%84%E9%87%91%E7%AE%A1%E7%90%86%E7%AD%96%E7%95%A5"><span class="nav-number">2.3.</span> <span class="nav-text">自定义资金管理策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%9E%84%E5%BB%BA%E5%B9%B6%E8%BF%90%E8%A1%8C%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text">三、构建并运行系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E8%AE%BE%E5%AE%9A%E5%85%AC%E5%85%B1%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">修改设定公共参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E5%AE%9A%E7%A7%81%E6%9C%89%E5%8F%82%E6%95%B0%E5%8F%8A%E5%BE%85%E6%B5%8B%E8%AF%95%E6%A0%87%E7%9A%84"><span class="nav-number">3.2.</span> <span class="nav-text">设定私有参数及待测试标的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.3.</span> <span class="nav-text">构建系统实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.4.</span> <span class="nav-text">运行系统</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%9F%A5%E7%9C%8B%E8%B5%84%E9%87%91%E6%9B%B2%E7%BA%BF%E5%8F%8A%E7%BB%A9%E6%95%88%E7%BB%9F%E8%AE%A1"><span class="nav-number">4.</span> <span class="nav-text">四、查看资金曲线及绩效统计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%88%96%E8%AE%B8%E6%83%B3%E7%9C%8B%E4%B8%8B%E5%9B%BE%E5%BD%A2"><span class="nav-number">5.</span> <span class="nav-text">五、或许想看下图形</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%88%96%E8%AE%B8%E6%83%B3%E7%9C%8B%E7%9C%8B%E6%89%80%E6%9C%89%E8%82%A1%E7%A5%A8%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">6.</span> <span class="nav-text">六、或许想看看所有股票的情况</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hoey</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span id="timeDate"></span>
+<span id="times"></span>
+
+
+
+<script>
+  var now = new Date();
+  function createtime() {
+    var grt= new Date("01/01/2022 12:00:00");//此处修改你的建站时间或者网站上线时间
+    now.setTime(now.getTime()+250);
+    days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+    hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+    if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+    mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+    seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+    snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+    document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+    document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+  }
+  setInterval("createtime()",250);
+</script>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -303,6 +303,176 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230328125112-f144fb4b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20230328125112-f144fb4b.html" itemprop="url">Doris使用踩坑总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-03-28T12:51:12+08:00">
+                2023-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>环境</p>
+<ul>
+<li>MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports)</li>
+<li>[Doris](<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">部署 Docker 集群 - Apache Doris</a>):v1.12.1</li>
+<li><a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>: v1.8.x</li>
+<li>IDEA开发环境</li>
+</ul>
+<h3 id="一、-Docker部署"><a href="#一、-Docker部署" class="headerlink" title="一、 Docker部署"></a>一、 Docker部署</h3><p>官方提供文档<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/install/construct-docker/run-docker-cluster/">Deploy Docker cluster</a></p>
+<p><font color="red">但部署完以后发现集群无法识别BE节点，查看日志发现是因为没有设置<code>vm.max_map_count</code>参数</font></p>
+<blockquote>
+<p>避坑1: 需要设置sysctl -w vm.max_map_count=2000000</p>
+<p>避坑2: 在启动容器时需要添加privileged: true</p>
+</blockquote>
+<h3 id="二、Flink-写入Doris"><a href="#二、Flink-写入Doris" class="headerlink" title="二、Flink 写入Doris"></a>二、Flink 写入Doris</h3><p>官方提供了文档<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/ecosystem/flink-doris-connector?_highlight=flink">Flink Doris Connector</a></p>
+<p>这里选用的是RowData的方式写入到Doris，提前到Doris中创建表代码如下:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE dwd;</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> dwd.TICKET;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> dwd.TICKET (</span><br><span class="line">        event <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        newval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        oldval <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        stamp <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        subevent <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptm <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        uptmms <span class="type">VARCHAR</span>(<span class="number">256</span>),</span><br><span class="line">        ver <span class="type">VARCHAR</span>(<span class="number">256</span>)</span><br><span class="line">)DISTRIBUTED <span class="keyword">BY</span> HASH(stamp) BUCKETS <span class="number">1</span></span><br><span class="line">PROPERTIES (</span><br><span class="line">&quot;replication_allocation&quot; <span class="operator">=</span> &quot;tag.location.default: 1&quot;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>然后是使用Java代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">StreamExecutionEnvironment</span> <span class="variable">env</span> <span class="operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(<span class="number">1</span>);</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">prop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        prop.setProperty(<span class="string">&quot;format&quot;</span>, <span class="string">&quot;json&quot;</span>);</span><br><span class="line">        prop.setProperty(<span class="string">&quot;strip_outer_array&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">        env.fromElements(<span class="string">&quot;&#123;\&quot;event\&quot;:\&quot;CheckIn\&quot;,\&quot;newval\&quot;:\&quot;90\&quot;,\&quot;oldval\&quot;:\&quot;0\&quot;,\&quot;stamp\&quot;:\&quot;67100c4f-0355-4dba-8a76-2a94202132d1\&quot;,\&quot;subevent\&quot;:\&quot;\&quot;,\&quot;uptm\&quot;:\&quot;20230319094822\&quot;,\&quot;uptmms\&quot;:\&quot;20230319094822031\&quot;,\&quot;ver\&quot;:\&quot;v1.0\&quot;&#125;&quot;</span>)</span><br><span class="line">                .addSink(DorisSink.sink(</span><br><span class="line">                        DorisReadOptions.builder().build(),</span><br><span class="line">                        DorisExecutionOptions.builder().setBatchSize(<span class="number">3</span>)</span><br><span class="line">                                .setBatchIntervalMs(<span class="number">0L</span>)</span><br><span class="line">                                .setMaxRetries(<span class="number">3</span>)</span><br><span class="line">                                .setStreamLoadProp(prop)</span><br><span class="line">                                .build(),</span><br><span class="line">                        DorisOptions.builder().setFenodes(<span class="string">&quot;localhost:8030&quot;</span>)</span><br><span class="line">                                .setTableIdentifier(<span class="string">&quot;dwd.TICKET&quot;</span>)</span><br><span class="line">                                .setUsername(<span class="string">&quot;admin&quot;</span>)</span><br><span class="line">                                .setPassword(<span class="string">&quot;&quot;</span>).build())</span><br><span class="line">                );</span><br><span class="line">        env.execute(<span class="string">&quot;pss-format-job&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font color="red">运行时发现网络不通问题，无法成功写入Dois</font>，具体错误如图下图所示：</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131103501.png" alt="image-20230328131103501"></p>
+<p>分析宿主节点和docker集群的关系</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328131607049.png" alt="image-20230328131607049"></p>
+<p>由架构图得知，是因为sink写入的时候通过外网地址的fe取到be地址是内网地址。</p>
+<p>解决思路：</p>
+<ol>
+<li><p>程序上传到FE运行，但是我属于本地开发环境，这种方式不适合</p>
+</li>
+<li><p>配置Docker network，使得在宿主节点能够访问容器 BE的IP。这块我也尝试搜索了很多资料，最终以失败告终。</p>
+<ul>
+<li>尝试一： 在宿主节点修改路由表 sudo route add -net 172.20.80.0/24 172.20.80.1</li>
+<li>尝试二： 以Host方式运行FE和BE</li>
+</ul>
+</li>
+<li><p>修改源代码： 找到涉及到“第二步：将BE内网IP返回给主程序”代码，并修改</p>
+</li>
+</ol>
+<p>其中我是用第三种方法，成功在本地开发环境摄入数据到Doris，在这里简单介绍一下快速修改源码的方法。</p>
+<p>第一步： 先找到涉及到代码的相关方法，在该场景中对应的是<code>org.apache.doris.flink.rest.RestService</code>类的<code>randomBackend()</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@VisibleForTesting</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">randomBackend</span><span class="params">(DorisOptions options, DorisReadOptions readOptions, Logger logger)</span> <span class="keyword">throws</span> DorisException, IOException &#123;</span><br><span class="line">        List&lt;BackendRowV2&gt; backends = getBackendsV2(options, readOptions, logger);</span><br><span class="line">        logger.trace(<span class="string">&quot;Parse beNodes &#x27;&#123;&#125;&#x27;.&quot;</span>, backends);</span><br><span class="line">        <span class="keyword">if</span> (backends != <span class="literal">null</span> &amp;&amp; !backends.isEmpty()) &#123;</span><br><span class="line">            Collections.shuffle(backends);</span><br><span class="line">            <span class="type">BackendRowV2</span> <span class="variable">backend</span> <span class="operator">=</span> (BackendRowV2)backends.get(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> backend.getIp() + <span class="string">&quot;:&quot;</span> + backend.getHttpPort();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            logger.error(<span class="string">&quot;argument &#x27;&#123;&#125;&#x27; is illegal, value is &#x27;&#123;&#125;&#x27;.&quot;</span>, <span class="string">&quot;beNodes&quot;</span>, backends);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;beNodes&quot;</span>, String.valueOf(backends));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二步：现在希望返回值并非BE的内网IP，因此我们需要将<code>return</code>的内容写死<code>return &quot;localhost:8040&quot;;</code></p>
+<p>第三步：在代码中我们创建与类相同的包，并将源码原封不动粘贴进去，如果报错，可以修改。紧接着修改<code>return &quot;localhost:8040&quot;;</code>即可</p>
+<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20230328133408579.png" alt="image-20230328133408579"></p>
+<p>总结：</p>
+<p>我这里是本地开发环境遇到的问题，并非生产环境；如果生产环境部署基于Doris的应用程序，则需要注意下下面几点：</p>
+<ol>
+<li>运行的代码所在的机器，必须与Doris所在的网络保持通常。</li>
+<li>基于RowData的摄入方式不太友好，现在仍要寻找一种更好的编码方式。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20230314161612-f30a9b25.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1369,11 +1539,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#x63;&#x6e;&#x6e;&#113;&#x6a;&#x62;&#97;&#110;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#111;&#109;">&#x63;&#x6e;&#x6e;&#113;&#x6a;&#x62;&#97;&#110;&#x35;&#50;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#111;&#109;</a></td>
+<td><a href="mailto:&#x63;&#x6e;&#x6e;&#x71;&#106;&#98;&#x61;&#110;&#53;&#x32;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;">&#x63;&#x6e;&#x6e;&#x71;&#106;&#98;&#x61;&#110;&#53;&#x32;&#x31;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;</a></td>
 <td>hoey94</td>
 </tr>
 <tr>
-<td><a href="mailto:&#x33;&#x35;&#49;&#56;&#x36;&#x35;&#x35;&#x37;&#x36;&#64;&#113;&#113;&#46;&#99;&#x6f;&#109;">&#x33;&#x35;&#49;&#56;&#x36;&#x35;&#x35;&#x37;&#x36;&#64;&#113;&#113;&#46;&#99;&#x6f;&#109;</a></td>
+<td><a href="mailto:&#51;&#53;&#49;&#x38;&#x36;&#x35;&#53;&#x37;&#x36;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#109;">&#51;&#53;&#49;&#x38;&#x36;&#x35;&#53;&#x37;&#x36;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>hoey1994</td>
 </tr>
 </tbody></table>
@@ -1388,11 +1558,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="mailto:&#99;&#110;&#110;&#x71;&#106;&#x62;&#97;&#110;&#x35;&#x32;&#x31;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#99;&#110;&#110;&#x71;&#106;&#x62;&#97;&#110;&#x35;&#x32;&#x31;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#x63;&#x6e;&#x6e;&#113;&#x6a;&#98;&#97;&#x6e;&#53;&#50;&#49;&#64;&#103;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x63;&#x6e;&#x6e;&#113;&#x6a;&#98;&#97;&#x6e;&#53;&#50;&#49;&#64;&#103;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;</a></td>
 <td>Test</td>
 </tr>
 <tr>
-<td><a href="mailto:&#x33;&#x35;&#x31;&#56;&#54;&#x35;&#x35;&#x37;&#54;&#64;&#x71;&#113;&#46;&#99;&#x6f;&#x6d;">&#x33;&#x35;&#x31;&#56;&#54;&#x35;&#x35;&#x37;&#54;&#64;&#x71;&#113;&#46;&#99;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#x33;&#x35;&#49;&#x38;&#54;&#53;&#x35;&#x37;&#x36;&#64;&#x71;&#x71;&#46;&#99;&#x6f;&#109;">&#x33;&#x35;&#49;&#x38;&#54;&#53;&#x35;&#x37;&#x36;&#64;&#x71;&#x71;&#46;&#99;&#x6f;&#109;</a></td>
 <td>test</td>
 </tr>
 </tbody></table>
@@ -1441,8 +1611,8 @@
 
 
 
-<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#x6e;&#x6e;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#49;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x63;&#x6e;&#x6e;&#x71;&#106;&#x62;&#x61;&#x6e;&#x35;&#50;&#49;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a>(hoey94)下创建Test项目</p>
-<p>在账号<a href="mailto:&#51;&#x35;&#49;&#x38;&#x36;&#53;&#x35;&#x37;&#x36;&#64;&#x71;&#x71;&#46;&#99;&#x6f;&#109;">&#51;&#x35;&#49;&#x38;&#x36;&#53;&#x35;&#x37;&#x36;&#64;&#x71;&#x71;&#46;&#99;&#x6f;&#109;</a>(hoey1994)下创建test项目</p>
+<h1 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h1><p>在账号<a href="mailto:&#x63;&#110;&#110;&#113;&#x6a;&#98;&#x61;&#110;&#x35;&#50;&#49;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#x63;&#110;&#110;&#113;&#x6a;&#98;&#x61;&#110;&#x35;&#50;&#49;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a>(hoey94)下创建Test项目</p>
+<p>在账号<a href="mailto:&#x33;&#53;&#49;&#x38;&#54;&#53;&#53;&#55;&#54;&#x40;&#113;&#x71;&#x2e;&#x63;&#111;&#109;">&#x33;&#53;&#49;&#x38;&#54;&#53;&#53;&#55;&#54;&#x40;&#113;&#x71;&#x2e;&#x63;&#111;&#109;</a>(hoey1994)下创建test项目</p>
 <p>使用下面命令分别克隆到本地</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆Test</span></span><br><span class="line">git clone git@github-hoey94:hoey94/Test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey94</span></span><br><span class="line">gacm use hoey94 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">克隆<span class="built_in">test</span></span></span><br><span class="line">git clone git@github-hoey1994:hoey1994/test.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用gacm切换项目本地用户为hoey1994</span></span><br><span class="line">gacm use hoey1994 --local</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看项目本地用户是否切换成功</span></span><br><span class="line">gacm ls</span><br></pre></td></tr></table></figure>
 
@@ -1677,7 +1847,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

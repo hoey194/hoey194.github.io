@@ -303,6 +303,179 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241102231748-c09e9d17.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20241102231748-c09e9d17.html" itemprop="url">自定义图床OneDrive(二)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-11-02T23:17:48+08:00">
+                2024-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>需求: E5保活+OneDrive(简称od)图床，由于篇幅太长，套域名就不写了。</p>
+<h3 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备:"></a>前置准备:</h3><ol>
+<li>Debain12 &amp; docker环境</li>
+<li>Windows (用来申请rclone访问OD Token)</li>
+</ol>
+<h3 id="安装rclone"><a href="#安装rclone" class="headerlink" title="安装rclone"></a>安装rclone</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo -v ; curl https://rclone.org/install.sh | sudo bash</span><br><span class="line"># 安装rclone依赖</span><br><span class="line">apt install fuse3</span><br></pre></td></tr></table></figure>
+
+<h3 id="申请AZ客户端ID和密钥"><a href="#申请AZ客户端ID和密钥" class="headerlink" title="申请AZ客户端ID和密钥"></a>申请AZ客户端ID和密钥</h3><p>rclone和od对接，需要”客户端ID”和”客户端密钥”这个到面板上申请一个。</p>
+<p>访问<a target="_blank" rel="noopener" href="https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps">Azure API管理面板</a>登陆</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/672645e572608.png" alt="image-20241102233146492"></p>
+<p>点击“新注册”注册一个应用程序。</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/67264600a86ef.png" alt="image-20241102233214397"></p>
+<p>输入名称，勾选权限后注册应用。</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/6726461a859b7.png" alt="image-20241102233240133"></p>
+<p>注册成功后将跳转到管理页面，记下图中所示的“应用程序(客户端) ID”，供将来挂载使用。</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/6726463341089.png" alt="image-20241102233304789"></p>
+<p>此时点击“证书与密码”→“新客户端密码”，填写说明和截至期限后，添加密码。</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/6726467e037f2.png" alt="image-20241102233419464"></p>
+<p>​    添加密码后，我们记录密码值，供将来挂载使用。<strong>注意这里一定要将密码记录下来，因为它只显示一次。</strong></p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/672646922d28f.png" alt="image-20241102233439907"></p>
+<p>​    接下来，点击“API权限”，为我们的api获取权限。Files中的权限全部勾选。</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/672646b1e9319.png" alt="image-20241102233511198"></p>
+<p>至此，我们已经申请好了onedrive的api，目前我们已经得到了<strong>客户端ID</strong>以及<strong>客户端密钥</strong>。</p>
+<h3 id="rclone配置OD"><a href="#rclone配置OD" class="headerlink" title="rclone配置OD"></a>rclone配置OD</h3><p>到Windows下载<a href="rclone.org/downloads">rclone</a>，执行下面的命令获取token</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># windows系统下按win+R调出运行，输入“cmd”</span><br><span class="line">rclone.exe authorize &quot;onedrive&quot; &quot;客户端ID&quot; &quot;客户端密钥&quot;</span><br></pre></td></tr></table></figure>
+
+<p>![image-20241102234244003](/Users/hoey/Library/Application Support/typora-user-images/image-20241102234244003.png)</p>
+<p>把toekn存下来，后面要用，接下来来配置rclone 并挂在onedrive到本地/mnt/onedrive/</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 配rclone注册远程连接</span><br><span class="line">rclone config</span><br><span class="line">n </span><br><span class="line">onedrive</span><br><span class="line">35  Microsoft OneDrive</span><br><span class="line">客户端ID</span><br><span class="line">客户端密钥</span><br><span class="line">1  Microsoft Cloud Global</span><br><span class="line">n No (default) 不进行高级配置</span><br><span class="line">n No 不使用自动配置</span><br><span class="line">配置上面从windows存储的token</span><br><span class="line">1 OneDrive Personal or Business</span><br><span class="line">y</span><br><span class="line">y</span><br></pre></td></tr></table></figure>
+
+<p>最终成功结果，如果你哪一步跟不上可以参考这个文档<a target="_blank" rel="noopener" href="https://blog.csdn.net/diqiudq/article/details/122754919">申请onedrive api并使用rclone将其挂载为本地磁盘_rclone onedrive-CSDN博客</a>参考上半部分就行。</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/672649101ed19.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /mnt/onedrive/</span><br><span class="line">vim /etc/systemd/system/rclone.service</span><br><span class="line"></span><br><span class="line"># 里面的5G需要根据磁盘的大小设置，但是不能超过剩余磁盘空间</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=rclone</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=root</span><br><span class="line">ExecStart=/usr/bin/rclone mount onedrive:/ /mnt/onedrive/ --allow-other --allow-non-empty --vfs-cache-mode writes --vfs-cache-max-size 5G --transfers 3</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl start rclone</span><br><span class="line">sudo systemctl enable rclone</span><br><span class="line">sudo systemctl status rclone</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="lsky"><a href="#lsky" class="headerlink" title="lsky"></a>lsky</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/docker/lsky-pro/lsky</span><br><span class="line">cd /opt/docker/lsky-pro </span><br><span class="line"></span><br><span class="line">vim docker-compose.yml</span><br><span class="line"># 18088 &amp; 18089可以自定义</span><br><span class="line">services:</span><br><span class="line">  lsky-pro:</span><br><span class="line">    image: hisatri/lsky:latest</span><br><span class="line">    container_name: lsky-pro</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;18088:8088&quot;</span><br><span class="line">      - &quot;18089:8089&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - $PWD/lsky:/var/www/html</span><br><span class="line">      - /mnt/onedrive:/onedrive</span><br><span class="line">    environment:</span><br><span class="line">      - HTTPS_PORT=8088</span><br><span class="line">      - WEB_PORT=8089</span><br><span class="line"></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+
+
+<p>访问localhost:18089</p>
+<p>数据库选择sqllite，存储目录留空不填写，自己设置个邮箱和密码。</p>
+<p>角色组</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/67264b91b86c1.png" alt="image-20241102235558735"></p>
+<p>存储策略</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/67264bad24bc7.png" alt="image-20241102235626568"></p>
+<h3 id="picgo"><a href="#picgo" class="headerlink" title="picgo"></a>picgo</h3><p>插件-&gt;lankong</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/67264c1e163da.png" alt="image-20241102235818645"></p>
+<p>设置</p>
+<p>![image-20241102235848350](/Users/hoey/Library/Application Support/typora-user-images/image-20241102235848350.png)</p>
+<h3 id="Auth-token的获取方法："><a href="#Auth-token的获取方法：" class="headerlink" title="Auth token的获取方法："></a>Auth token的获取方法：</h3><p>照着这个放一个post请求就可以了。</p>
+<p><a target="_blank" rel="noopener" href="http://pic.yihao.de/api/v1/tokens?email=&amp;password=">http://pic.yihao.de/api/v1/tokens?email=&amp;password=</a></p>
+<p><img src="https://pic.yihao.de/pic/2024/11/02/67264c75c3f83.png"></p>
+<p><img src="https://pic.yihao.de/pic/2024/11/03/672657d799d1d.png" alt="image-20241103004820420"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241031100903-85baf870.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1458,176 +1631,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240515105100-f4a4afc9.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20240515105100-f4a4afc9.html" itemprop="url">HSD梳理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-05-15T10:51:00+08:00">
-                2024-05-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="HSD名称及英文简称映射"><a href="#HSD名称及英文简称映射" class="headerlink" title="HSD名称及英文简称映射"></a>HSD名称及英文简称映射</h3><table>
-<thead>
-<tr>
-<th>名称</th>
-<th>英文简称</th>
-<th>参考黑屏指令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>航班计划数据</td>
-<td>iSCH</td>
-<td>ST</td>
-</tr>
-<tr>
-<td>库存数据</td>
-<td>iINV</td>
-<td>RO</td>
-</tr>
-<tr>
-<td>客票数据</td>
-<td>iETS</td>
-<td>DETR</td>
-</tr>
-<tr>
-<td>EMD票数据</td>
-<td>iEMD</td>
-<td>DEMD</td>
-</tr>
-<tr>
-<td>订座PNR数据</td>
-<td>iPNR</td>
-<td>RT</td>
-</tr>
-<tr>
-<td>订座PNR数据(历史)</td>
-<td>iPNRH</td>
-<td>RTC</td>
-</tr>
-<tr>
-<td>离港旅客数据</td>
-<td>iCKI</td>
-<td>PR</td>
-</tr>
-<tr>
-<td>离港航班数据</td>
-<td>iFLT</td>
-<td>SY</td>
-</tr>
-</tbody></table>
-<h3 id="中转航班的逻辑"><a href="#中转航班的逻辑" class="headerlink" title="中转航班的逻辑"></a>中转航班的逻辑</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 按 照票号+出票日期 取最新的数据</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets <span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    <span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">(</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.stamp,</span><br><span class="line">    a.dttm,</span><br><span class="line">    a.ticketidentification_tktissuedate,</span><br><span class="line">    a.ticketimage_ticketnumber,</span><br><span class="line">    a.itinerary_ticketcoupon,</span><br><span class="line">    <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> a.ticketidentification_tktissuedate, a.ticketimage_ticketnumber <span class="keyword">order</span> <span class="keyword">by</span> a.dttm <span class="keyword">desc</span>) r</span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">    ods.cst_hsd_iets a</span><br><span class="line">) t  </span><br><span class="line"><span class="keyword">where</span>  r<span class="operator">=</span><span class="number">1</span> </span><br><span class="line">;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment">-- 拆分json</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_01;    </span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_01 <span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.stamp,</span><br><span class="line">    a.dttm,</span><br><span class="line">    a.ticketidentification_tktissuedate issuedate, <span class="comment">-- 出票日期</span></span><br><span class="line">    substr(a.ticketimage_ticketnumber,<span class="number">1</span>,<span class="number">13</span>) ticketnumber, <span class="comment">--票号</span></span><br><span class="line">    get_json_object(itinerary, <span class="string">&#x27;$.CouponNumber&#x27;</span>) couponNumber,</span><br><span class="line">    get_json_object(itinerary, <span class="string">&#x27;$.CouponStatus&#x27;</span>) couponStatus, <span class="comment">-- 客票状态</span></span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Carrier&#x27;</span>), <span class="string">&#x27;$.AirlineCode&#x27;</span>) carrier_airlinecode, </span><br><span class="line">    get_json_object(get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Carrier&#x27;</span>), <span class="string">&#x27;$.FlightNumber&#x27;</span>), <span class="string">&#x27;$.Value&#x27;</span>) carrier_flightnumber,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Carrier&#x27;</span>), <span class="string">&#x27;$.FlightNumber&#x27;</span>), <span class="string">&#x27;$.Suffix&#x27;</span>) carrier_flightnumber_suffix,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.OperatingCarrier&#x27;</span>), <span class="string">&#x27;$.AirlineCode&#x27;</span>) operating_airlinecode, <span class="comment">-- 承运航司</span></span><br><span class="line">    get_json_object(get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.OperatingCarrier&#x27;</span>), <span class="string">&#x27;$.FlightNumber&#x27;</span>), <span class="string">&#x27;$.Value&#x27;</span>) operating_flightnumber, <span class="comment">-- 承运航班号</span></span><br><span class="line">    get_json_object(get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.OperatingCarrier&#x27;</span>), <span class="string">&#x27;$.FlightNumber&#x27;</span>), <span class="string">&#x27;$.Suffix&#x27;</span>) operating_flightnumber_suffix, <span class="comment">-- 承运航班号后缀</span></span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Departure&#x27;</span>), <span class="string">&#x27;$.Date&#x27;</span>) departure_date,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Departure&#x27;</span>), <span class="string">&#x27;$.AirportCode&#x27;</span>) departure_airportcode,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Flight&#x27;</span>), <span class="string">&#x27;$.Arrival&#x27;</span>), <span class="string">&#x27;$.AirportCode&#x27;</span>) arrival_airportcode,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Open&#x27;</span>), <span class="string">&#x27;$.OpenDeparture&#x27;</span>), <span class="string">&#x27;$.AirportCode&#x27;</span>) open_departure_airportcode,</span><br><span class="line">    get_json_object(get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Open&#x27;</span>), <span class="string">&#x27;$.OpenArrival&#x27;</span>), <span class="string">&#x27;$.AirportCode&#x27;</span>) open_arrival_airportcode,</span><br><span class="line">    get_json_object(get_json_object(itinerary, <span class="string">&#x27;$.Open&#x27;</span>), <span class="string">&#x27;$.OperatingCarrier&#x27;</span>) open_operatingcarrier</span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">    test.djj_temp_hsd_iets a</span><br><span class="line">    <span class="keyword">LATERAL</span> <span class="keyword">VIEW</span> explode(split(</span><br><span class="line">     regexp_replace(</span><br><span class="line">         regexp_replace(</span><br><span class="line">            itinerary_ticketcoupon, </span><br><span class="line">            <span class="string">&#x27;\\[|\\]&#x27;</span> , <span class="string">&#x27;&#x27;</span>),<span class="comment">-- 将json数组两边的中括号去掉</span></span><br><span class="line">            </span><br><span class="line">              <span class="string">&#x27;\\&#125;\\,\\&#123;&#x27;</span> , <span class="string">&#x27;\\&#125;\\;\\&#123;&#x27;</span>),<span class="comment">-- 将json数组元素之间的逗号换成分号</span></span><br><span class="line">                </span><br><span class="line">                 <span class="string">&#x27;\\;&#x27;</span>)<span class="comment">-- 以分号作为分隔符(split函数以分号作为分隔)</span></span><br><span class="line">          )  a <span class="keyword">as</span> itinerary</span><br><span class="line">    ;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 合并出发到达</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_02;    </span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_02 <span class="keyword">as</span>    </span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.issuedate,</span><br><span class="line">    a.ticketnumber,</span><br><span class="line">    a.couponnumber,</span><br><span class="line">    a.couponstatus,</span><br><span class="line">    <span class="built_in">coalesce</span>(a.departure_airportcode, a.open_departure_airportcode) departure_airportcode,</span><br><span class="line">    <span class="built_in">coalesce</span>(a.arrival_airportcode, a.open_arrival_airportcode) arrival_airportcode</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">    test.djj_temp_hsd_iets_01 a</span><br><span class="line">    ;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 匹配出发到达城市    </span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_03;    </span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_03 <span class="keyword">as</span>     </span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.issuedate,</span><br><span class="line">    a.ticketnumber,</span><br><span class="line">    a.couponnumber,</span><br><span class="line">    a.couponstatus,</span><br><span class="line">    a.departure_airportcode,</span><br><span class="line">    a.arrival_airportcode,</span><br><span class="line">    b.city_code departure_citycode,</span><br><span class="line">    c.city_code arrival_citycode,</span><br><span class="line">    <span class="built_in">coalesce</span>(b.city_code, a.departure_airportcode) departure, <span class="comment">-- 以防有的机场匹配不到城市</span></span><br><span class="line">    <span class="built_in">coalesce</span>(c.city_code, a.arrival_airportcode) arrival <span class="comment">-- 以防有的机场匹配不到城市</span></span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">    test.djj_temp_hsd_iets_02  a </span><br><span class="line"><span class="keyword">left</span> <span class="keyword">join</span> </span><br><span class="line">    ods.t_airport_info_zp b <span class="keyword">on</span> a.departure_airportcode<span class="operator">=</span>b.airport_code <span class="keyword">and</span> b.dp<span class="operator">=</span><span class="string">&#x27;ACTIVE&#x27;</span></span><br><span class="line"><span class="keyword">left</span> <span class="keyword">join</span> </span><br><span class="line">    ods.t_airport_info_zp c <span class="keyword">on</span> a.arrival_airportcode<span class="operator">=</span>c.airport_code <span class="keyword">and</span> c.dp<span class="operator">=</span><span class="string">&#x27;ACTIVE&#x27;</span></span><br><span class="line"><span class="keyword">where</span> </span><br><span class="line">    a.couponstatus<span class="operator">&lt;&gt;</span><span class="string">&#x27;V&#x27;</span>  <span class="comment">-- 排除废票</span></span><br><span class="line">    ;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 匹配出发到达城市    </span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_04;    </span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.djj_temp_hsd_iets_04 <span class="keyword">as</span>      </span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    t.issuedate,</span><br><span class="line">    t.ticketnumber,</span><br><span class="line">    t.seg_num,</span><br><span class="line">    substr(origin,<span class="number">1</span>,<span class="number">3</span>) origin,</span><br><span class="line">    substr(destination,<span class="number">-3</span>,<span class="number">3</span>) destination</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">(</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    a.issuedate,</span><br><span class="line">    a.ticketnumber,</span><br><span class="line">    <span class="built_in">sum</span>(<span class="number">1</span>) <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span>  a.issuedate, a.ticketnumber) seg_num, <span class="comment">-- 总航段数</span></span><br><span class="line">    concat_ws(<span class="string">&#x27;,&#x27;</span>, collect_list(departure) <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> a.issuedate, a.ticketnumber <span class="keyword">order</span> <span class="keyword">by</span> a.couponnumber)) <span class="keyword">as</span> origin,</span><br><span class="line">    concat_ws(<span class="string">&#x27;,&#x27;</span>, collect_list(arrival) <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> a.issuedate, a.ticketnumber <span class="keyword">order</span> <span class="keyword">by</span> a.couponnumber)) <span class="keyword">as</span> destination,</span><br><span class="line">    <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> a.issuedate, a.ticketnumber <span class="keyword">order</span> <span class="keyword">by</span> a.couponnumber <span class="keyword">desc</span>) <span class="keyword">as</span> r</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">    test.djj_temp_hsd_iets_03 a</span><br><span class="line">) t </span><br><span class="line"><span class="keyword">where</span> </span><br><span class="line">    r<span class="operator">=</span><span class="number">1</span></span><br><span class="line">    <span class="keyword">and</span> substr(origin,<span class="number">1</span>,<span class="number">3</span>)<span class="operator">&lt;&gt;</span>substr(destination,<span class="number">-3</span>,<span class="number">3</span>) <span class="comment">-- 排除往返票</span></span><br><span class="line">    <span class="keyword">and</span> seg_num<span class="operator">&gt;</span><span class="number">1</span> <span class="comment">-- 筛选多段的</span></span><br><span class="line">    ;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    issuedate,</span><br><span class="line">    ticketnumber,</span><br><span class="line">    seg_num,</span><br><span class="line">    origin,</span><br><span class="line">    destination</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">    test.djj_temp_hsd_iets_04 a</span><br><span class="line">    ;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1694,7 +1697,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
