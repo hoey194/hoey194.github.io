@@ -303,6 +303,141 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241111100308-c50a6b21.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20241111100308-c50a6b21.html" itemprop="url">SEO Google: 添加到 Search Console（有效解决零收录情况）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-11-11T10:03:08+08:00">
+                2024-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>如果发现搜索结果中一条记录都没有，那么在完成本文指引后，再等待 1 天，再去查询收录情况，就会发现提交的网站已经被收录了。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ol>
+<li>打开控制台：<a target="_blank" rel="noopener" href="https://search.google.com/search-console/welcome?hl=zh-cn">https://search.google.com/search-console/welcome?hl=zh-cn</a></li>
+<li>根据提示输入域名，添加 DNS 解析，我使用的验证方式是 CNAME，添加完后点击验证</li>
+<li>点击左侧导航栏打开刚刚验证完成的网站，刚刚添加的网站，在 1 天后才能查看数据：<br>![image-20241111100407215](/Users/hoey/Library/Application Support/typora-user-images/image-20241111100407215.png)</li>
+</ol>
+<h2 id="查询是否已被收录"><a href="#查询是否已被收录" class="headerlink" title="查询是否已被收录"></a>查询是否已被收录</h2><p>打开 <a target="_blank" rel="noopener" href="https://www.google.com/">Google</a>，在搜索框输入以下内容（将 yourdomain.com 替换为你自己的顶级域名），然后点击搜索按钮：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">site:yourdomain.com</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://developers.google.com/search/docs/monitor-debug/search-operators/all-search-site?hl=zh-cn">深入了解 <code>site:</code> 搜索运算符</a></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>根据 Google 收录后的条目，大概可以得知，GoogleBot 会先访问添加的网址，进而收集该入口页面的所有的超链接（<a/>），然后再访问这些超链接，再收集页面上超链接。</p>
+<p>建议：</p>
+<ul>
+<li>路径层级最好不要超过两级，也就是说最大层级别超过 <code>/a/b</code></li>
+<li>如果有些网址没有展示在页面上，那么就需要提交 <a target="_blank" rel="noopener" href="https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview?hl=zh-cn">站点地图</a> 了</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241102231748-c09e9d17.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1506,136 +1641,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240515150036-22a18a.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20240515150036-22a18a.html" itemprop="url">Doris关联Hive表</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-05-15T15:00:36+08:00">
-                2024-05-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Doris关联Hive外部数据源"><a href="#Doris关联Hive外部数据源" class="headerlink" title="Doris关联Hive外部数据源"></a><strong>Doris关联Hive外部数据源</strong></h1><p>元数据创建</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> CATALOG test_hive PROPERTIES (</span><br><span class="line">    <span class="string">&#x27;type&#x27;</span><span class="operator">=</span><span class="string">&#x27;hms&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;hive.metastore.uris&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;thrift://172.22.17.20:9083,thrift://172.22.17.21:9083,thrift://172.22.17.22:9083&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;hadoop.username&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;hive&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.nameservices&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;Tdsop&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.ha.namenodes.Tdsop&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;nn1,nn2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.namenode.rpc-address.Tdsop.nn1&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;172.22.17.20:8022&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.namenode.rpc-address.Tdsop.nn2&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;172.22.17.21:8022&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dfs.client.failover.proxy.provider.Tdsop&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider&#x27;</span></span><br><span class="line">);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>常用命令</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> catalogs;</span><br><span class="line"><span class="keyword">SHOW</span> CATALOG test_hive;</span><br><span class="line"><span class="keyword">SHOW</span> DATABASES <span class="keyword">FROM</span> test_hive;</span><br><span class="line"><span class="keyword">SHOW</span> TABLES <span class="keyword">FROM</span> test_hive.ods;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> test_hive.ods.ce_flight;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&lt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">&gt;</a>
+    <a class="extend prev" rel="prev" href="/">&lt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">&gt;</a>
   </nav>
 
 
@@ -1697,7 +1707,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
