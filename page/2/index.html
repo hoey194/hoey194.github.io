@@ -303,6 +303,142 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241115103626-5d207e39.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20241115103626-5d207e39.html" itemprop="url">构建你的短链接</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-11-15T10:36:26+08:00">
+                2024-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>对短链服务架构研究一番后，小年就突然兴起，为何不自己动手做一个？</p>
+<p>要实现一个简单易用的短链服务其实并不复杂，但是考虑到时间和维护成本，如果用Java、Go 来实现的话，可能会比较重、繁琐。</p>
+<p>正巧小年最近在学习 React 和 Nextjs ，加上 Vercel 支持免费部署，刚好学以致用，尝试一点不一样的技术栈。</p>
+<p>当然，重点是：<strong>免费！</strong></p>
+<p>按照小年的教程，只需要 10 分钟时间就可以免费部署一个自己的短链服务。</p>
+<h2 id="Step-1：Github-Fork-项目"><a href="#Step-1：Github-Fork-项目" class="headerlink" title="Step 1：Github Fork 项目"></a>Step 1：Github Fork 项目</h2><p>打开小年的 Github Repository：<strong>short-link</strong>，fork 到自己的仓库</p>
+<h2 id="Setp-2：注册-Vercel"><a href="#Setp-2：注册-Vercel" class="headerlink" title="Setp 2：注册 Vercel"></a>Setp 2：注册 Vercel</h2><p>登录 Vercel 官网注册账号，可以通过github账号关联登录。</p>
+<h2 id="Setp-3：创建项目"><a href="#Setp-3：创建项目" class="headerlink" title="Setp 3：创建项目"></a>Setp 3：创建项目</h2><p>1、创建账号后，进入个人主页 Overview，创建项目</p>
+<p><img src="https://pic.yihao.de/pic/2024/11/15/6736b066df5ba.png" alt="image.png"></p>
+<p>2、选中 Github Fork 的项目 <strong>short-link</strong><br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0783d8a0.png" alt="image.png"></p>
+<p>3、这里默认选中 Next.js，点击 Deploy<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b08101d0b.png" alt="image.png"></p>
+<h2 id="Step-4：配置数据库"><a href="#Step-4：配置数据库" class="headerlink" title="Step 4：配置数据库"></a>Step 4：配置数据库</h2><p>项目第一次部署后，虽然页面可以访问，但其实功能还不能正常运行，还需要配置Storage。</p>
+<p>进到 Storage 创建数据库，类型选择 KV。</p>
+<p>然后进入新创建的项目，进入 Storage ，关联刚刚新创建的数据库即可。<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b08bb62d5.png" alt="image.png"></p>
+<h2 id="Step-5：重新部署"><a href="#Step-5：重新部署" class="headerlink" title="Step 5：重新部署"></a>Step 5：重新部署</h2><p>进入项目的部署标签页下，重新部署后，就可以直接使用了。<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0994a34a.png" alt="image.png"></p>
+<p>整个过程大概10min，就可以部署一套属于自己的短链服务。</p>
+<p>vercel会为每个project自动生成一个域名，访问域名就能看到最终的效果页面啦~<br><img src="https://pic.yihao.de/pic/2024/11/15/6736b0a188d4c.png" alt="image.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241111100308-c50a6b21.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1519,128 +1655,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240517104019-885e0603.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20240517104019-885e0603.html" itemprop="url">K2K Template 脚本</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-05-17T10:40:19+08:00">
-                2024-05-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>使用flink 同步Kafka到Kafka</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 前两段是kafka2kafka</span></span><br><span class="line"><span class="comment">-- LDP init的话用目录下面的python脚本</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> kafka_source_ldp (</span><br><span class="line">    a STRING</span><br><span class="line">)<span class="keyword">with</span> ( <span class="string">&#x27;connector&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;kafka&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;topic&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;LOADSHEET.LDP&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;scan.startup.mode&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;earliest-offset&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.group.id&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;pipeline_ums&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.bootstrap.servers&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;jxbigdatakafka01.juneyaoair.com:9092,jxbigdatakafka02.juneyaoair.com:9092,jxbigdatakafka03.juneyaoair.com:9092&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.fetch.max.bytes&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;5242880&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.allow.auto.create.topics&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;false&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.enable.auto.commit&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;true&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;format&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;raw&#x27;</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> kafka_sink_ldp (</span><br><span class="line">    a STRING</span><br><span class="line">)<span class="keyword">with</span> ( <span class="string">&#x27;connector&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;kafka&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;topic&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;JXHK.AUTO.DC_AOC_LOADSHEET_LDP&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.bootstrap.servers&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;172.27.2.3:9092,172.27.2.4:9092,172.27.2.10:9092&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.allow.auto.create.topics&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;false&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;properties.enable.auto.commit&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;true&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;format&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;raw&#x27;</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> kafka_sink_ldp</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> kafka_source_ldp;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1707,7 +1721,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
