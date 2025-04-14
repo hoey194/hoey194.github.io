@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/posts/20250414092156-d83062e5.html</loc>
+    <lastmod>2025-04-14</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/posts/20240415174551-ebe1c553.html</loc>
+    <lastmod>2025-04-13</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/posts/20250312154507-800f254c.html</loc>
     <lastmod>2025-03-12</lastmod>
   </url>
@@ -107,10 +115,6 @@
   <url>
     <loc>http://example.com/posts/20240417164207-f8343c34.html</loc>
     <lastmod>2024-04-17</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/posts/20240415174551-ebe1c553.html</loc>
-    <lastmod>2024-04-15</lastmod>
   </url>
   <url>
     <loc>http://example.com/posts/20240326183345-bcf32449.html</loc>
