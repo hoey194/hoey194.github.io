@@ -303,6 +303,148 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250623172846-6ac773fb.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20250623172846-6ac773fb.html" itemprop="url">Dify构建智能体</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-06-23T17:28:46+08:00">
+                2025-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这里部署社区版本dify，可以参考这个文档 <a target="_blank" rel="noopener" href="https://docs.dify.ai/en/getting-started/install-self-hosted/docker-compose">Deploy with Docker Compose - Dify Docs</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/langgenius/dify.git --branch 0.15.8</span><br><span class="line">cd /volume1/docker/dify/docker</span><br><span class="line">cp .env.example .env</span><br><span class="line"></span><br><span class="line"># 求nginx暴漏端口</span><br><span class="line">EXPOSE_NGINX_PORT=8083</span><br><span class="line">EXPOSE_NGINX_SSL_PORT=4143</span><br><span class="line"></span><br><span class="line"># 提前创建好目录</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/redis/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/dat</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/weaviate</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/app/storage</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/conf</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/www</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/conf/live</span><br><span class="line"></span><br><span class="line"># 启动docker</span><br><span class="line">docker-compose up -d</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>访问 localhost:8083/install 等待安装</p>
+<p>设置好管理员账号即可正常使用localhost:8083/apps</p>
+<h1 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h1><p>我们以翻译机器人为例演示工作流的使用。</p>
+<p>创建一个空白应用</p>
+<p><img src="https://pic.yihao.de/pic/2025/06/23/68591ff28382d.png" alt="image-20250623173544724"></p>
+<p>填写相应信息</p>
+<p><img src="https://pic.yihao.de/pic/2025/06/23/68592020d1f8b.png" alt="image-20250623173631087"></p>
+<p>构造简单工作流整体链路</p>
+<p><img src="https://pic.yihao.de/pic/2025/06/23/6859203bc975a.png" alt="image-20250623173658904"></p>
+<p>在开始节点新增 [input]和[lang]变量，用来接受用户的要翻译的文本，和要翻译成的目标语言。</p>
+<p><img src="https://pic.yihao.de/pic/2025/06/23/68592073d3f39.png" alt="image-20250623173755291"></p>
+<p>设置LLM大模型，需要注意的是SYSTEM prompt可以点击✨动态生成，引用上游变量可以用大括号{}。USER prompt填写用户输入的Input内容即可。</p>
+<p><img src="https://pic.yihao.de/pic/2025/06/23/6859209314965.png" alt="image-20250623173825862"></p>
+<p>结束时将大模型内容输出出来。</p>
+<p><img src="https://pic.yihao.de/pic/2025/06/23/68592114e7c41.png" alt="image-20250623174036300"></p>
+<h1 id="Agent智能体构建"><a href="#Agent智能体构建" class="headerlink" title="Agent智能体构建"></a>Agent智能体构建</h1><p>智能体中可以包含多个工作流，下面需要将上面的工作流嵌入到Agent智能体中。</p>
+<p><img src="https://pic.yihao.de/pic/2025/06/23/68592163129cf.png" alt="image-20250623174153810"></p>
+<p>后续点击发布即可</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250424191420-7995bdd5.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1439,7 +1581,7 @@
 <tr>
 <td>_dmarc</td>
 <td>TXT</td>
-<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#x61;&#x64;&#x6d;&#x69;&#x6e;&#64;&#108;&#x61;&#110;&#99;&#x65;&#116;&#46;&#x69;&#x63;&#x75;">&#x61;&#x64;&#x6d;&#x69;&#x6e;&#64;&#108;&#x61;&#110;&#99;&#x65;&#116;&#46;&#x69;&#x63;&#x75;</a></td>
+<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#97;&#100;&#x6d;&#105;&#110;&#x40;&#108;&#x61;&#110;&#x63;&#x65;&#x74;&#46;&#x69;&#x63;&#117;">&#97;&#100;&#x6d;&#105;&#110;&#x40;&#108;&#x61;&#110;&#x63;&#x65;&#x74;&#46;&#x69;&#x63;&#117;</a></td>
 </tr>
 <tr>
 <td>_mta-sts</td>
@@ -1449,7 +1591,7 @@
 <tr>
 <td>_smtp._tls</td>
 <td>TXT</td>
-<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#x61;&#100;&#109;&#x69;&#110;&#64;&#108;&#x61;&#110;&#99;&#x65;&#116;&#46;&#x69;&#99;&#x75;">&#x61;&#100;&#109;&#x69;&#110;&#64;&#108;&#x61;&#110;&#99;&#x65;&#116;&#46;&#x69;&#99;&#x75;</a></td>
+<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#97;&#100;&#109;&#x69;&#110;&#64;&#108;&#97;&#110;&#x63;&#101;&#116;&#46;&#105;&#99;&#117;">&#97;&#100;&#109;&#x69;&#110;&#64;&#108;&#97;&#110;&#x63;&#101;&#116;&#46;&#105;&#99;&#117;</a></td>
 </tr>
 </tbody></table>
 <h2 id="6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："><a href="#6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：" class="headerlink" title="6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："></a>6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：</h2><p>创建登录账户，运行此命令后会让设置密码</p>
@@ -1466,7 +1608,7 @@
 
 <p>查看账户下邮件内容</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-mboxes dump x<span class="keyword">@lancet</span>.icu <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#120;&#x40;&#108;&#x61;&#110;&#x63;&#x65;&#116;&#46;&#x69;&#99;&#x75;">&#120;&#x40;&#108;&#x61;&#110;&#x63;&#x65;&#116;&#46;&#x69;&#99;&#x75;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
+<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#x78;&#64;&#108;&#97;&#110;&#x63;&#101;&#116;&#46;&#x69;&#99;&#117;">&#x78;&#64;&#108;&#97;&#110;&#x63;&#101;&#116;&#46;&#x69;&#99;&#117;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-msgs list x<span class="keyword">@lancet</span>.icu INBOX</span><br></pre></td></tr></table></figure>
 
 <p>会有如图所示的记录：<br><img src="https://img.yihao.de/1731680546525.png" alt="image.png"></p>
@@ -1777,201 +1919,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241127132327-8763d53e.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20241127132327-8763d53e.html" itemprop="url">炒股从入门到放弃-术语大全(一)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-11-27T13:23:27+08:00">
-                2024-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><font color='red'>牛市</font>: 股票市场上买入者多于卖出者，股市行情看涨称为牛市。</p>
-<p><font color='red'>熊市</font>: 熊市与牛市相反。股票市场上卖出者多于买入者，股市行情看跌称为熊市。</p>
-<p><font color='red'>开盘价</font>: 是指当日开盘后该股票的第一笔交易成交的价格。如果开市后30分钟内无成交价，则以前日的收盘价作为开盘价。</p>
-<p><font color='red'>收盘价</font>: 指每天成交中最后一笔股票的价格，也就是收盘价格。</p>
-<p><font color='red'>最高价</font>: 是指当日所成交的价格中的最高价位。有时最高价只有一笔，有时也不止一笔。</p>
-<p><font color='red'>最低价</font>: 是指当日所成交的价格中的最低价位。有时最低价只有一笔，有时也不止一笔。</p>
-<p><font color='red'>绩优股</font>: 是指那些业绩优良，但增长速度较慢的公司的股票。这类公司有实力抵抗经济衰退，但这类公司并不能给你带来振奋人心的利润。因为这类公司业务较为成熟，不需要花很多钱来扩展业务，所以投资这类公司的目的主要在于拿股息。另外，投资这类股票时，市盈率不要太高，同时要注意股价在历史上经济不景气时波动的记录。</p>
-<p><font color='red'>热门股</font>: 是指交易量大、流通性强、股价变动幅度较大的股票。</p>
-<p><font color='red'>成长股</font>: 是指这样一些公司所发行的股票，它们的销售额和利润额持续增长，而且其速度快于整个国家和本行业的增长。这些公司通常有宏图伟略，注重科研，留有大量利润作为再投资以促进其扩张。</p>
-<p><font color='red'>手</font>: 它是国际上通用的计算成交股数的单位。必须是手的整数倍才能办理交易。目前一般以100股为一手进行交易。即购买股票至少必须购买100股。</p>
-<p><font color='red'>成交量</font>: 反映成交的数量多少。一般可用成交股数和成交金额两项指标来衡量。目前深沪股市两项指标均能显示出来</p>
-<p><font color='red'>价位</font>: 指喊价的升降单位。价位的高低随股票的每股市价的不同而异。以上海证券交易所为例：每股市价末满100元 价位是0.10元，每股市价100-200元 价位是0.20元 每股市价200-300元 价位是0.30元，每股市价300-400元 价位是0.50元 每股市价400元以上 价位是1.00元</p>
-<p><font color='red'>停牌</font>: 股票由于某种消息或进行某种活动引起股价的连续上涨或下跌，由证券交易所暂停其在股票市场上进行交易。待情况澄清或企业恢复正常后，再复牌在交易所挂牌交易。</p>
-<p><font color='red'>涨跌</font>: 以每天的收盘价与前一天的收盘价相比较，来决定股票价格是涨还是跌。一般在交易台上方的公告牌上用“ ”“-”号表示。</p>
-<p><font color='red'>涨(跌)停板</font>: 交易所规定的股价一天中涨(跌)最大幅度为前一日收盘价的百分数，不能超过此限，否则自动停止交易。</p>
-<p><font color='red'>升高盘</font>: 是指开盘价比前一天收盘价高出许多。</p>
-<p><font color='red'>开低盘</font>: 是指开盘价比前一天收盘价低出许多。</p>
-<p><font color='red'>盘档</font>: 是指投资者不积极买卖，多采取观望态度，使当天股价的变动幅度很小，这种情况称为盘档。</p>
-<p><font color='red'>整理</font>: 是指股价经过一段急剧上涨或下跌后，开始小幅度波动，进入稳定变动阶段，这种现象称为整理，整理是下一次大变动的准备阶段。</p>
-<p><font color='red'>跳空</font>: 指受强烈利多或利空消息刺激，股价开始大幅度跳动。跳空通常在股价大变动的开始或结束前出现。</p>
-<p><font color='red'>市盈率</font>: 市盈率是某种股票每股市价与每股盈利的比率。(市盈率=普通股每股市场价格÷普通股每年每股盈利)上式中的分子是当前的每股市价，分母可用最近一年盈利，也可用未来一年或几年的预测盈利。市盈率是估计普通股价值的最基本、最重要的指标之一。一般认为该比率保持在20-30之间是正常的，过小说明股价低，风险小，值得购买;过大则说明股价高，风险大，购买时应谨慎。但高市盈率股票多为热门股，低市盈率股票可能为冷门股。</p>
-<p><font color='red'>回档</font>: 是指股价上升过程中，因上涨过速而暂时回跌的现象。</p>
-<p><font color='red'>反弹</font>: 是指在下跌的行情中，股价有时由于下跌速度太快，受到买方支撑暂时回升的现象。反弹幅度较下跌幅度小，反弹后恢复下跌趋势。</p>
-<p><font color='red'>多头</font>: 对股票后市看好，先行买进股票，等股价涨至某个价位，卖出股票赚取差价的人。</p>
-<p><font color='red'>空头</font>: 是指认为股价已上涨到了最高点，很快便会下跌，或当股票已开始下跌时，认为还会继续下跌，趁高价时卖出的投资者。</p>
-<p><font color='red'>多头市场</font>: 也称牛市，就是股票价格普遍上涨的市场。</p>
-<p><font color='red'>空头市场</font>: 股价呈长期下降趋势的市场，空头市场中，股价的变动情况是大跌小涨。亦称熊市。</p>
-<p><font color='red'>多翻空</font>: 原本看好行情的多头，看法改变，卖出手中的股票，有时还借股票卖出，这种行为称为翻空或多翻空。</p>
-<p><font color='red'>空翻多</font>: 原本作空头者，改变看法，把卖出的股票买回，有时还买进更多的股票，这种行为称为空翻多。</p>
-<p><font color='red'>买空</font>: 预计股价将上涨，因而买入股票，在实际交割前，再将买入的股票卖掉，实际交割时收取差价或补足差价的一种投机行为。</p>
-<p><font color='red'>卖空</font>: 预计股价将下跌，因而卖出股票，在发生实际交割前，将卖出股票如数补进，交割时，只结清差价的投机行为。</p>
-<p><font color='red'>利空</font>: 促使股价下跌，对空头有利的因素和消息。</p>
-<p><font color='red'>利多</font>: 是刺激股价上涨，对多头有利的因素和消息。</p>
-<p><font color='red'>套牢</font>: 是指预期股价上涨，不料买进后，股价路下跌;或是预期股价下跌，卖出股票后，股价却一路上涨，前者称多头套牢，后者是空头套牢。</p>
-<p><font color='red'>大户</font>: 就是大额投资人，例如财团、信托公司以及其它拥有庞大资金的集团或个人。</p>
-<p><font color='red'>中户</font>: 指投资额较大的投资人。</p>
-<p><font color='red'>散户</font>: 就是买卖股票数量很少的小额投资者。</p>
-<p><font color='red'>经纪人</font>: 执行客户命令，买卖证券、商品或其他财产，并为此收取佣金者。</p>
-<p><font color='red'>抢短线</font>: 预期股价上涨，先低价买进后再在短期内以高价卖出。预期股价下跌，先高价卖出再伺机在短期内以低价再回购。</p>
-<p><font color='red'>盘整</font>: 股价经过一段快捷上升或下降后，遭遇阻力或支撑而呈小幅涨跌变动，做换手整理。</p>
-<p><font color='red'>抬拉</font>: 抬拉是用非常方法，将股价大幅度抬起。通常大户在抬拉之后便大抛出以牟取暴利。</p>
-<p><font color='red'>打压</font>: 是用非常方法，将股价大幅度压低。通常大户在打压之后便大量买进以取暴利。</p>
-<p><font color='red'>黑马</font>: 是指股价在一定时间内，上涨一倍或数倍的股票</p>
-<p><font color='red'>白马</font>: 是指股价已形成慢慢涨的长升通道，还有一定的上涨空间。</p>
-<p><font color='red'>骗线</font>: 大户利用股民们迷信技术分析数据、图表的心理，故意抬拉、打压股指，致使技术图表形成一定线型，引诱股民大量买进或卖出，从而达到他们大发其财的目的。这种期骗性造成的技术图表线型称为骗线。</p>
-<p><font color='red'>技术分析</font>: 以供求关系为基础对市场和股票进行的分析研究。技术分析研究价格动向、交易量、交易趋势和形式，并制图表示上述因素，用图预测当前市场行为对未来证券的供求关系和个人持有的证券可能发生的影响。</p>
-<p><font color='red'>基本分析</font>: 根据销售额、资产、收益、产品或服务、市场和管理等因素对企业进行分析。亦指对宏观政治、经济、军事动态的分析，以预测它们对股市的影响。</p>
-<p><font color='red'>非上市股票</font>: 不在证券交易所注册挂牌的股票。</p>
-<p><font color='red'>委托书</font>: 股东委托他人(其他股东)代表自己在股东大会上行使投票权的书面证明。</p>
-<p><font color='red'>周转率</font>: 股票交易的股数占交易所上市流通的股票股数的百分比。</p>
-<p><font color='red'>认股权证</font>: 股票发行公司增发新股票时，发给公司原股东的以优惠价格购买一定数量股票的证书。认股权证通常都有时间限制，过时无 效。在有效期内持有人可以将其卖出或转让。</p>
-<p><font color='red'>除权</font>: 股票除权前一日收盘价减去所含权的差价，即为除权。</p>
-<p><font color='red'>派息</font>: 股票前一日收盘价减去上市公司发放的股息称为派息。</p>
-<p><font color='red'>含权</font>: 凡是有股票有权未送配的均称含权。</p>
-<p><font color='red'>填权</font>: 除权后股价上升，将除权差价补回，称为填权。</p>
-<p><font color='red'>增资</font>: 上市公司为业务需求经常会办理增资(有偿配股)或资本公积新增资(无偿配股)。</p>
-<p><font color='red'>配股</font>: 公司增发新股时，按股东所有人份数，以特价(低于市价)分配给股东认购。</p>
-<p><font color='red'>坐轿子</font>: 预测股价将涨，抢在众人前以低价先行买进，待众多散户跟进、股价节节升高后，卖出获利。</p>
-<p><font color='red'>抬轿子</font>: 在别人早已买进后才醒悟，也跟着买进，结果是把股价抬高让他人获利，而自己买进的股价已非低价，无利可图。</p>
-<p><font color='red'>下轿子</font>: 坐轿客逢高获利结算为下轿子。</p>
-<p><font color='red'>阻力线</font>: 股价上涨到达某一价位附近，如有大量的卖出情形，使股价停止上扬，甚至回跌的价。</p>
-<p><font color='red'>支撑线</font>: 股价下跌到在某一价位附近，如有大量买进情形，使股价停止下跌甚至回升的价位。</p>
-<p><font color='red'>跳空</font>: 股市受到强烈利多或利空消息的刺激，股价开始大幅跳动，在上涨时，当天的开盘或最低价，高于前一天的收盘价两个申报单位以上，称“跳空而上”;下跌时，当天的天盘或最高价低于前一天的收盘价两个申报单位，而于一天的交易中，上涨或下跌超过一个申报单位，称“跳空而下”。</p>
-<p><font color='red'>填空</font>: 指将跳空出现时将没有交易的空价位补回来，也就是股价跳空后，过一段时间将回到跳空前价位，以填补跳空价位。</p>
-<p><font color='red'>回档</font>: 上升趋势中，因股价上涨过速而回跌，以调整价位的现象。</p>
-<p><font color='red'>天价</font>: 个别股票由多头市场转为空头市场时的最高价。</p>
-<p><font color='red'>突破</font>: 指股价经过一段盘档时间后，产生的一种价格波动。</p>
-<p><font color='red'>探底</font>: 股价持续跌挫至某价位时便止跌回升，如此一次或数次。</p>
-<p><font color='red'>头部</font>: 股价上涨至某价位时便遇阻力而下滑。</p>
-<p><font color='red'>挂进</font>: 买进股票的意思。</p>
-<p><font color='red'>挂出</font>: 卖出股票的意思</p>
-<p><font color='red'>开平盘</font>: 指今日的开盘价与前一营业日的收盘价相同。</p>
-<p><font color='red'>近期趋势</font>: 20～30天为近期趋势。</p>
-<p><font color='red'>全额交割</font>: 是证券主管机关对重整公司或发生重大问题的上市公司之股票，特别制定的买卖交割力法。</p>
-<p><font color='red'>洗盘</font>: 做手为达到炒作目的，必须于途中让低价买进，且意志不坚的轿客下轿，以减轻上档压力，同时让持股者的平均价位升高，以利于施行养、套、杀的手段。</p>
-<p><font color='red'>对敲转帐</font>: 转帐交易的一种方式。这是证券经纪商赚取投资利润的一种手段。经纪商们经低价买进股票，并收取客户的佣金，再以高价卖给另一客户，这样就赚取了大量利润。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2038,7 +1985,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
