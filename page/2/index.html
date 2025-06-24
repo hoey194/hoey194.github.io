@@ -303,6 +303,145 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241204142542-152e99dc.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20241204142542-152e99dc.html" itemprop="url">OpenWRT镜像制作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-12-04T14:25:42+08:00">
+                2024-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h1><ul>
+<li>Windows</li>
+</ul>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.starwindsoftware.com/tmplink/starwindconverter.exe">StartWind V2V</a></li>
+<li><a target="_blank" rel="noopener" href="https://openwrt.ai/">OpenWRT镜像网站</a></li>
+</ul>
+<h1 id="注册并下载镜像"><a href="#注册并下载镜像" class="headerlink" title="注册并下载镜像"></a>注册并下载镜像</h1><p>到上面提到的镜像网站<a target="_blank" rel="noopener" href="https://openwrt.ai/">OpenWRT镜像网站</a>下载镜像，可以选择相应的组件，定制镜像时，在页面少选择几个不然需要赞助，里面组件用什么就勾选什么。</p>
+<p><img src="https://img.yihao.de/1733297228397.png" alt="image-20241204152704686"></p>
+<h1 id="VMDK镜像制作"><a href="#VMDK镜像制作" class="headerlink" title="VMDK镜像制作"></a>VMDK镜像制作</h1><p>下载镜像并使用StartWind V2V转换成exsi格式的vmdk</p>
+<p>基本照着我的图片下一步就好，细心点<br><img src="https://img.yihao.de/1733296455916.png" alt="image.png"></p>
+<p><img src="https://img.yihao.de/1733296474405.png" alt="image.png"></p>
+<p><img src="https://img.yihao.de/1733296488355.png" alt="image.png"></p>
+<p><img src="https://img.yihao.de/1733296504095.png" alt="image.png"></p>
+<p><img src="https://img.yihao.de/1733296515782.png" alt="image.png"></p>
+<p><img src="https://img.yihao.de/1733296526324.png" alt="image.png"></p>
+<p><img src="https://img.yihao.de/1733296551674.png" alt="image.png"></p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>如果你导入EXSI出现错误信息，可以按照这个文章调整[[【报错】请输入大于原始容量的磁盘大小]]</p>
+<p>具体操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 登陆SSH执行下面命令</span><br><span class="line">vmkfstools -X 1024M /vmfs/volumes/datastore1/op2/kwrt-12.04.2024-x86-64-generic-squashfs-combined-efi.vmdk</span><br><span class="line">Grow: 100% done.</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241127132327-8763d53e.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1578,136 +1717,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241025090101-28cb169b.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20241025090101-28cb169b.html" itemprop="url">Netcup注册</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-25T09:01:01+08:00">
-                2024-10-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Netcup可以注册后缀为de的域名一年1.32欧元，续费一样相当划算</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090250956.png" alt="image-20241025090250956"></p>
-<p>另外Netcup有0.84欧元/月的VPS套餐，每个账户只允许申请一台。</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090506316.png" alt="image-20241025090506316"></p>
-<p>探针如下：</p>
-<p><a target="_blank" rel="noopener" href="https://nezha.zyh1.cc/"><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20241025090705371.png" alt="image-20241025090705371"></a></p>
-<p>1.家宽直连，最好在下午4点到早上6点去试，这样能快一点，德国人在上班。用这个链接去买，感谢justwe佬的分享，应该不是aff</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1o：https://www.netcup.de/bestellen/produkt.php?produkt=3422</span><br><span class="line">2o：https://www.netcup.de/bestellen/produkt.php?produkt=3423</span><br><span class="line">4o：https://www.netcup.de/bestellen/produkt.php?produkt=3424</span><br></pre></td></tr></table></figure>
-
-<p>2.一直往下点就行，不行就翻译一下，选择注册帐号，填入你的真实信息，地址不能有“，”全英文，地址选中国，公司可以不填<br>3.会发一封邮件说工作人员正在审核，问你要不要付款，你可以取消之类的，如果你用家宽的话等5分钟左右会收到两封连在一起的邮件，一封给了你帐号密码，另一封让你去验证身份，你打开验证身份即可，注意一定要在第一次就选择预付款，不要选验证身份<br>4.去<a target="_blank" rel="noopener" href="https://www.nodeseek.com/jump?to=https://www.servercontrolpanel.de/SCP/Home">https://www.servercontrolpanel.de/SCP/Home</a> 登录，会发二步验证到你的邮箱，去billing付款，信用卡或者paypal，等机器开通，done！</p>
-<p>全程顺利的话半小时解决，我等机器开通等了1个小时，现在只要付钱就能过了，方便多了</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1774,7 +1783,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
