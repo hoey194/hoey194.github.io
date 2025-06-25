@@ -303,6 +303,131 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250625145404-1bc9cb81.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20250625145404-1bc9cb81.html" itemprop="url">HuggingFace Embedding的模型提取</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-06-25T14:54:04+08:00">
+                2025-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>提取huggingface上关于embedding的模型 – 20250625</p>
+<p>以下内容借助AI提取，仅做参考</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br></pre></td><td class="code"><pre><span class="line">[Qwen/Qwen3-Embedding-0.6B]: 解决问题：[将文本转换为向量表示问题] </span><br><span class="line">[Qwen/Qwen3-Embedding-8B]: 解决问题：[文本向量化及语义表征问题]</span><br><span class="line">[Qwen/Qwen3-Embedding-4B]: 解决问题：将文本转换为向量表示用于下游任务 </span><br><span class="line">[jinaai/jina-embeddings-v3]: 解决问题：文本向量化及语义相似度计算 </span><br><span class="line">Qwen/Qwen3-Embedding-0.6B-GGUF: 解决问题：将文本转换为向量表示 </span><br><span class="line">jinaai/jina-embeddings-v4: 解决问题：文本特征提取与语义表示 </span><br><span class="line">[Qwen/Qwen3-Embedding-8B-GGUF]: 解决问题：文本向量化以用于下游任务 </span><br><span class="line">[Qwen/Qwen3-Embedding-4B-GGUF]: 解决问题：文本特征提取与向量化表示 </span><br><span class="line">ai-sage/Giga-Embeddings-instruct: 解决问题：文本向量化以用于多种NLP任务 </span><br><span class="line">boboliu/Qwen3-Embedding-0.6B-W4A16-G128: 解决问题：文本向量化及语义表示问题 </span><br><span class="line">[pyannote/embedding]: 解决问题：语音特征嵌入表示相关问题 </span><br><span class="line">NeuML/pubmedbert-base-embeddings: 解决问题：处理生物医学文本特征表示</span><br><span class="line">desarrolloasesoreslocales/jina-embeddings-v2-base-en-finetuned-legalcorpus: 解决问题：处理英文法律文本嵌入问题 </span><br><span class="line">maidlun1020/bce-embedding-base_v1: 解决问题：未找到该模型: 解决问题的相关信息 </span><br><span class="line">[jinaai/jina-embeddings-v2-base-zh]: 解决问题：中文文本向量化表示问题 </span><br><span class="line">[jinaai/jina-embeddings-v2-base-de]: 解决问题：德语文本嵌入表示问题 </span><br><span class="line">Marqo/marqo-ecommerce-embeddings-L: 解决问题：电商领域文本特征嵌入问题 </span><br><span class="line">ibm-granite/granite-embedding-30m-english: 解决问题：英文文本向量化及语义表示问题 </span><br><span class="line">ibm-granite/granite-embedding-107m-multilingual: 解决问题：多语言文本嵌入表示问题 </span><br><span class="line">Salesforce/SFR-Embedding-Code-2B_R: 解决问题：代码相关的嵌入表示问题 </span><br><span class="line">alikia2x/jina-embedding-v3-m2v-256: 解决问题：文本到向量的嵌入表示问题 </span><br><span class="line">[AhmedZaky1/DIMI-embedding-sts-matryoshka]: 解决问题：语义文本相似度计算问题 </span><br><span class="line">onnx-community/Qwen3-Embedding-0.6B-ONNX: 解决问题：文本向量化及语义特征提取 </span><br><span class="line">electroglyph/Qwen3-Embedding-0.6B-onnx-uint8: 解决问题：将文本转换为向量表示 </span><br><span class="line">annamodels/LGAI-Embedding-Preview: 解决问题：未找到该模型: 解决问题相关信息 </span><br><span class="line">[C10X/Qwen3-Embedding-TurboX]: 解决问题：文本特征提取与语义表示问题 </span><br><span class="line">[janni-t/qwen3-embedding-0.6b-tei-onnx]: 解决问题：文本向量化及语义表示问题 </span><br><span class="line">itsbohara/qwen3_embedding_4b_q8_0: 解决问题：文本向量化及语义表示问题 </span><br><span class="line">MALIBA-AI/bambara-embeddings: 解决问题：生成班巴拉语的词嵌入表示 </span><br><span class="line">malcolmrey/embeddings: 解决问题：未找到该模型明确解决的问题信息 </span><br><span class="line">flax-sentence-embeddings/multi-qa_v1-distilbert-cls_dot: 解决问题：多语言问答文本嵌入表示问题 </span><br><span class="line">flax-sentence-embeddings/multi-qa_v1-distilbert-mean_cos: 解决问题：多语言问答任务语义匹配 </span><br><span class="line">flax-sentence-embeddings/multi-qa_v1-mpnet-cls_dot: 解决问题：多语言问答文本嵌入问题 </span><br><span class="line">flax-sentence-embeddings/multi-qa_v1-mpnet-mean_cos: 解决问题：多语言问答句嵌入表示问题 </span><br><span class="line">[flax-sentence-embeddings/reddit_single-context_mpnet-base]: 解决问题：处理Reddit文本单上下文嵌入问题 </span><br><span class="line">[flax-sentence-embeddings/st-codesearch-distilroberta-base]: 解决问题：[代码搜索相关语义匹配问题]</span><br><span class="line">flax-sentence-embeddings/stackoverflow_mpnet-base: 解决问题：处理Stack Overflow文本语义表示 </span><br><span class="line">[sentence-transformers/average_word_embeddings_glove.6B.300d]: 解决问题：将文本转换为词嵌入向量表示 </span><br><span class="line">sentence-transformers/average_word_embeddings_glove.840B.300d: 解决问题：将文本转换为固定长度向量表示 </span><br><span class="line">[sentence-transformers/average_word_embeddings_komninos]: 解决问题：生成句子嵌入用于语义表示 </span><br><span class="line">[sentence-transformers/average_word_embeddings_levy_dependency]: 解决问题：生成句子的平均词嵌入表示 </span><br><span class="line">[MrAnderson/bert-base-1024-full-trivia-copied-embeddings]: 解决问题：[处理问答类琐事相关任务] </span><br><span class="line">MrAnderson/nystrom-2048-full-trivia-copied-embeddings: 解决问题：处理琐事相关的嵌入表示问题 </span><br><span class="line">MrAnderson/yoso-2048-full-trivia-copied-embeddings: 解决问题：未找到相关信息，无法明确: 解决问题。 </span><br><span class="line">MrAnderson/yoso-512-full-trivia-copied-embeddings: 解决问题：处理问答琐事相关嵌入表示 </span><br><span class="line">MrAnderson/bert-base-2048-full-trivia-copied-embeddings: 解决问题：处理问答类琐事信息嵌入问题 </span><br><span class="line">MrAnderson/nystrom-1024-full-trivia-copied-embeddings: 解决问题：处理与琐事相关的嵌入表示问题 </span><br><span class="line">Kalaoke/embeddings_dense_model: 解决问题：暂未找到该模型: 解决问题的相关信息 </span><br><span class="line">MrAnderson/nystrom-4096-full-trivia-copied-embeddings: 解决问题：处理琐事相关的嵌入表示问题 </span><br><span class="line">MrAnderson/bert-base-4096-full-trivia-copied-embeddings: 解决问题：可能用于问答类知识相关嵌入表示 </span><br><span class="line">jwieting/simple-paraphrastic-embeddings: 解决问题：生成句子的释义嵌入表示 </span><br><span class="line">[shiemn/bigdatageo-gelectra-base-new-embeddings]: 解决问题：可能用于地理相关数据嵌入表示 </span><br><span class="line">[ITESM/sentece-embeddings-BETO]: 解决问题：生成西班牙语句子的嵌入表示 </span><br><span class="line">[espejelomar/sentece-embeddings-BETO]: 解决问题：生成西班牙语句子的嵌入表示 </span><br><span class="line">cambridgeltl/tweet-roberta-base-embeddings-v1: 解决问题：将推文转换为向量表示 </span><br><span class="line">sumedh/pretrained-word-embeddings: 解决问题：将单词转换为向量表示 </span><br><span class="line">florentgbelidji/blip_image_embeddings: 解决问题：将图像转换为向量嵌入表示 </span><br><span class="line">philschmid/all-MiniLM-L6-v2-optimum-embeddings: 解决问题：文本语义表示与相似度计算 </span><br><span class="line">crumb/ViT-L-14-Token-Embeddings: 解决问题：图像视觉特征的嵌入表示问题 </span><br><span class="line">ProGamerGov/knollingcase-embeddings-sd-v2-0: 解决问题：生成特定风格图像嵌入表示 </span><br><span class="line">mikumikugeek/embeddings: 解决问题：未找到该模型: 解决问题的相关信息 </span><br><span class="line">soknife/embeddings: 解决问题：暂未获取到该模型: 解决问题相关信息。 </span><br><span class="line">KnutJaegersberg/sentence_transformer_mpnet_v2_to_kg_embeddings_wikidata5m: 解决问题：将句子转换为知识图谱嵌入</span><br><span class="line">ProGamerGov/winter-cat-embeddings-sd-v2-1: 解决问题：用于StableDiffusion生成特定风格图像 </span><br><span class="line">rickysambora55/ai-embeddings: 解决问题：未找到该模型相关有效: 解决问题信息 </span><br><span class="line">SirVeggie/nixeu_embeddings: 解决问题：未在huggingface找到相关: 解决问题信息 </span><br><span class="line">Priyanshu9991/sd2.1_768_embeddings: 解决问题：生成StableDiffusion 2.1图像嵌入 </span><br><span class="line">anony12sub34/embeddings-lehmer-6-50-roberta_squad2.0: 解决问题：处理SQuAD 2.0问答任务相关问题 </span><br><span class="line">mikumikugeek/embeddings02: 解决问题：暂未找到该模型具体: 解决问题信息 </span><br><span class="line">anony12sub34/embeddings-hamming-6-100-roberta_squad2.0: 解决问题：适用于SQuAD 2.0问答任务</span><br><span class="line">[anony12sub34/embeddings-hamming-6-50-roberta_squad2.0]: 解决问题：[SQuAD 2.0问答任务嵌入问题] </span><br><span class="line">[ycool/embeddings-kenny-6-50-roberta_squad2.0]: 解决问题：[处理SQuAD 2.0问答任务相关问题]</span><br><span class="line">ycool/embeddings-kenny-6-100-roberta_squad2.0: 解决问题：用于SQuAD 2.0问答任务文本嵌入 </span><br><span class="line">tsukimiya/embeddings: 解决问题：未在huggingface找到相关: 解决问题信息 </span><br><span class="line">dranzerstar/SD-textual-inversion-embeddings-repo: 解决问题：用于Stable Diffusion文本反转嵌入</span><br><span class="line">EvaKlimentova/knots_M2_embeddings_alphafold: 解决问题：蛋白质结构中打结相关问题分析 </span><br><span class="line">ProGamerGov/knollingcase-embeddings-sd-v1-5: 解决问题：用于稳定扩散v1.5的嵌入相关问题 </span><br><span class="line">jjetho/embeddings: 解决问题：未在huggingface找到相关信息，无法确定。 </span><br><span class="line">garyw/clinical-embeddings-100d-w2v-cr: 解决问题：临床文本数据的嵌入表示问题 </span><br><span class="line">lckidwell/embeddings: 解决问题：未在公开信息中明确其: 解决问题 </span><br><span class="line">rschwabco/clip-vit-base-patch32-embeddings: 解决问题：图像和文本的特征嵌入提取 </span><br><span class="line">garyw/clinical-embeddings-300d-w2v-cr: 解决问题：生成临床文本的词向量表示 </span><br><span class="line">garyw/clinical-embeddings-600d-w2v-cr: 解决问题：处理临床文本向量化问题 </span><br><span class="line">garyw/clinical-embeddings-100d-ft-cr: 解决问题：提供临床文本的向量嵌入表示 </span><br><span class="line">[garyw/clinical-embeddings-300d-ft-cr]: 解决问题：提供临床文本的词嵌入表示 </span><br><span class="line">garyw/clinical-embeddings-600d-ft-cr: 解决问题：提供临床领域文本嵌入表示 </span><br><span class="line">garyw/clinical-embeddings-100d-w2v-oa-all: 解决问题：临床文本信息的向量表示问题 </span><br><span class="line">garyw/clinical-embeddings-300d-w2v-oa-all: 解决问题：处理临床文本信息的嵌入表示 </span><br><span class="line">[garyw/clinical-embeddings-100d-ft-oa-all]: 解决问题：[生成临床文本的词向量表示]</span><br><span class="line">garyw/clinical-embeddings-300d-ft-oa-all: 解决问题：生成临床文本的词向量表示 </span><br><span class="line">garyw/clinical-embeddings-100d-gl-cr: 解决问题：生成临床文本的词向量表示 </span><br><span class="line">garyw/clinical-embeddings-100d-gl-oa-all: 解决问题：生成临床文本的向量嵌入表示 </span><br><span class="line">[Banano/banano-sd-embeddings]: 解决问题：文本到图像生成的嵌入问题 </span><br><span class="line">johnsmith007/Embeddings: 解决问题：未找到该模型: 解决问题相关信息 </span><br><span class="line">garyw/clinical-embeddings-300d-gl-oa-all: 解决问题：生成临床文本的嵌入表示 </span><br><span class="line">garyw/clinical-embeddings-600d-gl-oa-all: 解决问题：临床文本信息的向量化表示 </span><br><span class="line">[garyw/clinical-embeddings-300d-gl-cr]: 解决问题：提供临床文本的嵌入表示 </span><br><span class="line">garyw/clinical-embeddings-600d-gl-cr: 解决问题：临床相关文本特征表示问题 </span><br><span class="line">rschwabco/facenet-embeddings: 解决问题：人脸特征提取与嵌入表示 </span><br><span class="line">deprem-ml/distilroberta-tweet-clustering-embeddings: 解决问题：对推文进行聚类嵌入处理 </span><br><span class="line">[rschwabco/clip-embeddings]: 解决问题：[图像与文本特征嵌入表示]</span><br><span class="line">nekofura/Embeddings: 解决问题：未找到该模型: 解决问题的相关信息。 </span><br><span class="line">[LithiumBC/embeddings]: 解决问题：文本向量化及特征表示问题 </span><br><span class="line">pix2pix-zero-library/direction_embeddings: 解决问题：图像转换方向的嵌入表示问题 </span><br><span class="line">[FoodDesert/Boring_Embeddings]: 解决问题：未找到该模型: 解决问题的相关信息 </span><br><span class="line">nolanaatama/embeddings: 解决问题：未找到该模型: 解决问题相关信息 </span><br><span class="line">Kizi-Art/embeddings: 解决问题：未找到相关信息，无法明确: 解决问题。 </span><br><span class="line">toto10/embeddings: 解决问题：未在公开信息中找到明确: 解决问题 </span><br><span class="line">[EarthnDusk/Isometric_Embeddings]: 解决问题：未找到该模型: 解决问题相关信息 </span><br><span class="line">furgo/hb_embeddings: 解决问题：暂未在公开信息明确其: 解决问题 </span><br><span class="line">AmornthepKladmee/embeddings: 解决问题：未找到该模型: 解决问题的相关信息。 </span><br><span class="line">ilahazs/embeddings: 解决问题：未找到该模型: 解决问题相关信息 </span><br><span class="line">Surteng/embeddings: 解决问题：未检索到该模型相关: 解决问题信息 </span><br><span class="line">Loug/embeddings: 解决问题：暂未找到该模型具体: 解决问题信息 </span><br><span class="line">9o99/embeddings: 解决问题：暂未获取到该模型: 解决问题信息 </span><br><span class="line">vivi2023/embeddings: 解决问题：未找到该模型在huggingface的相关信息，无法明确: 解决问题。 </span><br><span class="line">hc95qc/embeddings: 解决问题：未查询到该模型相关: 解决问题信息 </span><br><span class="line">Seltion/embeddings: 解决问题：未找到该模型在huggingface相关信息，无法确定: 解决问题。 </span><br><span class="line">[Upword/gpt-neox-20b-embeddings]: 解决问题：文本向量化及特征提取 </span><br><span class="line">SlavyanDesu/embeddings: 解决问题：未找到该模型具体: 解决问题相关信息 </span><br><span class="line">shalomma/llama-7b-embeddings: 解决问题：将文本转换为向量表示 </span><br><span class="line">wtmsb/embeddings: 解决问题：未找到该模型相关有效信息，无法确定。 </span><br><span class="line">[next-social/sd-embeddings]: 解决问题：文本到图像生成相关嵌入问题 </span><br><span class="line">johncerpa/clip-embeddings: 解决问题：图像与文本特征嵌入问题 </span><br><span class="line">[dkrugman/clip-embeddings]: 解决问题：图像和文本的嵌入表示问题 </span><br><span class="line">rimOPS/embeddings: 解决问题：暂未获取到该模型: 解决问题信息 </span><br><span class="line">trinitishop14045/clip-embeddings: 解决问题：图像与文本特征嵌入问题 </span><br><span class="line">[deerslab/llama-7b-embeddings]: 解决问题：将文本转换为向量表示 </span><br><span class="line">dhanyaXchandra/embeddings: 解决问题：未找到该模型: 解决问题的相关信息 </span><br><span class="line">[SenY/embeddings]: 解决问题：文本向量化以用于语义分析等 </span><br><span class="line">ahupeter/embeddings: 解决问题：未找到该模型: 解决问题的相关信息 </span><br><span class="line">srodan/pleroma-inversion-embeddings: 解决问题：暂未明确该模型具体: 解决问题 </span><br><span class="line">JoeHart/embeddings: 解决问题：暂未找到该模型: 解决问题的相关信息 </span><br><span class="line">TaiouIV/embeddings: 解决问题：暂未搜索到该模型: 解决问题的相关信息。 </span><br><span class="line">[luxluna/embeddings]: 解决问题：未找到该模型相关信息，无法明确: 解决问题。 </span><br><span class="line">RealestMeri/Embeddings: 解决问题：暂未找到该模型: 解决问题的相关信息。 </span><br><span class="line">[gmp-dev/gmp-embeddings]: 解决问题：生成文本嵌入向量用于下游任务 </span><br><span class="line">KanonDes/embeddings: 解决问题：未找到相关信息，无法明确: 解决问题。 </span><br><span class="line">ffxvs/embeddings-collection: 解决问题：未找到明确具体: 解决问题信息 </span><br><span class="line">lokCX/embeddings: 解决问题：未找到该模型: 解决问题的相关信息 </span><br><span class="line">meeagain212/embeddings: 解决问题：未找到该模型在huggingface上的有效信息，无法明确: 解决问题。 </span><br><span class="line">jomcs/embeddings: 解决问题：暂未找到该模型具体: 解决问题信息 </span><br><span class="line">Srio/embeddings: 解决问题：未在huggingface找到相关信息，无法确定。 </span><br><span class="line">[SquareHat/clip-embeddings]: 解决问题：图像和文本特征嵌入问题 </span><br><span class="line">RectalWorm/embeddings: 解决问题：暂未找到该模型相关有效: 解决问题信息 </span><br><span class="line">Lucky555/embeddings: 解决问题：未找到该模型相关用途信息 </span><br><span class="line">michaeleliot/clip-embeddings: 解决问题：图像和文本的特征嵌入问题 </span><br><span class="line">2phi/embeddings: 解决问题：将文本转换为向量表示</span><br><span class="line">jpohhhh/embeddings_from_msmarco-MiniLM-L-6-v3: 解决问题：信息检索与文本相似度计算 </span><br><span class="line">radames/blip_image_embeddings: 解决问题：将图像转换为向量嵌入表示 </span><br><span class="line">gunduverse/embeddings: 解决问题：未找到该模型在huggingface上相关: 解决问题信息。 </span><br><span class="line">TNitro/embeddings: 解决问题：暂未从公开信息获取到: 解决问题描述 </span><br><span class="line">ahsaputro/nolanaatama_embeddings: 解决问题：暂未找到该模型: 解决问题的相关信息。 </span><br><span class="line">pinapelz/embeddings: 解决问题：未找到该模型相关有效: 解决问题信息 </span><br><span class="line">HUNTERDEBASTADOR/embeddings: 解决问题：未在huggingface找到该模型相关有效信息，无法确定: 解决问题。 </span><br><span class="line">Yanderu/Embeddings: 解决问题：未在huggingface找到相关: 解决问题信息 </span><br><span class="line">yanuararif/embeddings: 解决问题：未在搜索中明确该模型: 解决问题 </span><br><span class="line">[HuynhTrong/embeddings_all_datasets_v4]: 解决问题：未在huggingface找到相关信息，无法明确。 </span><br><span class="line">[mlhub/embeddings]: 解决问题：未找到该模型相关有效信息，无法明确。 </span><br><span class="line">haodi50/embeddings: 解决问题：未找到相关信息，无法明确: 解决问题 </span><br><span class="line">licyk/sd-embeddings: 解决问题：用于Stable Diffusion的文本嵌入问题 </span><br><span class="line">AndreiBlahovici/sentence_embeddings: 解决问题：将句子转换为向量表示 </span><br><span class="line">Echiki/embeddings: 解决问题：未在huggingface找到该模型，无法明确: 解决问题。 </span><br><span class="line">stablediffusionapi/load_lora_embeddings: 解决问题：加载LoRA嵌入以增强SD模型效果 </span><br><span class="line">radames/segment-anything-embeddings-base: 解决问题：图像分割特征嵌入表示问题 </span><br><span class="line">radames/segment-anything-embeddings-large: 解决问题：图像分割特征嵌入提取 </span><br><span class="line">radames/segment-anything-embeddings-huge: 解决问题：图像分割特征嵌入问题 </span><br><span class="line">[skims/embeddings]: 解决问题：未找到该模型在huggingface上的相关信息，无法明确: 解决问题。 </span><br><span class="line">kazp/embeddings: 解决问题：暂未找到该模型在huggingface的有效信息，无法确定: 解决问题。 </span><br><span class="line">[chatbert/bert-base-cased-embeddings]: 解决问题：将文本转换为有意义向量表示 </span><br><span class="line">[chatbert/xlm-roberta-base-embeddings]: 解决问题：文本嵌入表示及语义理解问题 </span><br><span class="line">Ichiro0001/embeddings: 解决问题：暂未获取到该模型: 解决问题的相关信息。 </span><br><span class="line">joshuaKnauber/clip-embeddings: 解决问题：实现图像和文本的特征嵌入 </span><br><span class="line">ghostsniper7/embeddings: 解决问题：暂未找到该模型具体: 解决问题信息 </span><br><span class="line">Blaxzter/LaBSE-sentence-embeddings: 解决问题：多语言句子嵌入表示问题 </span><br><span class="line">seikohajimari/embeddings: 解决问题：未在huggingface查到相关: 解决问题信息 </span><br><span class="line">aimutation05/embeddings: 解决问题：未找到该模型在huggingface上的有效信息，无法确定: 解决问题。 </span><br><span class="line">botp/embeddings: 解决问题：暂未搜索到该模型具体: 解决问题信息 </span><br><span class="line">servbot/embeddings: 解决问题：未查询到该模型: 解决问题的相关信息。 </span><br><span class="line">uivid64/embeddings_sd: 解决问题：可能用于稳定扩散相关特征嵌入 </span><br><span class="line">[MaiKahoru/embeddingSlime]: 解决问题：未找到该模型: 解决问题的相关信息 </span><br><span class="line">[rahul1003/ELMo_Embeddings]: 解决问题：生成上下文相关词向量表示 </span><br><span class="line">axhello/embeddings: 解决问题：未查询到该模型相关: 解决问题信息 </span><br><span class="line">Renqf/embeddings: 解决问题：暂未找到该模型相关问题解决信息 </span><br><span class="line">OliAiart/embeddings: 解决问题：未搜索到该模型: 解决问题的明确信息 </span><br><span class="line">JCTN/embeddings: 解决问题：未找到有效信息，无法明确问题 </span><br><span class="line">zetavg/zh-tw-pythia-1b-a12k-f84566-embeddings-gcp-a100-trans-t3-d2ad: 解决问题：中文台湾地区文本嵌入问题 </span><br><span class="line">DividingSky/clip-embeddings: 解决问题：实现图像与文本的特征嵌入转换 </span><br><span class="line">zh-tw-llm-dv/zh-tw-pythia-6.9b-a12k-te01-embeddings-ea1: 解决问题：中文（台湾）文本向量化表示 </span><br><span class="line">cryptlord/embeddings: 解决问题：未找到该模型: 解决问题的相关信息 </span><br><span class="line">StanderPM/clips-embeddings: 解决问题：文本和图像的特征嵌入表示 </span><br><span class="line">brunovianna/laion-logo-embeddings: 解决问题：生成logo的嵌入表示 </span><br><span class="line">[brunovianna/AVA_image_clip_embeddings]: 解决问题：生成图像的CLIP嵌入表示 </span><br><span class="line">js101/clip-embeddings: 解决问题：图像与文本嵌入表示问题 </span><br><span class="line">[cundiff/clip-embeddings]: 解决问题：实现图像和文本的特征嵌入转换 </span><br><span class="line">zh-tw-llm-dv/zh-tw-llm-ta01-pythia-1b-ta8000-v1-a_1_embeddings-a100-t02-3d435e: 解决问题：未找到该模型: 解决问题的明确信息。 </span><br><span class="line">[uretan/clip-embeddings]: 解决问题：图像和文本的特征嵌入表示</span><br><span class="line">zh-tw-llm-dv/zh-tw-llm-ta01-pythia-1b-ta8000-v1-b_1_embeddings_and_attention-a100-t02-713b8e: 解决问题：暂未找到该模型: 解决问题的相关信息 </span><br><span class="line">zh-tw-llm-dv/zh-tw-llm-ta01-pythia-6.9b-ta8000-v1-a_1_embeddings-h100-t01-c5daa1: 解决问题：暂未找到该模型: 解决问题的相关信息。 </span><br><span class="line">igorsantana/rnn-embeddings-songs: 解决问题：生成歌曲的RNN嵌入表示 </span><br><span class="line">zh-tw-llm-dv/zh-tw-llm-ta01-pythia-6.9b-ta8000-v1-a_1_embeddings-h100-t01-c5daa1-8bit: 解决问题：未找到相关信息，无法明确: 解决问题 </span><br><span class="line">zetavg/zh-tw-llm-ta01-pythia-6.9b-ta8000-v1-a_1_embeddings-h100-t01-c5daa1-8bit-2: 解决问题：暂未获取到该模型具体: 解决问题信息 </span><br><span class="line">Word2vec/polyglot_words_embeddings_afr: 解决问题：将南非荷兰语单词转换为向量 </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>关于图相关的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">florentgbelidji/blip_image_embeddings: 解决问题：将图像转换为向量嵌入表示 </span><br><span class="line">crumb/ViT-L-14-Token-Embeddings: 解决问题：图像视觉特征的嵌入表示问题 </span><br><span class="line">ProGamerGov/knollingcase-embeddings-sd-v2-0: 解决问题：生成特定风格图像嵌入表示 </span><br><span class="line">KnutJaegersberg/sentence_transformer_mpnet_v2_to_kg_embeddings_wikidata5m: 解决问题：将句子转换为知识图谱嵌入</span><br><span class="line">ProGamerGov/winter-cat-embeddings-sd-v2-1: 解决问题：用于StableDiffusion生成特定风格图像 </span><br><span class="line">Priyanshu9991/sd2.1_768_embeddings: 解决问题：生成StableDiffusion 2.1图像嵌入 </span><br><span class="line">rschwabco/clip-vit-base-patch32-embeddings: 解决问题：图像和文本的特征嵌入提取 </span><br><span class="line">[Banano/banano-sd-embeddings]: 解决问题：文本到图像生成的嵌入问题 </span><br><span class="line">[rschwabco/clip-embeddings]: 解决问题：[图像与文本特征嵌入表示]</span><br><span class="line">pix2pix-zero-library/direction_embeddings: 解决问题：图像转换方向的嵌入表示问题 </span><br><span class="line">[next-social/sd-embeddings]: 解决问题：文本到图像生成相关嵌入问题 </span><br><span class="line">johncerpa/clip-embeddings: 解决问题：图像与文本特征嵌入问题 </span><br><span class="line">[dkrugman/clip-embeddings]: 解决问题：图像和文本的嵌入表示问题 </span><br><span class="line">trinitishop14045/clip-embeddings: 解决问题：图像与文本特征嵌入问题 </span><br><span class="line">[SquareHat/clip-embeddings]: 解决问题：图像和文本特征嵌入问题 </span><br><span class="line">michaeleliot/clip-embeddings: 解决问题：图像和文本的特征嵌入问题 </span><br><span class="line">radames/blip_image_embeddings: 解决问题：将图像转换为向量嵌入表示 </span><br><span class="line">radames/segment-anything-embeddings-base: 解决问题：图像分割特征嵌入表示问题 </span><br><span class="line">radames/segment-anything-embeddings-large: 解决问题：图像分割特征嵌入提取 </span><br><span class="line">radames/segment-anything-embeddings-huge: 解决问题：图像分割特征嵌入问题 </span><br><span class="line">joshuaKnauber/clip-embeddings: 解决问题：实现图像和文本的特征嵌入 </span><br><span class="line">DividingSky/clip-embeddings: 解决问题：实现图像与文本的特征嵌入转换 </span><br><span class="line">StanderPM/clips-embeddings: 解决问题：文本和图像的特征嵌入表示 </span><br><span class="line">[brunovianna/AVA_image_clip_embeddings]: 解决问题：生成图像的CLIP嵌入表示 </span><br><span class="line">js101/clip-embeddings: 解决问题：图像与文本嵌入表示问题 </span><br><span class="line">[cundiff/clip-embeddings]: 解决问题：实现图像和文本的特征嵌入转换 </span><br><span class="line">[uretan/clip-embeddings]: 解决问题：图像和文本的特征嵌入表示</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250625112125-daebff51.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1817,214 +1942,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241217173020-4242deda.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20241217173020-4242deda.html" itemprop="url">自建邮局</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-12-17T17:30:20+08:00">
-                2024-12-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这个是我自己建好的邮箱mail.yihao.de</p>
-<p>下面演示一下如何搭建一个属于自己的邮箱。</p>
-<h2 id="1-安装1panel"><a href="#1-安装1panel" class="headerlink" title="1. 安装1panel"></a>1. 安装1panel</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sSL https://resource.fit2cloud.com/1panel/package/quick_start.sh -o quick_start.sh &amp;&amp; bash quick_start.sh</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-进入1panel操作页面"><a href="#2-进入1panel操作页面" class="headerlink" title="2. 进入1panel操作页面"></a>2. 进入1panel操作页面</h2><p>按顺序：首页的左侧栏有个“应用商店”，进去搜索：maddy<br>随后安装，如图所示：<br><img src="https://img.yihao.de/1731680079461.png" alt="image.png"></p>
-<p><img src="https://img.yihao.de/1731680095409.png" alt="image.png"></p>
-<p>记得一定要打开：端口外部访问。如图：  </p>
-<p><img src="https://img.yihao.de/1731680110235.png" alt="image.png"></p>
-<h2 id="3-申请证书并推送至本地目录"><a href="#3-申请证书并推送至本地目录" class="headerlink" title="3. 申请证书并推送至本地目录"></a>3. 申请证书并推送至本地目录</h2><p>按序找：1panel操作页面的左侧栏，从上往下第三个，点开后扩展：证书，进去。<br>配置好你的acme账户与dns账户<br><img src="http://lsky.xxxh.de/uploads/66a8ca6711f1e.jpeg" alt="IMG_1623.jpeg"></p>
-<h4 id="3-1-acme账户"><a href="#3-1-acme账户" class="headerlink" title="3.1 acme账户"></a>3.1 acme账户</h4><p><img src="https://img.yihao.de/1731680379716.png" alt="image.png"><br>邮箱随便填一个点确认</p>
-<h4 id="3-2NDS账户"><a href="#3-2NDS账户" class="headerlink" title="3.2NDS账户"></a>3.2NDS账户</h4><p>我使用的是阿里云<br><img src="https://img.yihao.de/1731680436011.png" alt="image.png"></p>
-<p>以上准备工作完成后，点申请证书<br>主域名填：<a target="_blank" rel="noopener" href="https://www.nodeseek.com/jump?to=http://mail.lancet.icu">mail.lancet.icu</a>（举例子）<br>如图所示填好推送的证书路径<br><img src="http://lsky.xxxh.de/uploads/66a8cba91e245.jpeg" alt="IMG_1625.jpeg"></p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="keyword">var</span><span class="operator">/</span>lib<span class="operator">/</span>docker<span class="operator">/</span>volumes<span class="operator">/</span>maddydata<span class="operator">/</span>_data<span class="operator">/</span>tls</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-以上均完成后，检查容器运行正常，获取DKIM值"><a href="#4-以上均完成后，检查容器运行正常，获取DKIM值" class="headerlink" title="4. 以上均完成后，检查容器运行正常，获取DKIM值"></a>4. 以上均完成后，检查容器运行正常，获取DKIM值</h2><p>当容器正常运行后，在/var/lib/docker/volumes/maddydata/_data/dkim_keys路径下会有个像这样的lancet.icu_default.dns的文件。<br>打开文件，全选复制里面的所有内容，留作备用</p>
-<h2 id="5-DNS解析，用cloudflare举例，按表格填写"><a href="#5-DNS解析，用cloudflare举例，按表格填写" class="headerlink" title="5. DNS解析，用cloudflare举例，按表格填写"></a>5. DNS解析，用cloudflare举例，按表格填写</h2><table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>default._domainkey</td>
-<td>TXT</td>
-<td>第四步中lancet.icu_default.dns文件中的内容</td>
-</tr>
-<tr>
-<td>mail</td>
-<td>A</td>
-<td>服务器IP</td>
-</tr>
-<tr>
-<td>@</td>
-<td>A</td>
-<td>服务器IP</td>
-</tr>
-<tr>
-<td>@</td>
-<td>MX</td>
-<td>mail.lancet.icu</td>
-</tr>
-<tr>
-<td>mail</td>
-<td>TXT</td>
-<td>v=spf1 mx ~all</td>
-</tr>
-<tr>
-<td>@</td>
-<td>TXT</td>
-<td>v=spf1 mx ~all</td>
-</tr>
-<tr>
-<td>_dmarc</td>
-<td>TXT</td>
-<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#97;&#x64;&#109;&#x69;&#110;&#x40;&#108;&#x61;&#110;&#99;&#x65;&#116;&#46;&#x69;&#99;&#117;">&#97;&#x64;&#109;&#x69;&#110;&#x40;&#108;&#x61;&#110;&#99;&#x65;&#116;&#46;&#x69;&#99;&#117;</a></td>
-</tr>
-<tr>
-<td>_mta-sts</td>
-<td>TXT</td>
-<td>v=STSv1; id=1</td>
-</tr>
-<tr>
-<td>_smtp._tls</td>
-<td>TXT</td>
-<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#97;&#x64;&#109;&#x69;&#110;&#64;&#108;&#x61;&#x6e;&#x63;&#101;&#x74;&#x2e;&#105;&#x63;&#x75;">&#97;&#x64;&#109;&#x69;&#110;&#64;&#108;&#x61;&#x6e;&#x63;&#101;&#x74;&#x2e;&#105;&#x63;&#x75;</a></td>
-</tr>
-</tbody></table>
-<h2 id="6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："><a href="#6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：" class="headerlink" title="6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："></a>6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：</h2><p>创建登录账户，运行此命令后会让设置密码</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy creds <span class="keyword">create</span> x<span class="variable">@lancet</span>.icu</span><br></pre></td></tr></table></figure>
-
-<p>创建存储账户</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap<span class="operator">-</span>acct <span class="keyword">create</span> x<span class="variable">@lancet</span>.icu</span><br></pre></td></tr></table></figure>
-
-<p>可以查看账户列表</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">maddy creds list</span><br><span class="line"></span><br><span class="line">maddy imap-acct list</span><br></pre></td></tr></table></figure>
-
-<p>查看账户下的邮箱分类</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-mboxes list x<span class="keyword">@lancet</span>.icu</span><br></pre></td></tr></table></figure>
-
-<p>查看账户下邮件内容</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-mboxes dump x<span class="keyword">@lancet</span>.icu <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#120;&#x40;&#x6c;&#x61;&#110;&#x63;&#101;&#x74;&#x2e;&#105;&#99;&#117;">&#120;&#x40;&#x6c;&#x61;&#110;&#x63;&#101;&#x74;&#x2e;&#105;&#99;&#117;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-msgs list x<span class="keyword">@lancet</span>.icu INBOX</span><br></pre></td></tr></table></figure>
-
-<p>会有如图所示的记录：<br><img src="https://img.yihao.de/1731680546525.png" alt="image.png"></p>
-<h2 id="8-绑定到客户端使用"><a href="#8-绑定到客户端使用" class="headerlink" title="8. 绑定到客户端使用"></a>8. 绑定到客户端使用</h2><p>我这里使用的是macos自带的邮箱</p>
-<p><img src="https://img.yihao.de/1731680597650.png" alt="image.png"><br><img src="https://img.yihao.de/1731680661473.png" alt="image.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2091,7 +2008,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

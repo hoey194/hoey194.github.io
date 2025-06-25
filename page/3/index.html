@@ -303,6 +303,127 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241027142701-bb4ea6a4.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20241027142701-bb4ea6a4.html" itemprop="url">喜当爹</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-27T14:27:01+08:00">
+                2024-10-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://img.yihao.de/1730010431322.png" alt="image-20241027142706017"></p>
+<p>意不意外、惊不惊喜，就是这么快。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241027140107-6cd3e3dc.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1504,142 +1625,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20240417164207-f8343c34.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20240417164207-f8343c34.html" itemprop="url">中转线路的应用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-04-17T16:42:07+08:00">
-                2024-04-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>中转机指的是一个中间服务器，将用户的请求转发到目标服务器上。在使用VPS的时候，也常常会通过中转机进行访问。例如，用户在国内使用VPS搭建了一个网站，但由于网络限制等问题，国外用户无法直接访问该网站。这时，用户可以在国外租用一台VPS作为中转机，然后将中转机和国内的VPS连接起来，通过中转机实现访问。在此过程中，用户的请求会先到达中转机，再由中转机将请求转发到国内的VPS上，最后再将响应返回给用户。中转机也可以增加一些额外的安全性和隐私保护措施，保护用户的数据和隐私。</p>
-<p><img src="https://hoey-images.oss-cn-hangzhou.aliyuncs.com/img/image-20240417164517758.png" alt="image-20240417164517758"></p>
-<p>假设你有 A-B 两台机器，打算使用 A 机器转发流量到 B 机器。常见的用途是国内连接到A机器的网络比较好，然后希望通过A机器转发数据到B机器，再通过B机器干一些不可描述的事情…又或者是 B 机器可以解锁一些在线服务之类，但是直连效果不好，甚至IP都被墙了，想要使用A机器做前置转发。缺点是，只能转发 TCP 或 UDP 流量，带 TLS 的不行</p>
-<p>下面介绍两种中转方案</p>
-<h2 id="方案一、-使用VPN-V2ray"><a href="#方案一、-使用VPN-V2ray" class="headerlink" title="方案一、 使用VPN+V2ray"></a>方案一、 使用VPN+V2ray</h2><p>这种方案在A机器上安装IPsec VPN，在B机器上安装V2ray</p>
-<p>在机器A上安装IPsec VPN，我是在Openwrt旁路由上安装，你也可以参考其他方案自行验证</p>
-<p><a target="_blank" rel="noopener" href="https://wiki.eryajf.net/pages/5363.html#_2-%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5">使用docker快速部署一个 IPsec VPN 服务器 | 二丫讲梵 (eryajf.net)</a></p>
-<h2 id="方案二、使用V2ray-V2ray"><a href="#方案二、使用V2ray-V2ray" class="headerlink" title="方案二、使用V2ray+V2ray"></a>方案二、使用V2ray+V2ray</h2><p>这种方案需要在AB两台机器上配置V2ray，实现互相通信</p>
-<h2 id="1-添加配置"><a href="#1-添加配置" class="headerlink" title="1.添加配置"></a>1.添加配置</h2><p>先在 B 机器添加一个 V2Ray 配置，举例： <code>v2ray add tcp 233</code></p>
-<p>这样来就是添加了一个 VMESS-TCP 的配置，并且端口是 233</p>
-<p>如果你已经有配置就不用再添加了，反正记下 B 机器的 <code>IP</code> 和配置的 <code>端口</code> 即可</p>
-<p>因为利用 A 机器转发的时候必须要填写上 B 机器的 IP，以及要转到到 B 机器的哪个端口</p>
-<h2 id="2-door"><a href="#2-door" class="headerlink" title="2.door"></a>2.door</h2><p>使用方法： <code>v2ray add door [port] [remote-addr] [remote-port]</code></p>
-<p>在 A 机器执行：<code>v2ray add door</code>，然后输入 B 机器的 IP 和端口</p>
-<p>默认情况下 V2Ray 脚本会随机生成一个端口，如果你需要自定义端口请使用 <code>v2ray add door 需要自定义的端口</code></p>
-<h2 id="3-测试"><a href="#3-测试" class="headerlink" title="3.测试"></a>3.测试</h2><p>把 B 机器给出的配置里面的地址和端口，改成 A 机器的 IP 和端口即可</p>
-<p>就是 B 机器的配置，假设你用 v2rayN 通过 URL 导入了配置，把配置的地址和端口改成 A 机器的 IP 和 Dokodemo-door 端口。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1706,7 +1691,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
