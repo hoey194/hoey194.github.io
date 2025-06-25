@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="n86IUFnBFOxfeqHBuzwyDN9z4IxNVMohQEh6b6rUtYo" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="先要安装依赖 1pip install langchain-chroma  Chroma可以以多种模式运行。以下是每种模式的示例，均与LangChain集成：  in-memory-在Python脚本或Jupyter笔记本中 in-memory with persistance-在脚本或笔记本中保存&#x2F;加载到磁盘 in a docker container-作为在本地机器或云中运行的服务器  与任何">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LangChain构建 Chroma">
+<meta property="og:url" content="http://example.com/posts/20250625112125-daebff51.html">
+<meta property="og:site_name" content="Hoey笔记">
+<meta property="og:description" content="先要安装依赖 1pip install langchain-chroma  Chroma可以以多种模式运行。以下是每种模式的示例，均与LangChain集成：  in-memory-在Python脚本或Jupyter笔记本中 in-memory with persistance-在脚本或笔记本中保存&#x2F;加载到磁盘 in a docker container-作为在本地机器或云中运行的服务器  与任何">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-06-25T03:21:25.000Z">
+<meta property="article:modified_time" content="2025-06-25T03:22:06.310Z">
+<meta property="article:author" content="Hoey">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/posts/20250625112125-daebff51.html"/>
+
+
+
+
+
+  <title>LangChain构建 Chroma | Hoey笔记</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?43f2ad51dd03ad146d67cc622d4e11e2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hoey笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">和有趣的人做尽有趣的事</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a target="_blank" href="http://hoey.tk" rel="section noopener">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Sitemap
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<style>
+  #VOCECHAT_WIDGET {
+    bottom: 85px !important;
+    right: 25px !important;
+  }
+</style>
+
+<script
+  data-host-id="1"
+  data-auto-reg="true"
+  data-login-token=""
+  data-close-width="35"
+  data-close-height="35"
+  data-open-width="380"
+  data-open-height="680"
+  data-position="right"
+  data-welcome="请问有什么事？"
+  src="https://talk.zyh1.cc/widget.js"
+  async
+></script>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250625112125-daebff51.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LangChain构建 Chroma</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-06-25T11:21:25+08:00">
+                2025-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>先要安装依赖</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install langchain-chroma</span><br></pre></td></tr></table></figure>
+
+<p>Chroma可以以多种模式运行。以下是每种模式的示例，均与LangChain集成：</p>
+<ul>
+<li>in-memory-在Python脚本或Jupyter笔记本中</li>
+<li>in-memory with persistance-在脚本或笔记本中保存/加载到磁盘</li>
+<li>in a docker container-作为在本地机器或云中运行的服务器</li>
+</ul>
+<p>与任何其他数据库一样，您可以进行以下操作：</p>
+<ul>
+<li>add</li>
+<li>get</li>
+<li>update</li>
+<li>upsert</li>
+<li>delete</li>
+<li>peek</li>
+</ul>
+<p>而.query则运行相以性搜索。查看完整文档，请访问docs。要直接访问这些方法，可以使用，_collection.method()。</p>
+<p>基本示例在这个基本示例中，我们获取《乔布斯演讲稿》，将其分割成片段，使用开源嵌入模型进行嵌入，加载到Chroma中，然后进行查询。</p>
+<p>乔布斯演讲知识库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"># knowledge.txt</span><br><span class="line"></span><br><span class="line">Thank you. I&#x27;m honored to be with you today for your commencement from one of the finest universities in the world. Truth be told, I never graduated from college and this is the closest I&#x27;ve ever gotten to a college graduation.</span><br><span class="line">谢谢大家。很荣幸能和你们，来自世界最好大学之一的毕业生们，一块儿参加毕业典礼。老实说，我大学没有毕业，今天恐怕是我一生中离大学毕业最近的一次了。</span><br><span class="line"></span><br><span class="line">Today I want to tell you three stories from my life. That&#x27;s it. No big deal. Just three stories.</span><br><span class="line">今天我想告诉大家来自我生活的三个故事。没什么大不了的，只是三个故事而已。</span><br><span class="line"></span><br><span class="line">The first story is about connecting the dots.</span><br><span class="line">第一个故事，如何串连生命中的点滴。</span><br><span class="line"></span><br><span class="line">I dropped out of Reed College after the first six months but then stayed around as a drop-in for another 18 months or so before I really quit. So why did I drop out? It started before I was born. My biological mother was a young, unwed graduate student, and she decided to put me up for adoption. She felt very strongly that I should be adopted by college graduates, so everything was all set for me to be adopted at birth by a lawyer and his wife, except that when I popped out, they decided at the last minute that they really wanted a girl. So my parents, who were on a waiting list, got a call in the middle of the night asking, &quot;We&#x27;ve got an unexpected baby boy. Do you want him?&quot; They said, &quot;Of course.&quot; My biological mother found out later that my mother had never graduated from college and that my father had never graduated from high school. She refused to sign the final adoption papers. She only relented a few months later when my parents promised that I would go to college.</span><br><span class="line">我在里得大学读了六个月就退学了，但是在18个月之后--我真正退学之前，我还常去学校。为何我要选择退学呢？这还得从我出生之前说起。我的生母是一个年轻、未婚的大学毕业生，她决定让别人收养我。她有一个很强烈的信仰，认为我应该被一个大学毕业生家庭收养。于是，一对律师夫妇说好了要领养我，然而最后一秒钟，他们改变了主意，决定要个女孩儿。然后我排在收养人名单中的养父母在一个深夜接到电话，“很意外，我们多了一个男婴，你们要吗？”“当然要！”但是我的生母后来又发现我的养母没有大学毕业，养父连高中都没有毕业。她拒绝在领养书上签字。几个月后，我的养父母保证会让我上大学，她妥协了。</span><br><span class="line"></span><br><span class="line">This was the start in my life. And 17 years later, I did go to college, but I naively chose a college that was almost as expensive as Stanford, and all of my working-class parents&#x27; savings were being spent on my college tuition. After six months, I couldn&#x27;t see the value in it. I had no idea what I wanted to do with my life, and no idea of how college was going to help me figure it out, and here I was, spending all the money my parents had saved their entire life. So I decided to drop out and trust that it would all work out OK. It was pretty scary at the time, but looking back, it was one of the best decisions I ever made. The minute I dropped out, I could stop taking the required classes that didn&#x27;t interest me and begin dropping in on the ones that looked far more interesting.</span><br><span class="line">这是我生命的开端。十七年后，我上大学了，但是我很无知地选了一所差不多和斯坦福一样贵的学校，几乎花掉我那蓝领阶层养父母一生的积蓄。六个月后，我觉得不值得。我看不出自己以后要做什么，也不晓得大学会怎样帮我指点迷津，而我却在花销父母一生的积蓄。所以我决定退学，并且相信没有做错。一开始非常吓人，但回忆起来，这却是我一生中作的最好的决定之一。从我退学的那一刻起，我可以停止一切不感兴趣的必修课，开始旁听那些有意思得多的课。</span><br><span class="line"></span><br><span class="line">It wasn&#x27;t all romantic. I didn&#x27;t have a dorm room, so I slept on the floor in friends&#x27; rooms. I returned Coke bottles for the five-cent deposits to buy food with, and I would walk the seven miles across town every Sunday night to get one good meal a week at the Hare Krishna temple. I loved it. And much of what I stumbled into by following my curiosity and intuition turned out to be priceless later on. Let me give you one example.</span><br><span class="line">事情并不那么美好。我没有宿舍可住，睡在朋友房间的地上。为了吃饭，我收集五分一个的旧可乐瓶，每个星期天晚上步行七英里到哈尔-克里什纳庙里改善一下一周的伙食。我喜欢这种生活方式。能够遵循自己的好奇和直觉前行后来被证明是多么的珍贵。让我来给你们举个例子吧。</span><br><span class="line"></span><br><span class="line">Reed College at that time offered perhaps the best calligraphy instruction in the country. Throughout the campus every poster, every label on every drawer was beautifully hand-calligraphed. Because I had dropped out and didn&#x27;t have to take the normal classes, I decided to take a calligraphy class to learn how to do this. I learned about serif and sans-serif typefaces, about varying the amount of space between different letter combinations, about what makes great typography great. It was beautiful, historical, artistically subtle in a way that science can&#x27;t capture, and I found it fascinating.</span><br><span class="line">当时的里德大学提供可能是全国最好的书法指导。校园中每一张海报，抽屉上的每一张标签，都是漂亮的手写体。由于我已退学，不用修那些必修课，我决定选一门书法课上上。在这门课上，我学会了“serif”和&quot;sans-serif&quot;两种字体、学会了怎样在不同的字母组合中改变字间距、学会了怎样写出好的字来。这是一种科学无法捕捉的微妙，楚楚动人、充满历史底蕴和艺术性，我觉得自己被完全吸引了。</span><br><span class="line"></span><br><span class="line">None of this had even a hope of any practical application in my life. But ten years later when we were designing the first Macintosh computer, it all came back to me, and we designed it all into the Mac. It was the first computer with beautiful typography. If I had never dropped in on that single course in college, the Mac would have never had multiple typefaces or proportionally spaced fonts, and since Windows just copied the Mac, it&#x27;s likely that no personal computer would have them.</span><br><span class="line">当时我并不指望书法在以后的生活中能有什么实用价值。但是，十年之后，我们在设计第一台 Macintosh计算机时，它一下子浮现在我眼前。于是，我们把这些东西全都设计进了计算机中。这是第一台有这么漂亮的文字版式的计算机。要不是我当初在大学里偶然选了这么一门课，Macintosh计算机绝不会有那么多种印刷字体或间距安排合理的字号。要不是Windows照搬了 Macintosh，个人电脑可能不会有这些字体和字号。</span><br><span class="line"></span><br><span class="line">If I had never dropped out, I would have never dropped in on that calligraphy class and personals computers might not have the wonderful typography that they do.</span><br><span class="line">要不是退了学，我决不会碰巧选了这门书法课，个人电脑也可能不会有现在这些漂亮的版式了。</span><br><span class="line"></span><br><span class="line">Of course it was impossible to connect the dots looking forward when I was in college, but it was very, very clear looking backwards ten years later. Again, you can&#x27;t connect the dots looking forward. You can only connect them looking backwards, so you have to trust that the dots will somehow connect in your future. You have to trust in something--your gut, destiny, life, karma, whatever--because believing that the dots will connect down the road will give you the confidence to follow your heart, even when it leads you off the well-worn path, and that will make all the difference.</span><br><span class="line">当然，我在大学里不可能从这一点上看到它与将来的关系。十年之后再回头看，两者之间关系就非常、非常清楚了。你们同样不可能从现在这个点上看到将来；只有回头看时，才会发现它们之间的关系。所以你必须相信，那些点点滴滴，会在你未来的生命里，以某种方式串联起来。你必须相信一些东西——你的勇气、宿命、生活、因缘，随便什么——因为相信这些点滴能够一路连接会给你带来循从本觉的自信，它使你远离平凡，变得与众不同。</span><br><span class="line"></span><br><span class="line">My second story is about love and loss. I was lucky. I found what I loved to do early in life. Woz and I started Apple in my parents&#x27; garage when I was 20. We worked hard and in ten years, Apple had grown from just the two of us in a garage into a $2 billion company with over 4,000 employees. We&#x27;d just released our finest creation, the Macintosh, a year earlier, and I&#x27;d just turned 30, and then I got fired. How can you get fired from a company you started? Well, as Apple grew, we hired someone who I thought was very talented to run the company with me, and for the first year or so, things went well. But then our visions of the future began to diverge, and eventually we had a falling out. When we did, our board of directors sided with him, and so at 30, I was out, and very publicly out. What had been the focus of my entire adult life was gone, and it was devastating. I really didn&#x27;t know what to do for a few months. I felt that I had let the previous generation of entrepreneurs down, that I had dropped the baton as it was being passed to me. I met with David Packard and Bob Noyce and tried to apologize for screwing up so badly. I was a very public failure and I even thought about running away from the Valley. But something slowly began to dawn on me. I still loved what I did. The turn of events at Apple had not changed that one bit. I&#x27;d been rejected but I was still in love. And so I decided to start over.</span><br><span class="line">第二个故事是关于爱与失的。我很幸运，很早就发现自己喜欢做的事情。我二十岁的时候就和沃茨在父母的车库里开创了苹果公司。我们工作得很努力，十年后，苹果公司成长为拥有四千名员工，价值二十亿的大公司。我们刚刚推出了最好的创意，Macintosh操作系统，在这之前的一年，也就是我刚过三十岁，我被解雇了。你怎么可能被一个亲手创立的公司解雇？事情是这样的，在公司成长期间，我雇佣了一个我们认为非常聪明，可以和我一起经营公司的人。一年后，我们对公司未来的看法产生分歧，董事会站在了他的一边。于是，在我三十岁的时候，我出局了，很公开地出局了。我整个成年生活的焦点没了，这很要命。一开始的几个月我真的不知道该干什么。我觉得我让公司的前一代创建者们失望了，我把传给我的权杖给弄丢了。我与戴维德·帕珂德和鲍勃·诺埃斯见面，试图为这彻头彻尾的失败道歉。我败得如此之惨以至于我想要逃离硅谷。但有个东西在慢慢地叫醒我：我还爱着我从事的行业。这次失败一点儿都没有改变这一点。我被逐了，但我仍爱着我的事业。我决定重新开始。</span><br><span class="line"></span><br><span class="line">I didn&#x27;t see it then, but it turned out that getting fired from Apple was the best thing that could have ever happened to me. The heaviness of being successful was replaced by the lightness of being a beginner again, less sure about everything. It freed me to enter one of the most creative periods in my life. During the next five years I started a company named NeXT, another company named Pixar and fell in love with an amazing woman who would become my wife. Pixar went on to create the world&#x27;s first computer-animated feature film, &quot;Toy Story,&quot; and is now the most successful animation studio in the world.</span><br><span class="line">当时我没有看出来，但事实证明“被苹果开除”是发生在我身上最好的事。成功的重担被重新起步的轻松替代，对任何事情都不再特别看重，这让我感觉如此自由，进入一生中最有创造力的阶段。接下来的五年，我创立了一个叫NeXT的公司，接着又建立了Pixar，然后与后来成为我妻子的女人相爱。Pixar出品了世界第一个电脑动画电影：“玩具总动员”，现在它已经是世界最成功的动画制作工作室了。</span><br><span class="line"></span><br><span class="line">In a remarkable turn of events, Apple bought NeXT and I returned to Apple and the technology we developed at NeXT is at the heart of Apple&#x27;s current renaissance, and Lorene and I have a wonderful family together.</span><br><span class="line">在一系列的成功运转后，苹果收购了NeXT，我又回到了苹果。我们在NeXT开发的技术在苹果的复兴中起了核心作用，另外劳琳和我组建了一个幸福的家庭。</span><br><span class="line"></span><br><span class="line">I&#x27;m pretty sure none of this would have happened if I hadn&#x27;t been fired from Apple. It was awful-tasting medicine but I guess the patient needed it. Sometimes life&#x27;s going to hit you in the head with a brick. Don&#x27;t lose faith. I&#x27;m convinced that the only thing that kept me going was that I loved what I did. You&#x27;ve got to find what you love, and that is as true for work as it is for your lovers. Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work, and the only way to do great work is to love what you do. If you haven&#x27;t found it yet, keep looking, and don&#x27;t settle. As with all matters of the heart, you&#x27;ll know when you find it, and like any great relationship it just gets better and better as the years roll on. So keep looking. Don&#x27;t settle.</span><br><span class="line">我非常确信，如果我没有被苹果炒掉，这些就都不会发生。这个药的味道太糟了，但是我想病人需要它。有些时候，生活会给你迎头一棒。不要丧失信心。我确信唯一让我一路走下来的是我对自己所做事情的热爱。你必须去找你热爱的东西，对工作如此，对你的爱人也是这样的。工作会占据你生命中很大的一部分，你只有相信自己做的是伟大的工作，你才能怡然自得。如果你还没有找到，那么就继续找，不要停。全心全意地找，当你找到时，你会知道的。就像任何真诚的关系，随着时间的流逝，只会越来越紧密。所以继续找，不要停。</span><br><span class="line"></span><br><span class="line">My third story is about death. When I was 17 I read a quote that went something like &quot;If you live each day as if it was your last, someday you&#x27;ll most certainly be right.&quot; It made an impression on me, and since then, for the past 33 years, I have looked in the mirror every morning and asked myself, &quot;If today were the last day of my life, would I want to do what I am about to do today?&quot; And whenever the answer has been &quot;no&quot; for too many days in a row, I know I need to change something. Remembering that I&#x27;ll be dead soon is the most important thing I&#x27;ve ever encountered to help me make the big choices in life, because almost everything--all external expectations, all pride, all fear of embarrassment or failure--these things just fall away in the face of death, leaving only what is truly important. Remembering that you are going to die is the best way I know to avoid the trap of thinking you have something to lose. You are already naked. There is no reason not to follow your heart.</span><br><span class="line">我的第三个故事关于死亡。我17岁的时候读到过一句话“如果你把每一天都当作最后一天过，有一天你会发现你是正确的”。这句话给我留下了深刻的印象。从那以后，过去的33年，每天早上我都会对着镜子问自己：“如果今天是我的最后一天，我会不会做我想做的事情呢？”如果连着一段时间，答案都是否定的的话，我就知道我需要改变一些东西了。提醒自己就要死了是我遇见的最大的帮助，帮我作了生命中的大决定。因为几乎任何事——所有的荣耀、骄傲、对难堪和失败的恐惧——在死亡面前都会消隐，留下真正重要的东西。提醒自己就要死亡是我知道的最好的方法，用来避开担心失去某些东西的陷阱。你已经赤裸裸了，没有理由不听从于自己的心愿。</span><br><span class="line"></span><br><span class="line">About a year ago, I was diagnosed with cancer. I had a scan at 7:30 in the morning and it clearly showed a tumor on my pancreas. I didn&#x27;t even know what a pancreas was. The doctors told me this was almost certainly a type of cancer that is incurable, and that I should expect to live no longer than three to six months. My doctor advised me to go home and get my affairs in order, which is doctors&#x27; code for &quot;prepare to die.&quot; It means to try and tell your kids everything you thought you&#x27;d have the next ten years to tell them, in just a few months. It means to make sure that everything is buttoned up so that it will be as easy as possible for your family. It means to say your goodbyes.</span><br><span class="line">大约一年前，我被诊断出患了癌症。我早上七点半作了扫描，清楚地显示在我的胰腺有一个肿瘤。我当时都不知道胰腺是什么东西。医生们告诉我这几乎是无法治愈的，我还有三到六个月的时间。我的医生建议我回家，整理一切。在医生的辞典中，这就是“准备死亡”的意思。就是意味着把要对你小孩说十年的话在几个月内说完；意味着把所有东西搞定，尽量让你的家庭活得轻松一点；意味着你要说“永别”了。</span><br><span class="line"></span><br><span class="line">I lived with that diagnosis all day. Later that evening I had a biopsy where they stuck an endoscope down my throat, through my stomach into my intestines, put a needle into my pancreas and got a few cells from the tumor. I was sedated but my wife, who was there, told me that when they viewed the cells under a microscope, the doctor started crying, because it turned out to be a very rare form of pancreatic cancer that is curable with surgery. I had the surgery and, thankfully, I am fine now.</span><br><span class="line">我整日都想着那诊断书的事情。后来有天晚上我做了一个活切片检查，他们将一个内窥镜伸进我的喉咙，穿过胃，到达肠道，用一根针在我的胰腺肿瘤上取了几个细胞。我当时是被麻醉的，但是我的妻子告诉我，那些医生在显微镜下看到细胞的时候开始尖叫，因为发现这竟然是一种非常罕见的可用手术治愈的胰腺癌症。我做了手术，现在，我痊愈了。</span><br><span class="line"></span><br><span class="line">This was the closest I&#x27;ve been to facing death, and I hope it&#x27;s the closest I get for a few more decades. Having lived through it, I can now say this to you with a bit more certainty than when death was a useful but purely intellectual concept. No one wants to die, even people who want to go to Heaven don&#x27;t want to die to get there, and yet, death is the destination we all share. No one has ever escaped it. And that is as it should be, because death is very likely the single best invention of life. It&#x27;s life&#x27;s change agent; it clears out the old to make way for the new. right now, the new is you. But someday, not too long from now, you will gradually become the old and be cleared away. Sorry to be so dramatic, but it&#x27;s quite true. Your time is limited, so don&#x27;t waste it living someone else&#x27;s life. Don&#x27;t be trapped by dogma, which is living with the results of other people&#x27;s thinking. Don&#x27;t let the noise of others&#x27; opinions drown out your own inner voice, and most important, have the courage to follow heart and intuition. They somehow already know what you truly want to become. Everything else is secondary.</span><br><span class="line">这是我最接近死亡的时候，我也希望是我未来几十年里最接近死亡的一次。这次死里逃生让我比以往只知道死亡是一个有用而纯粹书面概念的时候更确信地告诉你们，没有人愿意死，即使那些想上天堂的人们也不愿意通过死亡来达到他们的目的。但是死亡是每个人共同的终点，没有人能够逃脱。也应该如此，因为死亡很可能是生命最好的发明。它去陈让新。现在，你们就是“新”。但是有一天，不用太久，你们有会慢慢变老然后死去。抱歉，这很戏剧性，但却是真的。你们的时间是有限的，不要浪费在重复别人的生活上。不要被教条束缚，那意味着会和别人思考的结果一块儿生活。不要被其他人的喧嚣观点掩盖自己内心真正的声音。你的直觉和内心知道你想要变成什么样子。所有其他东西都是次要的。</span><br><span class="line"></span><br><span class="line">When I was young, there was an amazing publication called _The Whole Earth Catalogue_, which was one of the bibles of my generation. It was created by a fellow named Stuart Brand not far from here in Menlo Park, and he brought it to life with his poetic touch. This was in the late 1960s, before personal computers and desktop publishing, so it was all made with typewriters, scissors, and Polaroid cameras. it was sort of like Google in paperback form 35 years before Google came along. It was idealistic, overflowing with neat tools and great notions. Stuart and his team put out several issues of the _The Whole Earth Catalogue_, and then when it had run its course, they put out a final issue. It was the mid-1970s and I was your age. On the back cover of their final issue was a photograph of an early morning country road, the kind you might find yourself hitch-hiking on if you were so adventurous. Beneath were the words, &quot;Stay hungry, stay foolish.&quot; It was their farewell message as they signed off. &quot;Stay hungry, stay foolish.&quot; And I have always wished that for myself, and now, as you graduate to begin anew, I wish that for you. Stay hungry, stay foolish.</span><br><span class="line">我年轻的时候，有一份叫做《完整地球目录》的好杂志，是我们这一代人的圣经之一。它是一个叫斯纠华特·布兰的、住在离这不远的曼罗公园的家伙创立的。他用诗一般的触觉将这份杂志带到世界。那是六十年代后期，个人电脑出现之前，所以这份杂志全是用打字机、剪刀和偏光镜制作的。有点像软皮包装的google，不过却早了三十五年。它理想主义，全文充斥着灵巧的工具和伟大的想法。斯纠华特和他的小组出版了几期“完整地球目录”，在完成使命之前，他们出版了最后一期。那是七十年代中期，我和你们差不多大。最后一期的封底是一张清晨乡村小路的照片，如果你有冒险精神，可以自己找到这条路。下面有一句话，“保持饥饿，保持愚蠢”。这是他们的告别语，“保持饥饿，保持愚蠢”。我常以此勉励自己。现在，在你们即将踏上新旅程的时候，我也希望你们能这样。保持饥饿，保持愚蠢。</span><br><span class="line"></span><br><span class="line">Thank you all, very much.</span><br><span class="line">非常感谢。</span><br></pre></td></tr></table></figure>
+
+<p>下面是一个完整的代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#示例：chroma_base.py</span></span><br><span class="line"><span class="comment"># pip install langchain</span></span><br><span class="line"><span class="comment"># pip install langchain-community</span></span><br><span class="line"><span class="comment"># pip install langchain-chroma</span></span><br><span class="line"><span class="keyword">from</span> langchain_chroma <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="keyword">from</span> langchain_community.document_loaders <span class="keyword">import</span> TextLoader</span><br><span class="line"><span class="comment"># pip install -U langchain-huggingface</span></span><br><span class="line"><span class="keyword">from</span> langchain_huggingface <span class="keyword">import</span> HuggingFaceEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain_text_splitters <span class="keyword">import</span> CharacterTextSplitter</span><br><span class="line"><span class="comment">#加载文指并将其分割成片段</span></span><br><span class="line">loader = TextLoader(<span class="string">&quot;../knowledge.txt&quot;</span>,encoding=<span class="string">&quot;UTF-8&quot;</span>)</span><br><span class="line">documents = loader.load()</span><br><span class="line"><span class="comment">#将其分割成片段</span></span><br><span class="line">text_splitter = CharacterTextSplitter(chunk_size=<span class="number">1500</span>,chunk_overlap=<span class="number">0</span>)</span><br><span class="line">docs = text_splitter.split_documents(documents)</span><br><span class="line"><span class="comment">#创建开源嵌入函数</span></span><br><span class="line">embedding_function = HuggingFaceEmbeddings(model_name=<span class="string">&quot;all-MiniLM-L6-v2&quot;</span>)</span><br><span class="line"><span class="comment">#将其加载到Chroma中</span></span><br><span class="line">db = Chroma.from_documents(docs,embedding_function)</span><br><span class="line"><span class="comment">#进行查询</span></span><br><span class="line">query = <span class="string">&quot;Pixar公司是做什么的？&quot;</span></span><br><span class="line">docs = db.similarity_search(query)</span><br><span class="line"><span class="comment">#打印结果</span></span><br><span class="line"><span class="built_in">print</span>(docs[<span class="number">0</span>].page_content)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><p>如果我们希望将向量持久化到磁盘可以按照下面方式写</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pip install langchain-chroma</span></span><br><span class="line"><span class="keyword">import</span> chromadb</span><br><span class="line"><span class="keyword">from</span> langchain_chroma <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="comment">#  pip install -U langchain-huggingface</span></span><br><span class="line"><span class="keyword">from</span> langchain_huggingface <span class="keyword">import</span> HuggingFaceEmbeddings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">persistent_client = chromadb.PersistentClient()</span><br><span class="line"><span class="comment">#创建开源族入丽数</span></span><br><span class="line">embedding_function = HuggingFaceEmbeddings(model_name=<span class="string">&quot;all-MiniLM-L6-v2&quot;</span>)</span><br><span class="line">collection = persistent_client.get_or_create_collection(<span class="string">&quot;collection_name&quot;</span>)</span><br><span class="line">collection.add(ids=[<span class="string">&quot;1&quot;</span>,<span class="string">&quot;2&quot;</span>,<span class="string">&quot;3&quot;</span>],documents=[<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;c&quot;</span>])</span><br><span class="line">langchain_chroma = Chroma(</span><br><span class="line">    client=persistent_client,</span><br><span class="line">    collection_name=<span class="string">&quot;collection_name&quot;</span>,</span><br><span class="line">    embedding_function=embedding_function,</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;在年合中有&quot;</span>, langchain_chroma._collection.count(),<span class="string">&quot;个文档&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h2><p>下面是一个简单的增删改查可以体会一下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> chromadb</span><br><span class="line"><span class="comment"># pip install langchain-chroma</span></span><br><span class="line"><span class="keyword">from</span> langchain_chroma <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="comment"># pip install langchain-text-splitters</span></span><br><span class="line"><span class="keyword">from</span> langchain_text_splitters <span class="keyword">import</span> CharacterTextSplitter</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain_community.document_loaders <span class="keyword">import</span> TextLoader</span><br><span class="line"><span class="keyword">from</span> langchain_huggingface <span class="keyword">import</span> HuggingFaceEmbeddings</span><br><span class="line"></span><br><span class="line">loader = TextLoader(<span class="string">&quot;/content/onedrive/colab/knowledge.txt&quot;</span>,encoding=<span class="string">&quot;UTF-8&quot;</span>)</span><br><span class="line">documents = loader.load()</span><br><span class="line"><span class="comment"># #将其分割成片段</span></span><br><span class="line">text_splitter = CharacterTextSplitter(chunk_size=<span class="number">1500</span>,chunk_overlap=<span class="number">0</span>)</span><br><span class="line">docs = text_splitter.split_documents(documents)</span><br><span class="line"><span class="comment"># #创建开源嵌入函数</span></span><br><span class="line">embedding_function = HuggingFaceEmbeddings(model_name=<span class="string">&quot;all-MiniLM-L6-v2&quot;</span>)</span><br><span class="line">query=<span class="string">&quot;Pixar公司是做什么的？&quot;</span></span><br><span class="line"><span class="comment"># #创建简单的ids</span></span><br><span class="line">ids = [<span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(docs)+<span class="number">1</span>)]</span><br><span class="line"><span class="comment">#添加数据</span></span><br><span class="line">example_db = Chroma.from_documents(docs,embedding_function,ids=ids)</span><br><span class="line">docs = example_db.similarity_search(query)</span><br><span class="line"><span class="comment">#更新文档的元数据</span></span><br><span class="line">docs[<span class="number">0</span>].metadata = &#123;</span><br><span class="line">	<span class="string">&quot;source&quot;</span>:<span class="string">&quot;/content/onedrive/colab/knowledge.txt&quot;</span>,</span><br><span class="line">	<span class="string">&quot;new_value&quot;</span>:<span class="string">&quot;hello world&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;更所前内容：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(example_db._collection.get(ids=[ids[<span class="number">0</span>]]))</span><br><span class="line">example_db.update_document(ids[<span class="number">0</span>],docs [<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;更新后内容：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(example_db._collection.get(ids=[ids[<span class="number">0</span>]]))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;删除前计数&quot;</span>,example_db._collection.count())</span><br><span class="line"><span class="built_in">print</span>(example_db._collection.get(ids=[ids[-<span class="number">1</span>]]))</span><br><span class="line">example_db._collection.delete(ids=[ids[-<span class="number">1</span>]])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;删除后计数&quot;</span>,example_db._collection.count())</span><br><span class="line"><span class="built_in">print</span>(example_db._collection.get(ids=[ids[-<span class="number">1</span>]]))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用openAI"><a href="#使用openAI" class="headerlink" title="使用openAI"></a>使用openAI</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#示例：chroma._openai.py</span></span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"><span class="comment"># pip install langchain-chroma</span></span><br><span class="line"><span class="keyword">from</span> langchain_chroma <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="keyword">import</span> chromadb</span><br><span class="line"><span class="keyword">from</span> langchain_text_splitters <span class="keyword">import</span> CharacterTextsplitter</span><br><span class="line"><span class="keyword">from</span> langchain_community.document_loaders <span class="keyword">import</span> TextLoader</span><br><span class="line">embeddings = OpenAIEmbeddings()</span><br><span class="line">persistent_client = chromadb.Persistentclient()</span><br><span class="line">new_client = chromadb.Ephemeralclient()</span><br><span class="line"><span class="comment">#加载文档并将其分剖成片段</span></span><br><span class="line">loader = TextLoader(<span class="string">&quot;../../resource/knowledge.txt&quot;</span>,encoding=<span class="string">&quot;UTF-8&quot;</span>)</span><br><span class="line">documents = loader.load()</span><br><span class="line"><span class="comment">#将其分割成片段</span></span><br><span class="line">text_splitter = CharacterTextsplitter(chunk_size=<span class="number">1500</span>,chunk_overlap=<span class="number">0</span>)</span><br><span class="line">docs = text_splitter.split_documents(documents)</span><br><span class="line">openai_lc_client = Chroma.from_documents(</span><br><span class="line">    docs,embeddings,client=new_client,collection_name=<span class="string">&quot;openai_collection&quot;</span></span><br><span class="line">)</span><br><span class="line">query=<span class="string">&quot;Pixar公司是做什么的？&quot;</span></span><br><span class="line">docs = openai_lc_client.similarity_search(query)</span><br><span class="line"><span class="built_in">print</span>(docs[<span class="number">0</span>].page_content)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/20250625011750-3eadec25.html" rel="next" title="Embedding与向量数据库">
+                <i class="fa fa-chevron-left"></i> Embedding与向量数据库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="hoey194/note"
+        data-repo-id="R_kgDOImfwSg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOImfwSs4CikdG"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CRUD"><span class="nav-number">2.</span> <span class="nav-text">CRUD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8openAI"><span class="nav-number">3.</span> <span class="nav-text">使用openAI</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hoey</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span id="timeDate"></span>
+<span id="times"></span>
+
+
+
+<script>
+  var now = new Date();
+  function createtime() {
+    var grt= new Date("01/01/2022 12:00:00");//此处修改你的建站时间或者网站上线时间
+    now.setTime(now.getTime()+250);
+    days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+    hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+    if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+    mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+    seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+    snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+    document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+    document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+  }
+  setInterval("createtime()",250);
+</script>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
