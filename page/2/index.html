@@ -303,6 +303,256 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250116140848-fc120b9c.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20250116140848-fc120b9c.html" itemprop="url">Hikyuu - Quant Framework</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-16T14:08:48+08:00">
+                2025-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Hikyuu Quant Framework是基于C++/Python的高性能开源量化交易研究框架，用于策略分析及回测（目前用于国内A股市场）。其核心思想基于当前成熟的系统化交易方法，将整个系统化交易抽象为由市场环境判断策略、系统有效条件、信号指示器、止损/止盈策略、资金管理策略、盈利目标策略、移滑价差算法七大组件，你可以分别构建这些组件的策略资产库，在实际研究中对它们自由组合来观察系统的有效性、稳定性以及单一种类策略的效果。</p>
+<p>下面用一个小例子进行探索</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 如果 python 版本 &gt;3.12 ，请将下行注释掉，否则 matplotlib 不会显示图像</span><br><span class="line">%matplotlib inline</span><br><span class="line">%time from hikyuu.interactive import *</span><br><span class="line">iodog.open()</span><br><span class="line">2024-12-07 00:21:52,164 [INFO] hikyuu version: 2.2.3_202412040035_RELEASE_macosx_arm64 [&lt;module&gt;] (/Users/fasiondog/workspace/hikyuu/hikyuu/__init__.py:97) [hikyuu::hku_info]</span><br><span class="line">2024-12-07 00:21:57,486 [WARNING] Matplotlib is building the font cache; this may take a moment. [matplotlib.font_manager::&lt;lambda&gt;]</span><br><span class="line">2024-12-07 00:21:59.835 [HKU-I] - Using SQLITE3 BaseInfoDriver (BaseInfoDriver.cpp:57)</span><br><span class="line">2024-12-07 00:21:59.838 [HKU-I] - Loading market information... (StockManager.cpp:454)</span><br><span class="line">2024-12-07 00:21:59.838 [HKU-I] - Loading stock type information... (StockManager.cpp:472)</span><br><span class="line">2024-12-07 00:21:59.838 [HKU-I] - Loading stock information... (StockManager.cpp:374)</span><br><span class="line">2024-12-07 00:21:59.899 [HKU-I] - Loading stock weight... (StockManager.cpp:490)</span><br><span class="line">2024-12-07 00:21:59.995 [HKU-I] - Loading block... (StockManager.cpp:113)</span><br><span class="line">2024-12-07 00:22:00.076 [HKU-I] - Loading KData... (StockManager.cpp:117)</span><br><span class="line">2024-12-07 00:22:00.076 [HKU-I] - Preloading all day kdata to buffer ! (StockManager.cpp:153)</span><br><span class="line">2024-12-07 00:22:00.077 [HKU-I] - 0.24s Loaded Data. (StockManager.cpp:125)</span><br><span class="line">CPU times: user 756 ms, sys: 255 ms, total: 1.01 s</span><br><span class="line">Wall time: 8.28 s</span><br></pre></td></tr></table></figure>
+
+<h1 id="一、策略分析"><a href="#一、策略分析" class="headerlink" title="一、策略分析"></a>一、策略分析</h1><h2 id="原始描述"><a href="#原始描述" class="headerlink" title="原始描述"></a>原始描述</h2><p>买入条件：周线MACD零轴下方底部金叉买入30%</p>
+<p>卖出条件：日线级别 跌破 20日线 卖出50%持仓</p>
+<h2 id="策略分析"><a href="#策略分析" class="headerlink" title="策略分析"></a>策略分析</h2><p>市场环境：无</p>
+<p>系统有效性：无</p>
+<p>信号指示器：</p>
+<ul>
+<li>买入信号：周线MACD零轴下方底部金叉，即周线的DIF&gt;DEA金叉时买入（快线：DIF，慢线DEA）</li>
+<li>卖出信号：日线级别 跌破 20日均线</li>
+</ul>
+<p>止损/止盈：无</p>
+<p>资金管理：</p>
+<ul>
+<li>买入：30% （不明确，暂且当做当前现金的30%）</li>
+<li>卖出：已持仓股票数的50%</li>
+</ul>
+<p>盈利目标：</p>
+<p>移滑价差：</p>
+<h1 id="二、实现系统部件"><a href="#二、实现系统部件" class="headerlink" title="二、实现系统部件"></a>二、实现系统部件</h1><h2 id="定义信号指示器"><a href="#定义信号指示器" class="headerlink" title="定义信号指示器"></a>定义信号指示器</h2><p>In [2]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def getNextWeekDate(week):</span><br><span class="line">    &quot;&quot;&quot;获取指定日期的下一周周一日期&quot;&quot;&quot;</span><br><span class="line">    from datetime import timedelta</span><br><span class="line">    py_week = week.datetime()</span><br><span class="line">    next_week_start = py_week + timedelta(days = 7 - py_week.weekday())</span><br><span class="line">    return Datetime(next_week_start)</span><br></pre></td></tr></table></figure>
+
+<p>In [3]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">def DEMO_SG(self, k):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    买入信号：周线MACD零轴下方底部金叉，即周线的DIF&gt;DEA金叉时买入</span><br><span class="line">    卖出信号：日线级别 跌破 20日均线</span><br><span class="line">    </span><br><span class="line">    参数：</span><br><span class="line">    week_macd_n1：周线dif窗口</span><br><span class="line">    week_macd_n2: 周线dea窗口</span><br><span class="line">    week_macd_n3: 周线macd平滑窗口</span><br><span class="line">    day_n: 日均线窗口</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    if (len(k) == 0):</span><br><span class="line">        return</span><br><span class="line">    </span><br><span class="line">    stk = k.get_stock()</span><br><span class="line">    </span><br><span class="line">    #-----------------------------</span><br><span class="line">    #计算日线级别的卖出信号        </span><br><span class="line">    #-----------------------------</span><br><span class="line">    day_c = CLOSE(k)</span><br><span class="line">    day_ma = MA(day_c, self.get_param(&quot;day_n&quot;))</span><br><span class="line">    day_x = day_c &lt; day_ma  #收盘价小于均线</span><br><span class="line">    for i in range(day_x.discard, len(day_x)):</span><br><span class="line">        if day_x[i] &gt;= 1.0:</span><br><span class="line">            self._add_sell_signal(k[i].datetime)</span><br><span class="line"></span><br><span class="line">    #-----------------------------</span><br><span class="line">    #计算周线级别的买入信号        </span><br><span class="line">    #-----------------------------</span><br><span class="line">    week_q = Query(k[0].datetime, k[-1].datetime.next_day(), ktype=Query.WEEK)</span><br><span class="line">    week_k = k.get_stock().get_kdata(week_q)</span><br><span class="line">    </span><br><span class="line">    n1 = self.get_param(&quot;week_macd_n1&quot;)</span><br><span class="line">    n2 = self.get_param(&quot;week_macd_n2&quot;)</span><br><span class="line">    n3 = self.get_param(&quot;week_macd_n3&quot;)</span><br><span class="line">    m = MACD(CLOSE(week_k), n1, n2, n3)</span><br><span class="line">    fast = m.get_result(1)</span><br><span class="line">    slow = m.get_result(2)</span><br><span class="line">    </span><br><span class="line">    discard = m.discard if m.discard &gt; 1 else 1</span><br><span class="line">    for i in range(discard, len(m)):</span><br><span class="line">        if (fast[i-1] &lt; slow[i-1] and fast[i] &gt; slow[i]):</span><br><span class="line">            #当周计算的结果，只能作为下周一的信号</span><br><span class="line">            self._add_buy_signal(week_k[i].datetime.next_week())</span><br><span class="line">         </span><br></pre></td></tr></table></figure>
+
+<h2 id="定义资金管理策略"><a href="#定义资金管理策略" class="headerlink" title="定义资金管理策略"></a>定义资金管理策略</h2><p>In [4]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">class DEMO_MM(MoneyManagerBase):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    买入：30% （不明确，暂且当做当前现金的30%）</span><br><span class="line">    卖出：已持仓股票数的50%</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super(DEMO_MM, self).__init__(&quot;MACD_MM&quot;)</span><br><span class="line">        </span><br><span class="line">    def _reset(self):</span><br><span class="line">        pass</span><br><span class="line">    </span><br><span class="line">    def _clone(self):</span><br><span class="line">        return DEMO_MM()</span><br><span class="line">        </span><br><span class="line">    def _get_buy_num(self, datetime, stk, price, risk, part_from):</span><br><span class="line">        tm = self.tm</span><br><span class="line">        cash = tm.current_cash</span><br><span class="line">        </span><br><span class="line">        #可以不用考虑最小交易单位的问题，已经自动处理</span><br><span class="line">        # return int(cash*0.3/price) #返回类型必须是int</span><br><span class="line">        return cash / price</span><br><span class="line">    </span><br><span class="line">    def _get_sell_num(self, datetime, stk, price, risk, part_from):</span><br><span class="line">        tm = self.tm</span><br><span class="line">        position = tm.get_position(datetime, stk)</span><br><span class="line">        total_num = position.number</span><br><span class="line">        num = int(total_num * 0.5)</span><br><span class="line">        return num if num &gt;= 100 else 0</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、构建并运行系统"><a href="#三、构建并运行系统" class="headerlink" title="三、构建并运行系统"></a>三、构建并运行系统</h1><h2 id="设定系统参数"><a href="#设定系统参数" class="headerlink" title="设定系统参数"></a>设定系统参数</h2><p>In [5]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#账户参数</span><br><span class="line">init_cash = 100000 #账户初始资金</span><br><span class="line">init_date = Datetime(&#x27;1990-1-1&#x27;) #账户建立日期</span><br><span class="line"></span><br><span class="line">#信号指示器参数</span><br><span class="line">week_n1 = 12</span><br><span class="line">week_n2 = 26</span><br><span class="line">week_n3 = 9</span><br><span class="line">day_n = 20</span><br><span class="line"></span><br><span class="line">#选定标的，及测试区间</span><br><span class="line">stk = sm[&#x27;sz000001&#x27;]</span><br><span class="line">start_date = Datetime(&#x27;2017-01-01&#x27;)  #如果是同一级别K线，可以使用索引号，使用了不同级别的K线数据，建议还是使用日期作为参数</span><br><span class="line">end_date = Datetime()</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建系统实例"><a href="#构建系统实例" class="headerlink" title="构建系统实例"></a>构建系统实例</h2><p>In [6]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#创建账户</span><br><span class="line">my_tm = crtTM(date=init_date, init_cash = init_cash, cost_func=TC_FixedA())</span><br><span class="line"></span><br><span class="line">#创建系统实例</span><br><span class="line">my_sys = SYS_Simple()</span><br><span class="line"></span><br><span class="line">#绑定账户</span><br><span class="line">my_sys.tm = my_tm</span><br><span class="line"></span><br><span class="line">#绑定信号指示器</span><br><span class="line"># !注意</span><br><span class="line"># 受限与 pybind11 的限制，这里不能直接使用 my_sys.sg = crtSG(  或 my_sys.mm = DEMO_MM() , 需要先生成 Python 对象的实例再赋值</span><br><span class="line">my_sg = crtSG(DEMO_SG, </span><br><span class="line">              &#123;&#x27;week_macd_n1&#x27;: week_n1, &#x27;week_macd_n2&#x27;: week_n2, &#x27;week_macd_n3&#x27;: week_n3, &#x27;day_n&#x27;: day_n&#125;, </span><br><span class="line">                &#x27;DEMO_SG&#x27;) </span><br><span class="line">my_sys.sg = my_sg</span><br><span class="line">my_sys.sg.set_param(&#x27;alternate&#x27;, False)</span><br><span class="line"></span><br><span class="line">#绑定资金管理策略</span><br><span class="line">my_mm = DEMO_MM()</span><br><span class="line">my_sys.mm = my_mm</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行系统"><a href="#运行系统" class="headerlink" title="运行系统"></a>运行系统</h2><p>In [7]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">iodog.close()</span><br><span class="line">q = Query(start_date, end_date, ktype=Query.DAY)</span><br><span class="line">my_sys.run(stk, q)</span><br><span class="line"></span><br><span class="line">#将交易记录及持仓情况，保存在临时目录，可用Excel查看</span><br><span class="line">#临时目录一般设置在数据所在目录下的 tmp 子目录</span><br><span class="line">#如果打开了excel记录，再次运行系统前，记得先关闭excel文件，否则新的结果没法保存</span><br><span class="line">my_tm.tocsv(sm.tmpdir())</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、查看资金曲线及绩效统计"><a href="#四、查看资金曲线及绩效统计" class="headerlink" title="四、查看资金曲线及绩效统计"></a>四、查看资金曲线及绩效统计</h1><p>In [8]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#绘制资金收益曲线（净收益）</span><br><span class="line">x = my_tm.get_profit_curve(stk.get_datetime_list(q), Query.DAY)</span><br><span class="line">#x = my_tm.getFundsCurve(stk.getDatetimeList(q), KQuery.DAY) #总资产曲线</span><br><span class="line">x = PRICELIST(x)</span><br><span class="line">x.plot()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a45635c94.png" alt="image-20250116141650394"></p>
+<p>In [9]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">#回测统计</span><br><span class="line">per = Performance()</span><br><span class="line">print(per.report(my_tm, Datetime.now()))</span><br><span class="line">帐户初始金额: 100000.00</span><br><span class="line">累计投入本金: 100000.00</span><br><span class="line">累计投入资产: 0.00</span><br><span class="line">累计借入现金: 0.00</span><br><span class="line">累计借入资产: 0.00</span><br><span class="line">累计红利: 3598.40</span><br><span class="line">现金余额: 77807.46</span><br><span class="line">未平仓头寸净值: 1212.64</span><br><span class="line">当前总资产: 79020.10</span><br><span class="line">已平仓交易总成本: 0.00</span><br><span class="line">已平仓净利润总额: 0.00</span><br><span class="line">单笔交易最大占用现金比例%: 99.90</span><br><span class="line">交易平均占用现金比例%: 99.23</span><br><span class="line">已平仓帐户收益率%: 0.00</span><br><span class="line">帐户年复合收益率%: -3.11</span><br><span class="line">帐户平均年收益率%: -2.81</span><br><span class="line">赢利交易赢利总额: 0.00</span><br><span class="line">亏损交易亏损总额: 0.00</span><br><span class="line">已平仓交易总数: 0.00</span><br><span class="line">赢利交易数: 0.00</span><br><span class="line">亏损交易数: 0.00</span><br><span class="line">赢利交易比例%: 0.00</span><br><span class="line">赢利期望值: 0.00</span><br><span class="line">赢利交易平均赢利: 0.00</span><br><span class="line">亏损交易平均亏损: 0.00</span><br><span class="line">平均赢利/平均亏损比例: 0.00</span><br><span class="line">净赢利/亏损比例: 0.00</span><br><span class="line">最大单笔赢利: 0.00</span><br><span class="line">最大单笔盈利百分比%: 0.00</span><br><span class="line">最大单笔亏损: 0.00</span><br><span class="line">最大单笔亏损百分比%: 0.00</span><br><span class="line">赢利交易平均持仓时间: 0.00</span><br><span class="line">赢利交易最大持仓时间: 0.00</span><br><span class="line">亏损交易平均持仓时间: 0.00</span><br><span class="line">亏损交易最大持仓时间: 0.00</span><br><span class="line">空仓总时间: 2721.00</span><br><span class="line">空仓时间/总时间%: 100.00</span><br><span class="line">平均空仓时间: 2721.00</span><br><span class="line">最长空仓时间: 2720.00</span><br><span class="line">最大连续赢利笔数: 0.00</span><br><span class="line">最大连续亏损笔数: 0.00</span><br><span class="line">最大连续赢利金额: 0.00</span><br><span class="line">最大连续亏损金额: 0.00</span><br><span class="line">R乘数期望值: 0.00</span><br><span class="line">交易机会频率/年: 0.00</span><br><span class="line">年度期望R乘数: 0.00</span><br><span class="line">赢利交易平均R乘数: 0.00</span><br><span class="line">亏损交易平均R乘数: 0.00</span><br><span class="line">最大单笔赢利R乘数: 0.00</span><br><span class="line">最大单笔亏损R乘数: 0.00</span><br><span class="line">最大连续赢利R乘数: 0.00</span><br><span class="line">最大连续亏损R乘数: 0.00</span><br></pre></td></tr></table></figure>
+
+<p>In [10]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_sys.performance()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a43dd8c0e.png" alt="image-20250116141625079"></p>
+<h1 id="五、或许想看下图形"><a href="#五、或许想看下图形" class="headerlink" title="五、或许想看下图形"></a>五、或许想看下图形</h1><p>In [11]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">my_sys.plot()</span><br><span class="line">MA(CLOSE(my_sys.to), 20).plot(new=False)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a41a7cc80.png" alt="image-20250116141550061"></p>
+<h1 id="六、或许想看看所有股票的情况"><a href="#六、或许想看看所有股票的情况" class="headerlink" title="六、或许想看看所有股票的情况"></a>六、或许想看看所有股票的情况</h1><p>In [12]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">def calTotal(blk, q):</span><br><span class="line">    per = Performance()</span><br><span class="line">    s_name = []</span><br><span class="line">    s_code = []</span><br><span class="line">    x = []</span><br><span class="line">    for stk in blk:</span><br><span class="line">        my_sys.run(stk, q)</span><br><span class="line">        per.statistics(my_tm, Datetime.now())</span><br><span class="line">        s_name.append(stk.name)</span><br><span class="line">        s_code.append(stk.market_code)</span><br><span class="line">        x.append(per[&quot;当前总资产&quot;])</span><br><span class="line">    return pd.DataFrame(&#123;&#x27;代码&#x27;: s_code, &#x27;股票&#x27;: s_name, &#x27;当前总资产&#x27;: x&#125;)</span><br><span class="line"></span><br><span class="line">%time data = calTotal(blocka, q)</span><br><span class="line">CPU times: user 16.1 s, sys: 1.58 s, total: 17.7 s</span><br><span class="line">Wall time: 16.7 s</span><br></pre></td></tr></table></figure>
+
+<p>In [13]:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#保存到CSV文件</span><br><span class="line">#data.to_csv(sm.tmpdir() + &#x27;/统计.csv&#x27;)</span><br><span class="line">data[:10]</span><br></pre></td></tr></table></figure>
+
+<p>Out[13]:</p>
+<table>
+<thead>
+<tr>
+<th align="right"></th>
+<th align="right">代码</th>
+<th align="right">股票</th>
+<th align="right">当前总资产</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">0</td>
+<td align="right">SH601003</td>
+<td align="right">柳钢股份</td>
+<td align="right">66414.81</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td align="right">SH603180</td>
+<td align="right">金牌家居</td>
+<td align="right">65716.52</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="right">SZ000548</td>
+<td align="right">湖南投资</td>
+<td align="right">63616.49</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">SH600159</td>
+<td align="right">大龙地产</td>
+<td align="right">40364.84</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="right">SZ002099</td>
+<td align="right">海翔药业</td>
+<td align="right">53875.08</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td align="right">SH600732</td>
+<td align="right">爱旭股份</td>
+<td align="right">198582.34</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="right">SH603127</td>
+<td align="right">昭衍新药</td>
+<td align="right">131866.78</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td align="right">SZ002953</td>
+<td align="right">日丰股份</td>
+<td align="right">69972.42</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td align="right">SH603758</td>
+<td align="right">秦安股份</td>
+<td align="right">72336.15</td>
+</tr>
+<tr>
+<td align="right">9</td>
+<td align="right">SZ002962</td>
+<td align="right">五方光电</td>
+<td align="right">54827.43</td>
+</tr>
+</tbody></table>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241217173020-4242deda.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -430,7 +680,7 @@
 <tr>
 <td>_dmarc</td>
 <td>TXT</td>
-<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#x61;&#100;&#109;&#105;&#110;&#64;&#x6c;&#x61;&#110;&#99;&#x65;&#116;&#46;&#105;&#x63;&#x75;">&#x61;&#100;&#109;&#105;&#110;&#64;&#x6c;&#x61;&#110;&#99;&#x65;&#116;&#46;&#105;&#x63;&#x75;</a></td>
+<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#x61;&#x64;&#109;&#x69;&#110;&#x40;&#108;&#97;&#x6e;&#x63;&#101;&#116;&#x2e;&#105;&#99;&#x75;">&#x61;&#x64;&#109;&#x69;&#110;&#x40;&#108;&#97;&#x6e;&#x63;&#101;&#116;&#x2e;&#105;&#99;&#x75;</a></td>
 </tr>
 <tr>
 <td>_mta-sts</td>
@@ -440,7 +690,7 @@
 <tr>
 <td>_smtp._tls</td>
 <td>TXT</td>
-<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#97;&#100;&#109;&#x69;&#110;&#x40;&#108;&#97;&#110;&#x63;&#x65;&#116;&#46;&#x69;&#99;&#117;">&#97;&#100;&#109;&#x69;&#110;&#x40;&#108;&#97;&#110;&#x63;&#x65;&#116;&#46;&#x69;&#99;&#117;</a></td>
+<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#97;&#100;&#109;&#x69;&#110;&#64;&#x6c;&#x61;&#110;&#x63;&#x65;&#116;&#46;&#x69;&#99;&#117;">&#97;&#100;&#109;&#x69;&#110;&#64;&#x6c;&#x61;&#110;&#x63;&#x65;&#116;&#46;&#x69;&#99;&#117;</a></td>
 </tr>
 </tbody></table>
 <h2 id="6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："><a href="#6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：" class="headerlink" title="6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："></a>6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：</h2><p>创建登录账户，运行此命令后会让设置密码</p>
@@ -457,7 +707,7 @@
 
 <p>查看账户下邮件内容</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-mboxes dump x<span class="keyword">@lancet</span>.icu <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#x78;&#64;&#108;&#x61;&#110;&#99;&#x65;&#116;&#x2e;&#105;&#99;&#x75;">&#x78;&#64;&#108;&#x61;&#110;&#99;&#x65;&#116;&#x2e;&#105;&#99;&#x75;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
+<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#x78;&#x40;&#108;&#x61;&#110;&#99;&#x65;&#116;&#46;&#x69;&#99;&#x75;">&#x78;&#x40;&#108;&#x61;&#110;&#99;&#x65;&#116;&#46;&#x69;&#99;&#x75;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-msgs list x<span class="keyword">@lancet</span>.icu INBOX</span><br></pre></td></tr></table></figure>
 
 <p>会有如图所示的记录：<br><img src="https://img.yihao.de/1731680546525.png" alt="image.png"></p>
@@ -1665,139 +1915,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20241031100903-85baf870.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20241031100903-85baf870.html" itemprop="url">微软E5账号介绍</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-31T10:09:03+08:00">
-                2024-10-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="https://img.yihao.de/1730341108623.png" alt="image-20241031101825149"></p>
-<p><strong>Microsoft 365 E5</strong>是一款综合性的商业应用套件，它包含一系列的生产力应用和服务。E5版特别提供了一些高级的安全、合规性、语音和分析能力【7†source】。E5包括以下的应用和服务：</p>
-<ul>
-<li>Word</li>
-<li>Excel</li>
-<li>PowerPoint</li>
-<li>Outlook</li>
-<li>OneNote</li>
-<li>SharePoint</li>
-<li>OneDrive (5T)</li>
-<li>Microsoft Teams</li>
-<li>Power BI Pro</li>
-<li>Windows【9+source】</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1864,7 +1981,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
