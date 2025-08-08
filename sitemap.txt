@@ -31,10 +31,6 @@ http://example.com/posts/20241025090101-28cb169b.html
 http://example.com/posts/20240919164353-80770c57.html
 http://example.com/sage/%E5%90%89%E4%BA%8B%E8%AF%AD240531.html
 http://example.com/posts/20240517104019-885e0603.html
-http://example.com/sage/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-%E8%88%AA%E7%8F%AD%E8%BF%90%E8%A1%8C%E9%9B%86%E5%B8%82%EF%BC%88%E4%B8%80%EF%BC%89.html
-http://example.com/sage/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-%E8%BE%85%E8%90%A5%E4%BA%A7%E5%93%81%EF%BC%88%E4%B8%89%EF%BC%89.html
-http://example.com/sage/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-%E5%9C%B0%E9%9D%A2%E6%9C%8D%E5%8A%A1%EF%BC%88%E4%BA%8C%EF%BC%89.html
-http://example.com/posts/20231109104344-b6e0f1c6.html
 http://example.com/sage/%E9%AB%98%E9%A1%B9%E9%93%BE%E8%B7%AF%E6%A2%B3%E7%90%86.html
 http://example.com/posts/20240515150036-22a18a.html
 http://example.com/sage/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E9%87%8D%E7%82%B9%E6%8E%8C%E6%8F%A1.html

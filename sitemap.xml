@@ -299,42 +299,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/sage/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-%E8%88%AA%E7%8F%AD%E8%BF%90%E8%A1%8C%E9%9B%86%E5%B8%82%EF%BC%88%E4%B8%80%EF%BC%89.html</loc>
-    
-    <lastmod>2024-05-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/sage/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-%E8%BE%85%E8%90%A5%E4%BA%A7%E5%93%81%EF%BC%88%E4%B8%89%EF%BC%89.html</loc>
-    
-    <lastmod>2024-05-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/sage/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-%E5%9C%B0%E9%9D%A2%E6%9C%8D%E5%8A%A1%EF%BC%88%E4%BA%8C%EF%BC%89.html</loc>
-    
-    <lastmod>2024-05-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/posts/20231109104344-b6e0f1c6.html</loc>
-    
-    <lastmod>2024-05-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/sage/%E9%AB%98%E9%A1%B9%E9%93%BE%E8%B7%AF%E6%A2%B3%E7%90%86.html</loc>
     
     <lastmod>2024-05-16</lastmod>
