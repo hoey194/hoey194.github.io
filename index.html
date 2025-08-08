@@ -303,6 +303,190 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250721093711-32862603.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoey笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/20250721093711-32862603.html" itemprop="url">科普各个出海线路</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-07-21T09:37:11+08:00">
+                2025-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p><strong>整体的线路大概排名:<code>AS23764(CTGNet)</code>≈<code>AS4809(CN2 GIA)</code>&gt;<code>AS9929(CNCNet)</code>&gt;<code>AS9808(CMI)</code>&gt;<code>AS4837(CUVIP)</code>&gt;<code>AS4837(169)</code>&gt;<code>AS4809(CN2 GT)</code>≈<code>AS4134(CN163)</code></strong></p>
+<p>判断方法：</p>
+<table>
+<thead>
+<tr>
+<th align="left">网络</th>
+<th align="left">IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">CN2 GIA</td>
+<td align="left">59.43.*.*（全部）</td>
+</tr>
+<tr>
+<td align="left">CN2 GT</td>
+<td align="left">59.43.*.<em>（国外）/ 202.97.</em>.*（国内）</td>
+</tr>
+<tr>
+<td align="left">163</td>
+<td align="left">202.97.*.*（全部）</td>
+</tr>
+<tr>
+<td align="left">AS9929</td>
+<td align="left">218.105.<em>.</em> / 210.51.<em>.</em></td>
+</tr>
+<tr>
+<td align="left">CUVIP</td>
+<td align="left">同AS4837，但走美西(SJC)出口</td>
+</tr>
+<tr>
+<td align="left">AS4837</td>
+<td align="left">联通默认</td>
+</tr>
+</tbody></table>
+<h2 id="电信"><a href="#电信" class="headerlink" title="电信"></a>电信</h2><p>电信：<code>CTGNet</code>≈<code>CN2 GIA</code>&gt;<code>CN2 GT</code>&gt;<code>163直连</code>。</p>
+<h3 id="ChinaNet-163网"><a href="#ChinaNet-163网" class="headerlink" title="ChinaNet(163网)"></a>ChinaNet(163网)</h3><p>ChinaNet(也就是163网)，主要城市如LAX、SJC、FRA、LON，回国带宽大，但因电信超卖严重，因此尖峰时段较容易阻塞，同时也常有来自中国境内的流量攻击将出口塞满。价格较低，也是绝大部分普通家宽的默认出境路线。</p>
+<h3 id="CN2-GT-Global-Transit-CN2-GT（全球过境）"><a href="#CN2-GT-Global-Transit-CN2-GT（全球过境）" class="headerlink" title="CN2 GT (Global Transit) CN2 GT（全球过境）"></a>CN2 GT (Global Transit) CN2 GT（全球过境）</h3><p>CN2 GT，163与CN2 POP之间统一在上海、广州、北京三个互连点，北京互连点为新增节点。同上一点所属，由于两张网流量交换前也会经过163的汇聚点，因此也较容易因163汇聚点有大量攻击流量导致阻塞，同时因攻击塞满两张网之间的互连也时常发生。</p>
+<p>对于跨境互联质量，电信官网承认CN2 GT与ChinaNet质量无异。换句话说就是，CN2 GT集成了电信两张网各自最烂的部分：CN2海外的憨批骨干质量和163出口的傻逼跨境段质量。</p>
+<p>欧美地区的CN2 GT或将在接下来规划下线，现有CN2 GT的客户（已知的包括QuadraNet AS8100, 俄罗斯DataLine等）将被切换至163。但正如前文所述，在跨境质量上CN2 GT和163因为是共享C-I段，因此在质量上并不会有差别或者变化。</p>
+<h3 id="CN2-GIA-Global-Internet-Access"><a href="#CN2-GIA-Global-Internet-Access" class="headerlink" title="CN2 GIA (Global Internet Access)"></a>CN2 GIA (Global Internet Access)</h3><p>GIA与GT之间所经过的跨境互联段不同（即C-I段），其中GIA有单独的C-I段容量，而GT则与163共享C-I段，因此基于目前的跨境互联质量而言，CN2 GT与163几乎没有差异，但GIA与GT/163则会有明显体验上的差异。该产品在163与CN2两张网之间互连有独立的端口进行互连，互连点也较多，采就近接入原则，但实际上延迟不一定比较好。且因互连点不同关系，实际上有可能会出现某地至北美GT走上海出口，但GIA却走广东出口等等差异。另互连端口在有大量攻击时容易阻塞。特别是南京、北京互连点。</p>
+<p>电信报价依据所在地与中国大陆之间的延迟决定，延迟越高价格越低，如北美大约6 USD/Mbps (目前可能已涨价），而香港地区的CN2 GIA单价最高则达到了100 USD/Mbps，底线价格也有接近$80（但应该很少能有以这个价格拉到的）。<strong>2022年3月份</strong>左右CN2的跨境段容量峰值使用率已超过90%+，电信集团目前已经暂停了部分方向新接的CN2 GIA的订单（除非有释放的带宽资源，释放多少批多少）。</p>
+<p><strong>与AS4809直接互联的CN2 GIA产品在亚太和欧洲地区已经下线，目前新接客户需要通过CTGNet。</strong></p>
+<h3 id="CTGNet-AS23764"><a href="#CTGNet-AS23764" class="headerlink" title="CTGNet (AS23764)"></a>CTGNet (AS23764)</h3><p>由于通过CTG/CTA/CTE购买GIA带宽需要中国电信集团级别审批合约，因此CTG自己搞了个CTGNet（自卖自销系列），据大佬介绍CTGNet订购的带宽合约目前暂不需要集团审批。在今年年底某个时间点以后新开的合约都需要走CTGNet签订。目前电信正在将已有的AS4809客户迁移到CTGNet，亚太地区比如香港和新加坡已经迁移不少客户，包括阿里云香港、腾讯等，今后新开的大部分CN2合同都会变成CTGNet的合同。</p>
+<p>CTGNet包含了之前的163/CN2 GT和CN2 GIA的接入，区别是根据合约报价来决定最终互联的质量，钱给的多就给你GIA，钱给的少那就是GT甚至163。</p>
+<p>目前亚太和欧洲（除俄罗斯以外），原有的CN2 AS4809的客户大部分已经迁移至CTGNet下。</p>
+<p>CTGNet常见的骨干网IP开头为 69.194 和 203.22，均在AS23764下。</p>
+<p><img src="https://blog.sunflyer.cn/wp-content/uploads/2022/04/image-1-1024x580.png" alt="img"></p>
+<h2 id="联通"><a href="#联通" class="headerlink" title="联通"></a>联通</h2><p>联通：<code>三网回程GIA</code> &gt; <code>三网回程9929</code> &gt; <code>三网回程4837</code>。</p>
+<p>中国联通目前有3个主要ASN：AS4837（中国联通骨干网），AS10099（中国联通国际，CUG）以及AS9929（中国联通工业互联网，CUII，以前的老网通的骨干，简称A网）</p>
+<p>一般家宽客户接入的是4837网络，与电信4134类似。国际出口分为北京、上海、广州三部分。比较常见的路由如北京出口承载多数省份的跨境流量，包含日韩北美欧洲俄罗斯等地区；上海出口承载至东亚/东南亚以及北美圣何塞的跨境流量；广州出口承载至港澳/东南亚/北美（洛杉矶）/欧洲部分地区的流量。</p>
+<p>联通对其上游宣告的IP段有一定倾向性调整（这实际上也是流量工程和QoS的一部分），例如，对于部分IP段，联通在日本发给NTT的路由prepend了AS PATH，造成的情况就是对于同时接了NTT和其他网络的服务商（比如甲骨文东京接了NTT和TATA），由于AS PATH长度问题，至联通部分IP段（例如153.3.16.1）是NTT经由上海/北京互联回程，而部分IP段（例如 27.11.128.1） 则被送去了其他网络，出现绕美/高延迟的情况。这一点在联通至新加坡Cogent的互联也能看出来（部分段走新加坡的Cogent直接回到联通网内，部分则绕欧至联通与Cogent的欧洲互联）。</p>
+<p>10099（CUG）与电信目前的CTGNet类似，提供至大陆方向的差异化接入，包括CUG（10099-&gt;4837）和CUG VIP（10099-&gt;9929-&gt;4837）</p>
+<p>9929为老网通骨干网，现在的CUII，其本身负载低，所以被用于为政企提供高质量网络访问，但是缺点在于。。。这张网的跨境互联端点对比4837较少，而且多数互联的容量并不大。。。现在作为联通对标CN2 GIA的产品销售。</p>
+<p>普通4837的报价依据互联地区不同而不同，日本/新加坡可以做到$20/Mbps甚至更低的价格。（但还是贵而且和电信一样是Best Effort），香港比日本/新加坡略高一些，≤$25/Mbps，欧洲地区 ≤$5/Mbps。</p>
+<p>香港 10099 CN Premium Route (官方名称，实际上就是9929）的报价一般≥ $55/Mbps。</p>
+<h2 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h2><p>移动线路原本是全部走香港出口的，自2022年初开始，随着上海临港出口启用，在日韩购买了CMI IP Transit的ISP/IDC回到国内部分省份移动的流量会经由上海出口承载，延迟对比绕广东会有所降低。</p>
+<p>目前的主要出口还是广州-香港段，IPv6跨境流量路由大部分会出现绕行上海的情况（即使你处在广东）。</p>
+<p><em>注：移动线路的出口表现在不同省份不同线路的差异极大，对于广东、上海来说较好，对于内陆省份较差，需要根据实际情况测试决定</em></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="CTGNet-AS23764-CUG-AS10099-和-CMI-AS58453-三张网的差异性"><a href="#CTGNet-AS23764-CUG-AS10099-和-CMI-AS58453-三张网的差异性" class="headerlink" title="CTGNet (AS23764)/CUG (AS10099) 和 CMI (AS58453)三张网的差异性"></a>CTGNet (AS23764)/CUG (AS10099) 和 CMI (AS58453)三张网的差异性</h3><p>三家运营商目前都有趋势将国际客户的IPT业务转移至自身的国际网络下，但是三家的国际网络资源略有差异。</p>
+<p>对于电信和联通，CTGNet和CUG提供的包括对客户的IPT接入以及差异化产品（例如普通IPT：CTGNet给到163，而10099给到4837；而对于精品IPT（Premium IP Transit），CTGNet给到的是原有的CN2 GIA产品，CUG给到的则是联通A网9929。这一点也可以从现有路由能看出来。此外，CTGNet和CUG也为两家运营商在海外的移动客户提供网络接入（例如CUniq和CTMO/CTexcel），并且两张网络也用于对应的国内CN2/9929精品网客户就近访问海外资源。CTGNet和CUG<strong>目前并不接管两家运营商全部的出海流量</strong>。</p>
+<p>而对于移动，AS58453 CMI则是国内移动AS9808客户公网跨境的几乎唯一方向，并且移动的海外精品网访问接入是由AS58807来负责的，与电信CTGNet和联通CUG的角色上有较大的区别。</p>
+<h3 id="境外VPS购买提示"><a href="#境外VPS购买提示" class="headerlink" title="境外VPS购买提示"></a>境外VPS购买提示</h3><p>电信用户如果不买优化线路（GIA/9929/4837/CMI回程/163优化线路等）用电信163回程晚高峰会很慢。</p>
+<p>联通用户因为用户量少，出国线路日常就能满足，主流4837回程（推荐9929和软银/GIA/4837和香港CMI）。</p>
+<p>移动用户主流CMI回程（推荐香港CMI/GIA和9929/普通线路4837）</p>
+<p>整体位置速度：<code>香港</code>&gt;<code>韩国</code>&gt;<code>日本</code>&gt;<code>美国</code>。香港VPS比较贵。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250702154250-4dec7311.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -997,7 +1181,7 @@
         
           
             <p>这里部署社区版本dify，可以参考这个文档 <a target="_blank" rel="noopener" href="https://docs.dify.ai/en/getting-started/install-self-hosted/docker-compose">Deploy with Docker Compose - Dify Docs</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/langgenius/dify.git --branch 0.15.8</span><br><span class="line">cd /volume1/docker/dify/docker</span><br><span class="line">cp .env.example .env</span><br><span class="line"></span><br><span class="line"># 求nginx暴漏端口</span><br><span class="line">EXPOSE_NGINX_PORT=8083</span><br><span class="line">EXPOSE_NGINX_SSL_PORT=4143</span><br><span class="line"></span><br><span class="line"># 提前创建好目录</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/redis/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/dat</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/weaviate</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/app/storage</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/conf</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/www</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/conf/live</span><br><span class="line"></span><br><span class="line"># 启动docker</span><br><span class="line">docker-compose up -d</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/langgenius/dify.git --branch 0.15.8</span><br><span class="line">cd /volume1/docker/dify/docker</span><br><span class="line">cp .env.example .env</span><br><span class="line"></span><br><span class="line"># 求nginx暴漏端口</span><br><span class="line">EXPOSE_NGINX_PORT=8083</span><br><span class="line">EXPOSE_NGINX_SSL_PORT=4143</span><br><span class="line"></span><br><span class="line"># 提前创建好目录</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/redis/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/dat</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/weaviate</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/db/data</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/app/storage</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/conf</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/www</span><br><span class="line">mkdir -p /volume1/docker/dify/docker/volumes/certbot/conf/live</span><br><span class="line"></span><br><span class="line"># 启动docker</span><br><span class="line"></span><br><span class="line">docker-compose -p dify up -d</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 
@@ -1559,260 +1743,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/20250116142101-b1d4a72d.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoey笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/20250116142101-b1d4a72d.html" itemprop="url">Hikyuu量化交易二</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-16T14:21:01+08:00">
-                2025-01-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>续上篇文章，第二个小例子</p>
-<h1 id="一、策略分析"><a href="#一、策略分析" class="headerlink" title="一、策略分析"></a>一、策略分析</h1><h2 id="原始描述"><a href="#原始描述" class="headerlink" title="原始描述"></a>原始描述</h2><p>建仓条件：expma周线exp1跟exp2金叉向上使用使用 B=50% 的资金买入股票，建仓成功后，卖出条件才能起作用</p>
-<p>卖出条件S1：expma日线exp1和exp2死叉向下时卖出持仓股 S=50%</p>
-<p>买入条件B1：expma日线exp1和exp2金叉向上时买入股票数为S（卖出条件S1卖出股数）</p>
-<p>S1和B1就这样循环</p>
-<p>清仓条件为：expma周线exp1和exp2死叉时</p>
-<h2 id="策略分析"><a href="#策略分析" class="headerlink" title="策略分析"></a>策略分析</h2><p>市场环境：无</p>
-<p>系统有效性：周线EMA1（快线）和EMA2（慢线）金叉向上直到两者死叉，系统有效时建立初始仓位</p>
-<p>信号指示器：</p>
-<ul>
-<li>买入：日线EMA1（快线）和EMA2（慢线）金叉向上</li>
-<li>卖出：日线EMA1（快线）和EMA2（慢线）死叉向下</li>
-</ul>
-<p>止损/止盈：无</p>
-<p>资金管理：</p>
-<ul>
-<li>初次建仓：使用50%的资金</li>
-<li>买入：初次建仓时持股数的50%</li>
-<li>卖出：初次建仓时持股数的50%</li>
-</ul>
-<p>盈利目标：无</p>
-<h1 id="二、实现系统部件"><a href="#二、实现系统部件" class="headerlink" title="二、实现系统部件"></a>二、实现系统部件</h1><h2 id="自定义系统有效性策略"><a href="#自定义系统有效性策略" class="headerlink" title="自定义系统有效性策略"></a>自定义系统有效性策略</h2><p>In [2]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def getNextWeekDateList(week):</span><br><span class="line">    from datetime import timedelta</span><br><span class="line">    py_week = week.datetime()</span><br><span class="line">    next_week_start = py_week + timedelta(days = 7 - py_week.weekday())</span><br><span class="line">    next_week_end = next_week_start + timedelta(days=5)</span><br><span class="line">    return get_date_range(Datetime(next_week_start), Datetime(next_week_end))</span><br><span class="line">#ds = getNextWeekDateList(Datetime(201801010000))</span><br><span class="line">#for d in ds:</span><br><span class="line">#    print(d)</span><br></pre></td></tr></table></figure>
-
-<p>In [3]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">def DEMO_CN(self):</span><br><span class="line">    &quot;&quot;&quot; DIF &gt; DEA 时，系统有效</span><br><span class="line">    参数：</span><br><span class="line">    fast_n：周线dif窗口</span><br><span class="line">    slow_n: 周线dea窗口</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    k = self.to</span><br><span class="line">    if (len(k) &lt;= 10):</span><br><span class="line">        return</span><br><span class="line">    </span><br><span class="line">    #-----------------------------</span><br><span class="line">    # 周线        </span><br><span class="line">    #-----------------------------</span><br><span class="line">    week_q = Query(k[0].datetime, k[-1].datetime, ktype=Query.WEEK)</span><br><span class="line">    week_k = k.get_stock().get_kdata(week_q)</span><br><span class="line">    </span><br><span class="line">    n1 = self.get_param(&quot;week_macd_n1&quot;)</span><br><span class="line">    n2 = self.get_param(&quot;week_macd_n2&quot;)</span><br><span class="line">    n3 = self.get_param(&quot;week_macd_n3&quot;)</span><br><span class="line">    m = MACD(CLOSE(week_k), n1, n2, n3)</span><br><span class="line">    fast = m.get_result(0)</span><br><span class="line">    slow = m.get_result(1)</span><br><span class="line"></span><br><span class="line">    x = fast &gt; slow</span><br><span class="line">    for i in range(x.discard, len(x)-1):</span><br><span class="line">        if (x[i] &gt;= 1.0):</span><br><span class="line">            #需要被扩展到日线（必须是后一周）</span><br><span class="line">            date_list = getNextWeekDateList(week_k[i].datetime)</span><br><span class="line">            for d in date_list:</span><br><span class="line">                self._add_valid(d)</span><br></pre></td></tr></table></figure>
-
-<h2 id="自定义信号指示器"><a href="#自定义信号指示器" class="headerlink" title="自定义信号指示器"></a>自定义信号指示器</h2><p>In [4]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#这个例子不需要，已经有内建的SG_Cross函数可直接使用</span><br></pre></td></tr></table></figure>
-
-<h2 id="自定义资金管理策略"><a href="#自定义资金管理策略" class="headerlink" title="自定义资金管理策略"></a>自定义资金管理策略</h2><p>In [5]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">class DEMO_MM(MoneyManagerBase):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    初次建仓：使用50%的资金</span><br><span class="line">    买入：初次建仓时持股数的50%</span><br><span class="line">    卖出：初次建仓时持股数的50%</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super(DEMO_MM, self).__init__(&quot;MACD_MM&quot;)</span><br><span class="line">        self.set_param(&quot;init_position&quot;, 0.5) #自定义初始仓位参数，占用资金百分比</span><br><span class="line">        self.next_buy_num = 0</span><br><span class="line">        </span><br><span class="line">    def _reset(self):</span><br><span class="line">        self.next_buy_num = 0</span><br><span class="line">        #pass</span><br><span class="line">        </span><br><span class="line">    def _clone(self):</span><br><span class="line">        mm = DEMO_MM()</span><br><span class="line">        mm.next_buy_num = self.next_buy_num</span><br><span class="line">        #return DEMO_MM()</span><br><span class="line">    </span><br><span class="line">    def _get_buy_num(self, datetime, stk, price, risk, part_from):</span><br><span class="line">        tm = self.tm</span><br><span class="line">        cash = tm.current_cash</span><br><span class="line">        </span><br><span class="line">        #如果信号来源于系统有效条件，建立初始仓位</span><br><span class="line">        if part_from == System.Part.CONDITION:</span><br><span class="line">            #return int((cash * 0.5 // price // stk.atom) * stk.atom)  #MoneyManagerBase其实已经保证了买入是最小交易数的整数</span><br><span class="line">            self.next_buy_num = 0 #清理掉上一周期建仓期间滚动买卖的股票数</span><br><span class="line">            return int(cash * self.get_param(&quot;init_position&quot;) // price)</span><br><span class="line">        </span><br><span class="line">        #非初次建仓，买入同等数量</span><br><span class="line">        return self.next_buy_num</span><br><span class="line">    </span><br><span class="line">    def _getSellNumber(self, datetime, stk, price, risk, part_from):</span><br><span class="line">        tm = self.tm</span><br><span class="line">        position = tm.get_position(datetime, stk)</span><br><span class="line">        current_num = int(position.number * 0.5)</span><br><span class="line">        </span><br><span class="line">        #记录第一次卖出时的股票数，以便下次以同等数量买入</span><br><span class="line">        if self.next_buy_num == 0:</span><br><span class="line">            self.next_buy_num = current_num </span><br><span class="line">            </span><br><span class="line">        return current_num #返回类型必须是整数</span><br></pre></td></tr></table></figure>
-
-<h1 id="三、构建并运行系统"><a href="#三、构建并运行系统" class="headerlink" title="三、构建并运行系统"></a>三、构建并运行系统</h1><h2 id="修改设定公共参数"><a href="#修改设定公共参数" class="headerlink" title="修改设定公共参数"></a>修改设定公共参数</h2><p>每个系统部件以及TradeManager都有自己的公共参数会影响系统运行，具体可以查看帮助及试验。</p>
-<p>比如：这个例子当前使用系统有效条件进行初始建仓，那么必须设置系统公共参数cn_open_position为True。否则，没有建立初始仓位的话，后续没有卖出，不会有任何交易。</p>
-<p>In [6]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#System参数</span><br><span class="line">#delay=True #(bool) : 是否延迟到下一个bar开盘时进行交易</span><br><span class="line">#delay_use_current_price=True #(bool) : 延迟操作的情况下，是使用当前交易时bar的价格计算新的止损价/止赢价/目标价还是使用上次计算的结果</span><br><span class="line">#max_delay_count=3 #(int) : 连续延迟交易请求的限制次数</span><br><span class="line">#tp_monotonic=True #(bool) : 止赢单调递增</span><br><span class="line">#tp_delay_n=3 #(int) : 止盈延迟开始的天数，即止盈策略判断从实际交易几天后开始生效</span><br><span class="line">#ignore_sell_sg=False #(bool) : 忽略卖出信号，只使用止损/止赢等其他方式卖出</span><br><span class="line">#ev_open_position=False #(bool): 是否使用市场环境判定进行初始建仓</span><br><span class="line"></span><br><span class="line">cn_open_position=True #(bool): 是否使用系统有效性条件进行初始建仓</span><br><span class="line"></span><br><span class="line">#MoneyManager公共参数</span><br><span class="line">#auto-checkin=False #(bool) : 当账户现金不足以买入资金管理策略指示的买入数量时，自动向账户中补充存入（checkin）足够的现金。</span><br><span class="line">#max-stock=20000 #(int) : 最大持有的证券种类数量（即持有几只股票，而非各个股票的持仓数）</span><br><span class="line">#disable_ev_force_clean_position=False #(bool) : 禁用市场环境失效时强制清仓</span><br><span class="line">#disable_cn_force_clean_position=False #(bool) : 禁用系统有效条件失效时强制清仓</span><br></pre></td></tr></table></figure>
-
-<h2 id="设定私有参数及待测试标的"><a href="#设定私有参数及待测试标的" class="headerlink" title="设定私有参数及待测试标的"></a>设定私有参数及待测试标的</h2><p>In [7]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#账户参数</span><br><span class="line">init_cash = 500000 #账户初始资金</span><br><span class="line">init_date = &#x27;1990-1-1&#x27; #账户建立日期</span><br><span class="line"></span><br><span class="line">#信号指示器参数</span><br><span class="line">week_n1 = 12</span><br><span class="line">week_n2 = 26</span><br><span class="line">week_n3 = 9</span><br><span class="line"></span><br><span class="line">#选定标的，及测试区间</span><br><span class="line">stk = sm[&#x27;sz000002&#x27;]</span><br><span class="line"></span><br><span class="line">#如果是同一级别K线，可以使用索引号，使用了不同级别的K线数据，建议还是使用日期作为参数</span><br><span class="line">#另外，数据量太大的话，matplotlib绘图会比较慢</span><br><span class="line">start_date = Datetime(&#x27;2016-01-01&#x27;)  </span><br><span class="line">end_date = Datetime()</span><br></pre></td></tr></table></figure>
-
-<h2 id="构建系统实例"><a href="#构建系统实例" class="headerlink" title="构建系统实例"></a>构建系统实例</h2><p>In [8]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#创建模拟交易账户进行回测，初始资金30万</span><br><span class="line">my_tm = crtTM(date=Datetime(init_date), init_cash = init_cash)</span><br><span class="line"></span><br><span class="line">#创建系统实例</span><br><span class="line">my_sys = SYS_Simple()</span><br><span class="line"></span><br><span class="line">my_sys.set_param(&quot;cn_open_position&quot;, cn_open_position)</span><br><span class="line"></span><br><span class="line">my_sys.tm = my_tm</span><br><span class="line">my_cn = crtCN(DEMO_CN, </span><br><span class="line">              &#123;&#x27;week_macd_n1&#x27;: week_n1, &#x27;week_macd_n2&#x27;: week_n2, &#x27;week_macd_n3&#x27;: week_n3&#125;, </span><br><span class="line">                &#x27;DEMO_CN&#x27;)  </span><br><span class="line">my_sys.cn = my_cn</span><br><span class="line">my_sys.sg = SG_Cross(EMA(C, n=week_n1), EMA(C, n=week_n2))</span><br><span class="line">my_mm = DEMO_MM()</span><br><span class="line">my_sys.mm = my_mm</span><br></pre></td></tr></table></figure>
-
-<h2 id="运行系统"><a href="#运行系统" class="headerlink" title="运行系统"></a>运行系统</h2><p>In [9]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">q = Query(start_date, end_date, ktype=Query.DAY)</span><br><span class="line">my_sys.run(stk, q)</span><br><span class="line"></span><br><span class="line">#将交易记录及持仓情况，保存在临时目录，可用Excel查看</span><br><span class="line">#临时目录一般设置在数据所在目录下的 tmp 子目录</span><br><span class="line">#如果打开了excel记录，再次运行系统前，记得先关闭excel文件，否则新的结果没法保存</span><br><span class="line">my_tm.tocsv(sm.tmpdir())</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、查看资金曲线及绩效统计"><a href="#四、查看资金曲线及绩效统计" class="headerlink" title="四、查看资金曲线及绩效统计"></a>四、查看资金曲线及绩效统计</h1><p>In [10]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#绘制资金收益曲线</span><br><span class="line">x = my_tm.get_profit_curve(stk.get_datetime_list(q), Query.DAY)</span><br><span class="line">#x = my_tm.getFundsCurve(stk.getDatetimeList(q), KQuery.DAY) #资金净值曲线</span><br><span class="line">PRICELIST(x).plot()</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a58a9ee68.png" alt="image-20250116142158838"></p>
-<p>In [11]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">#回测统计</span><br><span class="line">per = Performance()</span><br><span class="line">print(per.report(my_tm, Datetime.now()))</span><br><span class="line">帐户初始金额: 500000.00</span><br><span class="line">累计投入本金: 500000.00</span><br><span class="line">累计投入资产: 0.00</span><br><span class="line">累计借入现金: 0.00</span><br><span class="line">累计借入资产: 0.00</span><br><span class="line">累计红利: 35609.57</span><br><span class="line">现金余额: 512542.57</span><br><span class="line">未平仓头寸净值: 0.00</span><br><span class="line">当前总资产: 512542.57</span><br><span class="line">已平仓交易总成本: 0.00</span><br><span class="line">已平仓净利润总额: 12542.57</span><br><span class="line">单笔交易最大占用现金比例%: 49.99</span><br><span class="line">交易平均占用现金比例%: 49.85</span><br><span class="line">已平仓帐户收益率%: 2.51</span><br><span class="line">帐户年复合收益率%: 0.32</span><br><span class="line">帐户平均年收益率%: 0.33</span><br><span class="line">赢利交易赢利总额: 226235.57</span><br><span class="line">亏损交易亏损总额: -213693.00</span><br><span class="line">已平仓交易总数: 14.00</span><br><span class="line">赢利交易数: 7.00</span><br><span class="line">亏损交易数: 7.00</span><br><span class="line">赢利交易比例%: 50.00</span><br><span class="line">赢利期望值: 895.90</span><br><span class="line">赢利交易平均赢利: 32319.37</span><br><span class="line">亏损交易平均亏损: -30527.57</span><br><span class="line">平均赢利/平均亏损比例: 1.06</span><br><span class="line">净赢利/亏损比例: 1.06</span><br><span class="line">最大单笔赢利: 140710.57</span><br><span class="line">最大单笔盈利百分比%: 56.58</span><br><span class="line">最大单笔亏损: -54740.00</span><br><span class="line">最大单笔亏损百分比%: -18.85</span><br><span class="line">赢利交易平均持仓时间: 39.86</span><br><span class="line">赢利交易最大持仓时间: 105.00</span><br><span class="line">亏损交易平均持仓时间: 74.86</span><br><span class="line">亏损交易最大持仓时间: 161.00</span><br><span class="line">空仓总时间: 2012.00</span><br><span class="line">空仓时间/总时间%: 71.00</span><br><span class="line">平均空仓时间: 143.00</span><br><span class="line">最长空仓时间: 431.00</span><br><span class="line">最大连续赢利笔数: 2.00</span><br><span class="line">最大连续亏损笔数: 3.00</span><br><span class="line">最大连续赢利金额: 142426.57</span><br><span class="line">最大连续亏损金额: -105390.00</span><br><span class="line">R乘数期望值: 0.01</span><br><span class="line">交易机会频率/年: 1.82</span><br><span class="line">年度期望R乘数: 0.02</span><br><span class="line">赢利交易平均R乘数: 0.12</span><br><span class="line">亏损交易平均R乘数: -0.10</span><br><span class="line">最大单笔赢利R乘数: 0.57</span><br><span class="line">最大单笔亏损R乘数: -0.19</span><br><span class="line">最大连续赢利R乘数: 0.29</span><br><span class="line">最大连续亏损R乘数: -0.19</span><br></pre></td></tr></table></figure>
-
-<h1 id="五、或许想看下图形"><a href="#五、或许想看下图形" class="headerlink" title="五、或许想看下图形"></a>五、或许想看下图形</h1><p>In [12]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_sys.performance()</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://pic.yihao.de/pic/2025/01/16/6788a57aa89ee.png" alt="image-20250116142141416"></p>
-<h1 id="六、或许想看看所有股票的情况"><a href="#六、或许想看看所有股票的情况" class="headerlink" title="六、或许想看看所有股票的情况"></a>六、或许想看看所有股票的情况</h1><p>In [13]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">def calTotal(blk, q):</span><br><span class="line">    per = Performance()</span><br><span class="line">    s_name = []</span><br><span class="line">    s_code = []</span><br><span class="line">    x = []</span><br><span class="line">    for stk in blk:</span><br><span class="line">        my_sys.run(stk, q)</span><br><span class="line">        per.statistics(my_tm, Datetime.now())</span><br><span class="line">        s_name.append(stk.name)</span><br><span class="line">        s_code.append(stk.market_code)</span><br><span class="line">        x.append(per[&quot;当前总资产&quot;])</span><br><span class="line">    return pd.DataFrame(&#123;&#x27;代码&#x27;: s_code, &#x27;股票&#x27;: s_name, &#x27;当前总资产&#x27;: x&#125;)</span><br><span class="line"></span><br><span class="line">%time data = calTotal(blocka, q)</span><br><span class="line">CPU times: total: 4.98 s</span><br><span class="line">Wall time: 29.2 s</span><br></pre></td></tr></table></figure>
-
-<p>In [14]:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#保存到CSV文件</span><br><span class="line">#data.to_csv(sm.tmpdir() + &#x27;/统计.csv&#x27;)</span><br><span class="line">data[:10]</span><br></pre></td></tr></table></figure>
-
-<p>Out[14]:</p>
-<table>
-<thead>
-<tr>
-<th align="right"></th>
-<th align="right">代码</th>
-<th align="right">股票</th>
-<th align="right">当前总资产</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="right">0</td>
-<td align="right">SH600605</td>
-<td align="right">汇通能源</td>
-<td align="right">778089.17</td>
-</tr>
-<tr>
-<td align="right">1</td>
-<td align="right">SH600606</td>
-<td align="right">绿地控股</td>
-<td align="right">459330.60</td>
-</tr>
-<tr>
-<td align="right">2</td>
-<td align="right">SH603272</td>
-<td align="right">联翔股份</td>
-<td align="right">480224.00</td>
-</tr>
-<tr>
-<td align="right">3</td>
-<td align="right">SH600354</td>
-<td align="right">敦煌种业</td>
-<td align="right">575339.00</td>
-</tr>
-<tr>
-<td align="right">4</td>
-<td align="right">SZ300359</td>
-<td align="right">全通教育</td>
-<td align="right">441039.85</td>
-</tr>
-<tr>
-<td align="right">5</td>
-<td align="right">SZ000725</td>
-<td align="right">京东方Ａ</td>
-<td align="right">465180.59</td>
-</tr>
-<tr>
-<td align="right">6</td>
-<td align="right">BJ838163</td>
-<td align="right">方大新材</td>
-<td align="right">519824.00</td>
-</tr>
-<tr>
-<td align="right">7</td>
-<td align="right">SZ300358</td>
-<td align="right">楚天科技</td>
-<td align="right">496350.30</td>
-</tr>
-<tr>
-<td align="right">8</td>
-<td align="right">SH600355</td>
-<td align="right">精伦电子</td>
-<td align="right">390633.00</td>
-</tr>
-<tr>
-<td align="right">9</td>
-<td align="right">SH603273</td>
-<td align="right">天元智能</td>
-<td align="right">543317.00</td>
-</tr>
-</tbody></table>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1879,7 +1809,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
