@@ -1,3 +1,5 @@
+http://example.com/sage/%E5%90%89%E4%BA%8B%E8%AF%AD251021.html
+http://example.com/sage/%E5%90%89%E4%BA%8B%E8%AF%AD240531.html
 http://example.com/posts/20240520150531-19375093.html
 http://example.com/posts/20250721093711-32862603.html
 http://example.com/posts/20241102231748-c09e9d17.html
@@ -29,7 +31,6 @@ http://example.com/posts/20241031100903-85baf870.html
 http://example.com/posts/20241027142701-bb4ea6a4.html
 http://example.com/posts/20241025090101-28cb169b.html
 http://example.com/posts/20240919164353-80770c57.html
-http://example.com/sage/%E5%90%89%E4%BA%8B%E8%AF%AD240531.html
 http://example.com/posts/20240517104019-885e0603.html
 http://example.com/sage/%E9%AB%98%E9%A1%B9%E9%93%BE%E8%B7%AF%E6%A2%B3%E7%90%86.html
 http://example.com/posts/20240515150036-22a18a.html
