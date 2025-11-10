@@ -440,7 +440,7 @@
 <tr>
 <td>_dmarc</td>
 <td>TXT</td>
-<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#97;&#x64;&#x6d;&#x69;&#x6e;&#x40;&#x6c;&#x61;&#110;&#x63;&#101;&#116;&#46;&#x69;&#x63;&#117;">&#97;&#x64;&#x6d;&#x69;&#x6e;&#x40;&#x6c;&#x61;&#110;&#x63;&#101;&#116;&#46;&#x69;&#x63;&#117;</a></td>
+<td>v=DMARC1; p=quarantine; ruf=mailto:<a href="mailto:&#x61;&#x64;&#x6d;&#x69;&#x6e;&#64;&#108;&#97;&#x6e;&#99;&#x65;&#x74;&#46;&#x69;&#x63;&#x75;">&#x61;&#x64;&#x6d;&#x69;&#x6e;&#64;&#108;&#97;&#x6e;&#99;&#x65;&#x74;&#46;&#x69;&#x63;&#x75;</a></td>
 </tr>
 <tr>
 <td>_mta-sts</td>
@@ -450,7 +450,7 @@
 <tr>
 <td>_smtp._tls</td>
 <td>TXT</td>
-<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#x61;&#100;&#109;&#x69;&#110;&#x40;&#x6c;&#97;&#x6e;&#99;&#x65;&#x74;&#46;&#x69;&#x63;&#x75;">&#x61;&#100;&#109;&#x69;&#110;&#x40;&#x6c;&#97;&#x6e;&#99;&#x65;&#x74;&#46;&#x69;&#x63;&#x75;</a></td>
+<td>v=TLSRPTv1;rua=mailto:<a href="mailto:&#x61;&#x64;&#x6d;&#105;&#110;&#x40;&#108;&#x61;&#x6e;&#x63;&#x65;&#116;&#46;&#105;&#99;&#117;">&#x61;&#x64;&#x6d;&#105;&#110;&#x40;&#108;&#x61;&#x6e;&#x63;&#x65;&#116;&#46;&#105;&#99;&#117;</a></td>
 </tr>
 </tbody></table>
 <h2 id="6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："><a href="#6-首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：" class="headerlink" title="6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令："></a>6. 首页左侧栏第五个，点进容器并进入容器终端，连接后按需运行以下命令：</h2><p>创建登录账户，运行此命令后会让设置密码</p>
@@ -467,7 +467,7 @@
 
 <p>查看账户下邮件内容</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-mboxes dump x<span class="keyword">@lancet</span>.icu <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#120;&#64;&#x6c;&#x61;&#x6e;&#99;&#101;&#116;&#x2e;&#x69;&#99;&#117;">&#120;&#64;&#x6c;&#x61;&#x6e;&#99;&#101;&#116;&#x2e;&#x69;&#99;&#117;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
+<h2 id="7-测试搭建是否完成"><a href="#7-测试搭建是否完成" class="headerlink" title="7. 测试搭建是否完成"></a>7. 测试搭建是否完成</h2><p>使用谷歌等邮箱向：<a href="mailto:&#x78;&#x40;&#x6c;&#x61;&#x6e;&#x63;&#x65;&#116;&#46;&#105;&#x63;&#x75;">&#x78;&#x40;&#x6c;&#x61;&#x6e;&#x63;&#x65;&#116;&#46;&#105;&#x63;&#x75;</a>，发送测试邮件。<br>在容器终端，运行查看收件箱命令，如下：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maddy imap-msgs list x<span class="keyword">@lancet</span>.icu INBOX</span><br></pre></td></tr></table></figure>
 
 <p>会有如图所示的记录：<br><img src="https://img.yihao.de/1731680546525.png" alt="image.png"></p>
